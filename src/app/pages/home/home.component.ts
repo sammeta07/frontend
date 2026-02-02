@@ -6,6 +6,7 @@ import { MatChipsModule } from '@angular/material/chips'; // Status badges ke li
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { EventDetailsDialogComponent } from '../../components/event-details-dialog/event-details-dialog.component';
+import { GroupProfileDialogComponent } from '../../components/group-profile-dialog/group-profile-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,28 @@ export class HomeComponent {
 
   constructor() {
     this.sortEvents();
+    this.enrichGroupData();
+  }
+
+  private enrichGroupData() {
+    const firstNames = ['Ramesh', 'Suresh', 'Mahesh', 'Dinesh', 'Vikram', 'Rahul', 'Amit', 'Priya', 'Neha', 'Anil', 'Sanjay', 'Viay', 'Rajesh'];
+    const lastNames = ['Kumar', 'Patel', 'Verma', 'Singh', 'Yadav', 'Sharma', 'Gupta', 'Das', 'Mishra', 'Tiwari'];
+    
+    const getName = () => `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+
+    this.samitiGroups.forEach((group: any) => {
+      group.totalMembers = Math.floor(Math.random() * 50) + 15;
+      group.president = getName();
+      group.vicePresident = getName();
+      group.treasurer = getName();
+      
+      // Generate unique members list
+      const members = new Set<string>();
+      while(members.size < group.totalMembers) {
+        members.add(getName());
+      }
+      group.members = Array.from(members);
+    });
   }
 
   getGroupLogoUrl(name: string): string {
@@ -57,6 +80,7 @@ export class HomeComponent {
     {
       name: 'Azad Navyuvak Mandal',
       location: 'Raipur, CG',
+      since: 2018,
       totalEvents: 3,
       events: [
         { id: 101, title: 'Ganesh Utsav 2026', status: 'inProgress', year_count: 5, start_date: '2026-09-15', end_date: '2026-09-25' },
@@ -67,6 +91,7 @@ export class HomeComponent {
     {
       name: 'Ekta Samiti Bhilai',
       location: 'Bhilai, CG',
+      since: 2010,
       totalEvents: 4,
       events: [
         { id: 201, title: 'Durga Puja 2025', status: 'completed', year_count: 51, start_date: '2025-10-01', end_date: '2025-10-10' },
@@ -78,6 +103,7 @@ export class HomeComponent {
     {
       name: 'Shiv Shakti Sewa Mandal',
       location: 'Durg, CG',
+      since: 2005,
       totalEvents: 5,
       events: [
         { id: 301, title: 'Maha Shivratri Bhandara', status: 'inProgress', year_count: 15, start_date: '2026-02-18', end_date: '2026-02-18' },
@@ -90,6 +116,7 @@ export class HomeComponent {
     {
       name: 'Pragati Welfare Group',
       location: 'Bilaspur, CG',
+      since: 2019,
       totalEvents: 3,
       events: [
         { id: 401, title: 'Street Play (Nukkad)', status: 'inProgress', year_count: 2, start_date: '2026-03-05', end_date: '2026-03-05' },
@@ -100,6 +127,7 @@ export class HomeComponent {
     {
       name: 'Rising Star Youth Club',
       location: 'Raigarh, CG',
+      since: 2021,
       totalEvents: 4,
       events: [
         { id: 501, title: 'Dance Competition', status: 'upcoming', year_count: 4, start_date: '2026-05-15', end_date: '2026-05-16' },
@@ -111,6 +139,7 @@ export class HomeComponent {
     {
       name: 'Maitri Pariwar',
       location: 'Korba, CG',
+      since: 1995,
       totalEvents: 6,
       events: [
         { id: 601, title: 'Holi Milan', status: 'completed', year_count: 20, start_date: '2025-03-25', end_date: '2025-03-25' },
@@ -124,6 +153,7 @@ export class HomeComponent {
     {
       name: 'Sanskriti Kala Manch',
       location: 'Jagdalpur, CG',
+      since: 2008,
       totalEvents: 3,
       events: [
         { id: 701, title: 'Tribal Art Fest', status: 'inProgress', year_count: 25, start_date: '2026-02-20', end_date: '2026-02-25' },
@@ -134,6 +164,7 @@ export class HomeComponent {
     {
       name: 'Umeed Foundation',
       location: 'Ambikapur, CG',
+      since: 2012,
       totalEvents: 4,
       events: [
         { id: 801, title: 'Scholarship Exam', status: 'inProgress', year_count: 10, start_date: '2026-01-15', end_date: '2026-03-15' },
@@ -145,6 +176,7 @@ export class HomeComponent {
     {
       name: 'Adarsh Gram Samiti',
       location: 'Dhamtari, CG',
+      since: 2016,
       totalEvents: 5,
       events: [
         { id: 901, title: 'Agri-Tech Seminar', status: 'inProgress', year_count: 4, start_date: '2026-02-01', end_date: '2026-02-02' },
@@ -157,6 +189,7 @@ export class HomeComponent {
     {
       name: 'Nav Nirman Group',
       location: 'Rajnandgaon, CG',
+      since: 2022,
       totalEvents: 3,
       events: [
         { id: 1001, title: 'Entrepreneurship Meet', status: 'inProgress', year_count: 2, start_date: '2026-03-15', end_date: '2026-03-15' },
@@ -167,6 +200,7 @@ export class HomeComponent {
     {
       name: 'Jan Kalyan Trust',
       location: 'Mahasamund, CG',
+      since: 2000,
       totalEvents: 7,
       events: [
         { id: 1101, title: 'Eye Surgery Camp', status: 'inProgress', year_count: 22, start_date: '2026-02-10', end_date: '2026-02-15' },
@@ -188,6 +222,14 @@ export class HomeComponent {
       width: '600px',
       data: event,
       autoFocus: false // Prevent auto-focusing the first button for better UX
+    });
+  }
+
+  openGroupProfile(group: any) {
+    this.dialog.open(GroupProfileDialogComponent, {
+      width: '500px',
+      data: group,
+      autoFocus: false
     });
   }
 }

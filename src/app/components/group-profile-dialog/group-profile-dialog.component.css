@@ -1,0 +1,95 @@
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat .label {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.stat .value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.key-roles {
+  margin: 16px 0;
+}
+
+h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #424242;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.role-item {
+  background: #e3f2fd;
+  padding: 12px;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.role-title {
+  display: block;
+  font-size: 0.75rem;
+  color: #1565c0;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.role-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #0d47a1;
+}
+
+.members-section {
+  margin-top: 16px;
+}
+
+.members-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
+
+/* Custom scrollbar for members list */
+.members-list::-webkit-scrollbar {
+  width: 6px;
+}
+.members-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.members-list::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.no-members {
+  padding: 16px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}

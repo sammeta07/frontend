@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ data.name }}</h2>
+<mat-dialog-content>
+  <div class="profile-header">
+     <div class="stat">
+       <span class="label">Established</span>
+       <span class="value">{{ data.since }}</span>
+     </div>
+     <div class="stat">
+       <span class="label">Total Members</span>
+       <span class="value">{{ data.totalMembers || 0 }}</span>
+     </div>
+     <div class="stat">
+       <span class="label">Location</span>
+       <span class="value">{{ data.location }}</span>
+     </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="key-roles">
+    <h3>Key Office Bearers</h3>
+    <div class="role-grid">
+      <div class="role-item">
+        <span class="role-title">Adhyaksh (President)</span>
+        <span class="role-name">{{ data.president || 'Not Assigned' }}</span>
+      </div>
+      <div class="role-item">
+        <span class="role-title">Upadhyaksh (Vice President)</span>
+        <span class="role-name">{{ data.vicePresident || 'Not Assigned' }}</span>
+      </div>
+       <div class="role-item">
+        <span class="role-title">Koshadhyaksh (Cashier)</span>
+        <span class="role-name">{{ data.treasurer || 'Not Assigned' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="members-section">
+    <h3>All Members ({{data.members?.length || 0}})</h3>
+    <mat-list role="list" class="members-list">
+       <mat-list-item role="listitem" *ngFor="let member of data.members">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <div matListItemTitle>{{ member }}</div>
+       </mat-list-item>
+       <div *ngIf="!data.members || data.members.length === 0" class="no-members">
+         No members listed.
+       </div>
+    </mat-list>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close()">Close</button>
+</mat-dialog-actions>
