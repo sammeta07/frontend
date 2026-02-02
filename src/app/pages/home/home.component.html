@@ -1,0 +1,51 @@
+<div class="home-container">
+  <section class="hero-section">
+    <h1>Manage Your Samiti Digitally</h1>
+    <p>Apne Mandal ya Group ka hisaab-kitaab rakhein ekdam asaan aur transparent.</p>
+    <div class="hero-actions">
+      <button mat-raised-button color="primary" (click)="onCreateSamiti()">
+        <mat-icon>add</mat-icon> CREATE NEW SAMITI
+      </button>
+      <button mat-stroked-button color="accent">
+        <mat-icon>search</mat-icon> FIND NEARBY GROUP
+      </button>
+    </div>
+  </section>
+  <hr class="section-divider">
+  <div class="home-container">
+    <section class="near-you-section">
+      <h2>Registered Groups & Their Events</h2>
+
+      <div class="group-grid">
+
+
+        <mat-card class="group-card" *ngFor="let group of samitiGroups">
+          <mat-card-header>
+            <div mat-card-avatar class="group-icon"><mat-icon>groups</mat-icon></div>
+            <mat-card-title>{{ group.name }}</mat-card-title>
+            <mat-card-subtitle>{{ group.location }}</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <p class="section-label">Active Events ({{ group.totalEvents }}):</p>
+            <div class="event-list">
+              <div class="event-item" *ngFor="let event of group.events">
+                <div class="event-info">
+                  <span class="event-title">{{ event.title }}</span>
+                  <span class="event-budget">{{ event.budget }}</span>
+                </div>
+                <span class="event-status-tag" [attr.data-status]="event.status">
+                  {{ event.status }}
+                </span>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button color="primary">VIEW GROUP PROFILE</button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </section>
+  </div>
+</div>
