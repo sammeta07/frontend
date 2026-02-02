@@ -14,7 +14,7 @@
   <hr class="section-divider">
   <div class="home-container">
     <section class="near-you-section">
-      <h2>Registered Groups & Their Events</h2>
+      <h2>Explore Active Events</h2>
 
       <div class="group-grid">
 
@@ -23,7 +23,11 @@
           <mat-card-header>
             <img mat-card-avatar [src]="getGroupLogoUrl(group.name)" class="group-logo" alt="{{group.name}}">
             <mat-card-title>{{ group.name }}</mat-card-title>
-            <mat-card-subtitle>{{ group.location }}</mat-card-subtitle>
+            <mat-card-subtitle>
+              <mat-icon
+                style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">location_on</mat-icon>
+              {{ group.location }}
+            </mat-card-subtitle>
             <mat-card-subtitle>
               <span class="view-profile-header-link" (click)="openGroupProfile(group)">VIEW GROUP PROFILE</span>
             </mat-card-subtitle>
@@ -42,7 +46,7 @@
                     <span class="year-count-badge" *ngIf="event.year_count">{{ getYearLabel(event.year_count) }}</span>
                   </div>
                   <span class="event-dates">
-                    <mat-icon class="small-icon">calendar_today</mat-icon> 
+                    <mat-icon class="small-icon">calendar_today</mat-icon>
                     {{ event.start_date | date:'mediumDate' }} - {{ event.end_date | date:'mediumDate' }}
                   </span>
                   <div class="event-footer">
