@@ -47,7 +47,7 @@
                   </span>
                   <div class="event-footer">
                     <span class="event-status-text" [attr.data-status]="event.status">
-                      {{ event.status === 'inProgress' ? 'In Progress' : (event.status | titlecase) }}
+                      {{ event.status | titlecase }}
                     </span>
                     <span class="view-details-link" (click)="openEventDetails(event)">View</span>
                   </div>

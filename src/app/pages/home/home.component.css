@@ -325,11 +325,11 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 }
 
 /* Status Colors (Using attribute selector) */
-.event-item[data-status="inProgress"] .event-status-text {
+.event-item[data-status="started"] .event-status-text {
   background-color: #e3f2fd;
   color: #1976d2;
 }
-.event-item[data-status="inProgress"] {
+.event-item[data-status="started"] {
   border-left: 4px solid #1976d2;
 }
 
