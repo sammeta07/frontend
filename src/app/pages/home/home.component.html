@@ -6,7 +6,7 @@
       <button mat-raised-button color="primary" (click)="onCreateSamiti()">
         <mat-icon>add</mat-icon> CREATE NEW SAMITI
       </button>
-      <button mat-stroked-button color="accent">
+      <button mat-stroked-button class="hero-secondary-btn">
         <mat-icon>search</mat-icon> FIND NEARBY GROUP
       </button>
     </div>
@@ -21,22 +21,28 @@
 
         <mat-card class="group-card" *ngFor="let group of samitiGroups">
           <mat-card-header>
-            <div mat-card-avatar class="group-icon"><mat-icon>groups</mat-icon></div>
-            <mat-card-title>{{ group.name }}</mat-card-title>
+            <img mat-card-avatar [src]="getGroupLogoUrl(group.name)" class="group-logo" alt="{{group.name}}">
+            <mat-card-title>{{ group.name }}</mat-card-title>({{ group.totalEvents }})
             <mat-card-subtitle>{{ group.location }}</mat-card-subtitle>
           </mat-card-header>
 
           <mat-card-content>
-            <p class="section-label">Active Events ({{ group.totalEvents }}):</p>
             <div class="event-list">
-              <div class="event-item" *ngFor="let event of group.events">
+              <div class="event-item" *ngFor="let event of group.events" [attr.data-status]="event.status">
                 <div class="event-info">
-                  <span class="event-title">{{ event.title }}</span>
-                  <span class="event-budget">{{ event.budget }}</span>
+                  <div class="event-title">
+                    <span>{{ event.title }}</span>
+                    <span class="year-count-badge" *ngIf="event.year_count">{{ getYearLabel(event.year_count) }}</span>
+                  </div>
+                  <span class="event-dates">
+                    <mat-icon class="small-icon">calendar_today</mat-icon> 
+                    {{ event.start_date | date:'mediumDate' }} - {{ event.end_date | date:'mediumDate' }}
+                  </span>
+                  <span class="event-status-text" [attr.data-status]="event.status">
+                    {{ event.status === 'inProgress' ? 'In Progress' : (event.status | titlecase) }}
+                  </span>
                 </div>
-                <span class="event-status-tag" [attr.data-status]="event.status">
-                  {{ event.status }}
-                </span>
+                <!-- <span class="view-details-link" (click)="openEventDetails(event)">View</span> -->
               </div>
             </div>
           </mat-card-content>

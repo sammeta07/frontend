@@ -1,207 +1,315 @@
-.home-container
-{
+/* General Layout */
+.home-container {
   max-width: 1200px;
   margin: 0 auto;
-}
-.near-you-section h2
-{
+  padding: 16px;
   font-family: 'Roboto', sans-serif;
   color: #333;
-  margin-top: 0 !important;
-  margin-bottom: 20px !important;
 }
 
-
-/* Actions area (Button) ki padding kam karein */
-mat-card-actions
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px solid #f1f5f9;
-  margin-top: auto;
-  /* Sabse important line: Button ko bottom mein push karegi */
-  padding: 4px 16px !important;
-  /* Vertical padding bahut kam kar di */
-  min-height: unset !important;
-  /* Default height hatane ke liye */
-}
-
-.hero-section
-{
+/* Hero Section */
+.hero-section {
   text-align: center;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 15px;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+  color: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
 
-  /* Vertical padding ko kam aur barabar (equal) karein */
-  padding: 30px 20px !important; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px !important;
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+  pointer-events: none;
 }
-.hero-section h1
-{
-  color: #1e293b;
-  /* Browser ka default top margin hataiye jo extra space de raha hai */
-  margin-top: 0 !important;
-  margin-bottom: 10px;
-  font-size: 2.2rem;
-  line-height: 1.2;
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
 }
+
 .hero-section p {
-  margin-bottom: 20px;
-  margin-top: 0;
-}
-.hero-actions
-{
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  /* Buttons ke niche ka margin zero karein taaki padding hi space control kare */
-  margin-top: 5px;
-  margin-bottom: 0 !important;
-}
-.section-divider
-{
-  border: 0;
-  border-top: 1px solid #e2e8f0;
-  margin: 20px 0 !important; /* Divider ke upar-niche ka gap kam kiya */
-  opacity: 0.5;
-}
-/* Mat-icon ko button ke andar align karne ke liye */
-.hero-actions button mat-icon
-{
-  margin-right: 5px;
-}
-.group-grid
-{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 25px;
-  padding: 10px;
-  /* Taaki cards ki height content ke hisab se nahi, balki row ke hisab se ho */
-  align-items: stretch;
-}
-.group-card
-{
-  border-left: 5px solid #3f51b5;
-  /* Highlight group with a side border */
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  /* Vertical alignment */
-  height: auto;
-  /* Height ko content pe chhod dein */
-  min-height: 320px;
-  /* Ek minimum base height */
-  max-height: 380px;
-  border-radius: 12px;
-  transition: transform 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 1.1rem;
+  margin-bottom: 24px;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.group-icon
-{
-  background-color: #e8eaf6;
+.hero-actions {
   display: flex;
   justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color: #3f51b5;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.section-label
-{
-  font-weight: bold;
-  color: #666;
-  text-transform: uppercase;
-  /* "ACTIVE EVENTS" label ka margin kam karein */
-  margin: 8px 0 4px 0 !important;
-  font-size: 0.75rem;
-}
-.event-list
-{
-  background: #ccdef0;
-  border-radius: 8px;
-  padding: 10px;
-  /* Event list aur button ke beech ka gap khatam karein */
-  margin-top: 5px !important;
-  margin-bottom: 0 !important;
-  /* 3 events approx 150px-180px lete hain */
-  /* max-height: 180px; */
-  height: 171px;
-  overflow-y: auto;
-  /* Sirf vertical scroll jab events zyada hon */
-  border: 1px solid #e2e8f0;
-}
-/* Scrollbar ko thoda sundar (thin) banane ke liye */
-.event-list::-webkit-scrollbar
-{
-  width: 5px;
-}
-.event-list::-webkit-scrollbar-thumb
-{
-  background: #3f51b5;
-  border-radius: 10px;
-}
-.event-item
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px dashed #cbd5e1;
-}
-.event-item:last-child
-{
-  border-bottom: none;
-}
-.event-title
-{
+
+.hero-actions button {
+  padding: 8px 24px;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hero-secondary-btn {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 20px 0;
+}
+
+/* Near You Section */
+.near-you-section h2 {
+  font-size: 1.75rem;
+  color: #424242;
+  margin-bottom: 16px;
+  border-left: 5px solid #673ab7;
+  padding-left: 16px;
+}
+
+/* Grid Layout for Cards */
+.group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Card Styling */
+.group-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 12px;
+  background-color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.group-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.group-card mat-card-header {
+  padding: 16px;
+  background-color: #fcfcfc;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.group-logo {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+mat-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212121;
+}
+
+mat-card-subtitle {
+  font-size: 0.9rem;
+  color: #757575;
+  margin-top: 4px;
+}
+
+mat-card-content {
+  padding: 16px;
+  flex-grow: 1;
+}
+
+.section-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #9e9e9e;
+  margin-bottom: 12px;
   display: block;
 }
-.event-budget
-{
-  font-size: 0.75rem;
-  color: #16a34a;
-  /* Green for money */
-}
-.event-status-tag
-{
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 12px;
-  background: #e2e8f0;
-  color: #475569;
-}
-/* Status Colors */
-[data-status="In Progress"]
-{
-  background: #dcfce7;
-  color: #166534;
-}
-[data-status="Upcoming"]
-{
-  background: #fef9c3;
-  color: #854d0e;
-}
-/* Card Header ki extra padding kam karein */
-mat-card-header
-{
-  padding: 12px 16px 8px 16px !important;
-}
-/* Content area ki padding aur margin reset karein */
-mat-card-content
-{
-  padding: 0 16px !important;
-  /* Side padding barabar rakhein, top/bottom kam */
-  flex-grow: 1;
+
+/* Event List Styling */
+.event-list {
   display: flex;
   flex-direction: column;
+  gap: 12px;
 }
 
-::ng-deep .mat-mdc-card-header-text {
-  margin-left: 12px !important;
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0px 10px 10px;
+  background-color: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.event-item:hover {
+  filter: brightness(0.95);
+}
+
+.event-item[data-status="inProgress"] {
+  background-color: #e3f2fd;
+  border-color: #bbdefb;
+}
+
+.event-item[data-status="upcoming"] {
+  background-color: #fff3e0;
+  border-color: #ffe0b2;
+}
+
+.event-item[data-status="completed"] {
+  background-color: #e8f5e9;
+  border-color: #c8e6c9;
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Allow it to grow */
+  margin-right: 16px; /* Add spacing before the button */
+}
+
+.event-title {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Push badge to right */
+  width: 100%;
+}
+
+.year-count-badge {
+  font-size: 0.7rem;
+  color: #fff;
+  background: linear-gradient(135deg, #ff6f00, #ffca28);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.event-dates {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #757575;
+  margin: 4px 0;
+}
+
+.small-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+}  
+
+
+/* Status Badge Styling */
+.event-status-text {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  text-transform: capitalize;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+.event-status-text[data-status="inProgress"] {
+  color: #1565c0;
+}
+.event-status-text[data-status="upcoming"] {
+  color: #ef6c00;
+}
+.event-status-text[data-status="completed"] {
+  color: #2e7d32;
+}
+
+.view-details-link {
+  font-size: 0.85rem;
+  color: #673ab7;
+  font-weight: 600;
+  cursor: pointer;
+}
+.view-details-link:hover {
+  text-decoration: underline;
+}
+
+/* Status Badge Styling - Keeping for reference or removal */
+.event-status-tag {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Dynamic Status Colors */
+.event-status-tag[data-status="Active"],
+.event-status-tag[data-status="In Progress"] {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.event-status-tag[data-status="Upcoming"], 
+.event-status-tag[data-status="Planning"] {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.event-status-tag[data-status="Completed"] {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+mat-card-actions {
+  padding: 8px 16px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+mat-card-actions button {
+  font-weight: 500;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 40px 16px;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+  
+  .group-grid {
+    grid-template-columns: 1fr;
+  }
 }
