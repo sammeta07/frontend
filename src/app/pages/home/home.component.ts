@@ -2,14 +2,17 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips'; // Status badges ke liye
+import { MatChipsModule } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { EventDetailsDialogComponent } from '../../components/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from '../../components/group-profile-dialog/group-profile-dialog.component';
+import { SamitiService } from '../../services/samiti.service';
+import { SamitiGroup, SamitiEvent } from '../../models/samiti.model';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
     CommonModule,
     MatCardModule,
@@ -22,30 +25,55 @@ import { GroupProfileDialogComponent } from '../../components/group-profile-dial
 })
 export class HomeComponent {
   private dialog = inject(MatDialog);
+  private samitiService = inject(SamitiService);
+
+  selectedYear = new Date().getFullYear();
+  availableYears: number[] = [];
+  filteredSamitiGroups: (SamitiGroup & { events: SamitiEvent[] })[] = [];
 
   constructor() {
-    this.sortEvents();
-    this.enrichGroupData();
+    this.initAvailableYears();
+    this.fetchDataForYear(this.selectedYear);
   }
 
-  private enrichGroupData() {
-    const firstNames = ['Ramesh', 'Suresh', 'Mahesh', 'Dinesh', 'Vikram', 'Rahul', 'Amit', 'Priya', 'Neha', 'Anil', 'Sanjay', 'Viay', 'Rajesh'];
-    const lastNames = ['Kumar', 'Patel', 'Verma', 'Singh', 'Yadav', 'Sharma', 'Gupta', 'Das', 'Mishra', 'Tiwari'];
-    
-    const getName = () => `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+  initAvailableYears() {
+    const current = new Date().getFullYear();
+    this.availableYears = [
+        current + 1,
+        current,
+        current - 1,
+        current - 2,
+        current - 3,
+        current - 4
+    ];
+  }
 
-    this.samitiGroups.forEach((group: any) => {
-      group.totalMembers = Math.floor(Math.random() * 50) + 15;
-      group.president = getName();
-      group.vicePresident = getName();
-      group.treasurer = getName();
-      
-      // Generate unique members list
-      const members = new Set<string>();
-      while(members.size < group.totalMembers) {
-        members.add(getName());
-      }
-      group.members = Array.from(members);
+  selectYear(year: number) {
+    this.selectedYear = year;
+    this.fetchDataForYear(year);
+  }
+
+  fetchDataForYear(year: number) {
+    this.filteredSamitiGroups = this.samitiService.getGroupsForYear(year);
+  }
+
+  onCreateSamiti() {
+    // Logic to create new samiti
+  }
+
+  openEventDetails(event: SamitiEvent) {
+    this.dialog.open(EventDetailsDialogComponent, {
+      width: '600px',
+      data: event,
+      autoFocus: false
+    });
+  }
+
+  openGroupProfile(group: SamitiGroup) {
+    this.dialog.open(GroupProfileDialogComponent, {
+      width: '500px',
+      data: group,
+      autoFocus: false
     });
   }
 
@@ -53,183 +81,28 @@ export class HomeComponent {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;
   }
 
-  getYearLabel(year: number): string {
-    if (!year) return '';
-    const j = year % 10,
-        k = year % 100;
+  getYearLabel(yearCount: number): string {
+    if (!yearCount) return '';
+    const j = yearCount % 10,
+        k = yearCount % 100;
     if (j == 1 && k != 11) {
-        return year + "st Year";
+        return yearCount + "st Year";
     }
     if (j == 2 && k != 12) {
-        return year + "nd Year";
+        return yearCount + "nd Year";
     }
     if (j == 3 && k != 13) {
-        return year + "rd Year";
+        return yearCount + "rd Year";
     }
-    return year + "th Year";
+    return yearCount + "th Year";
   }
 
-  private sortEvents() {
-    const priority: { [key: string]: number } = { 'completed': 1, 'started': 2, 'upcoming': 3 };
-    this.samitiGroups.forEach(group => {
-      group.events.sort((a, b) => (priority[a.status] || 99) - (priority[b.status] || 99));
-    });
+  // TrackBy functions for optimization
+  trackByGroupId(index: number, group: SamitiGroup): string {
+    return group.name; 
   }
 
-  samitiGroups = [
-    {
-      name: 'Azad Navyuvak Mandal',
-      location: 'Raipur, CG',
-      since: 2018,
-      totalEvents: 3,
-      events: [
-        { id: 101, title: 'Ganesh Utsav 2026', status: 'started', year_count: 5, start_date: '2026-02-01', end_date: '2026-02-11' },
-        { id: 102, title: 'Blood Donation Camp', status: 'upcoming', year_count: 2, start_date: '2026-03-10', end_date: '2026-03-15' },
-        { id: 103, title: 'Cricket League', status: 'upcoming', year_count: 10, start_date: '2026-11-01', end_date: '2026-11-12' }
-      ]
-    },
-    {
-      name: 'Ekta Samiti Bhilai',
-      location: 'Bhilai, CG',
-      since: 2010,
-      totalEvents: 4,
-      events: [
-        { id: 201, title: 'Durga Puja 2025', status: 'completed', year_count: 51, start_date: '2026-01-10', end_date: '2026-01-20' },
-        { id: 202, title: 'Garba Night', status: 'completed', year_count: 5, start_date: '2025-12-15', end_date: '2025-12-25' },
-        { id: 203, title: 'Diwali Mela', status: 'upcoming', year_count: 8, start_date: '2026-11-05', end_date: '2026-11-15' },
-        { id: 204, title: 'Winter Charity Drive', status: 'started', year_count: 12, start_date: '2026-01-28', end_date: '2026-02-08' }
-      ]
-    },
-    {
-      name: 'Shiv Shakti Sewa Mandal',
-      location: 'Durg, CG',
-      since: 2005,
-      totalEvents: 5,
-      events: [
-        { id: 301, title: 'Maha Shivratri Bhandara', status: 'started', year_count: 15, start_date: '2026-01-30', end_date: '2026-02-10' },
-        { id: 302, title: 'Yoga Workshop', status: 'upcoming', year_count: 3, start_date: '2026-04-01', end_date: '2026-04-12' },
-        { id: 303, title: 'Satsang Series', status: 'started', year_count: 7, start_date: '2026-01-20', end_date: '2026-02-04' },
-        { id: 304, title: 'Temple Renovation', status: 'upcoming', year_count: 4, start_date: '2026-06-01', end_date: '2026-06-10' },
-        { id: 305, title: 'Free Medical Checkup', status: 'started', year_count: 6, start_date: '2026-01-29', end_date: '2026-02-09' }
-      ]
-    },
-    {
-      name: 'Pragati Welfare Group',
-      location: 'Bilaspur, CG',
-      since: 2019,
-      totalEvents: 3,
-      events: [
-        { id: 401, title: 'Street Play (Nukkad)', status: 'started', year_count: 2, start_date: '2026-01-27', end_date: '2026-02-06' },
-        { id: 402, title: 'Clean City Campaign', status: 'started', year_count: 5, start_date: '2026-01-25', end_date: '2026-02-08' },
-        { id: 403, title: 'Plantation Drive', status: 'upcoming', year_count: 9, start_date: '2026-07-01', end_date: '2026-07-15' }
-      ]
-    },
-    {
-      name: 'Rising Star Youth Club',
-      location: 'Raigarh, CG',
-      since: 2021,
-      totalEvents: 4,
-      events: [
-        { id: 501, title: 'Dance Competition', status: 'upcoming', year_count: 4, start_date: '2026-05-15', end_date: '2026-05-25' },
-        { id: 502, title: 'Summer Coaching', status: 'started', year_count: 8, start_date: '2026-01-22', end_date: '2026-02-05' },
-        { id: 503, title: 'Football Tournament', status: 'started', year_count: 6, start_date: '2026-01-24', end_date: '2026-02-07' },
-        { id: 504, title: 'Cyber Security Seminar', status: 'upcoming', year_count: 1, start_date: '2026-08-05', end_date: '2026-08-10' }
-      ]
-    },
-    {
-      name: 'Maitri Pariwar',
-      location: 'Korba, CG',
-      since: 1995,
-      totalEvents: 6,
-      events: [
-        { id: 601, title: 'Holi Milan', status: 'completed', year_count: 20, start_date: '2026-01-05', end_date: '2026-01-15' },
-        { id: 602, title: 'Tree Adoption', status: 'started', year_count: 3, start_date: '2026-01-26', end_date: '2026-02-06' },
-        { id: 603, title: 'Old Age Home Visit', status: 'started', year_count: 7, start_date: '2026-01-28', end_date: '2026-02-07' },
-        { id: 604, title: 'Digital Literacy Camp', status: 'upcoming', year_count: 2, start_date: '2026-09-01', end_date: '2026-09-12' },
-        { id: 605, title: 'Handicraft Exhibition', status: 'upcoming', year_count: 5, start_date: '2026-10-02', end_date: '2026-10-10' },
-        { id: 606, title: 'Food Donation', status: 'started', year_count: 12, start_date: '2026-01-20', end_date: '2026-02-04' }
-      ]
-    },
-    {
-      name: 'Sanskriti Kala Manch',
-      location: 'Jagdalpur, CG',
-      since: 2008,
-      totalEvents: 3,
-      events: [
-        { id: 701, title: 'Tribal Art Fest', status: 'started', year_count: 25, start_date: '2026-01-29', end_date: '2026-02-09' },
-        { id: 702, title: 'Photography Contest', status: 'upcoming', year_count: 4, start_date: '2026-08-19', end_date: '2026-08-30' },
-        { id: 703, title: 'Local Music Night', status: 'upcoming', year_count: 6, start_date: '2026-11-14', end_date: '2026-11-20' }
-      ]
-    },
-    {
-      name: 'Umeed Foundation',
-      location: 'Ambikapur, CG',
-      since: 2012,
-      totalEvents: 4,
-      events: [
-        { id: 801, title: 'Scholarship Exam', status: 'started', year_count: 10, start_date: '2026-01-30', end_date: '2026-02-12' },
-        { id: 802, title: 'Winter Clothes Drive', status: 'started', year_count: 15, start_date: '2026-01-25', end_date: '2026-02-08' },
-        { id: 803, title: 'Library Setup', status: 'upcoming', year_count: 2, start_date: '2026-06-01', end_date: '2026-06-15' },
-        { id: 804, title: 'Skill Training', status: 'upcoming', year_count: 3, start_date: '2026-09-05', end_date: '2026-09-18' }
-      ]
-    },
-    {
-      name: 'Adarsh Gram Samiti',
-      location: 'Dhamtari, CG',
-      since: 2016,
-      totalEvents: 5,
-      events: [
-        { id: 901, title: 'Agri-Tech Seminar', status: 'started', year_count: 4, start_date: '2026-02-01', end_date: '2026-02-06' },
-        { id: 902, title: 'Pond Cleaning', status: 'started', year_count: 8, start_date: '2026-01-28', end_date: '2026-02-05' },
-        { id: 903, title: 'Village Sports Day', status: 'upcoming', year_count: 12, start_date: '2026-04-14', end_date: '2026-04-24' },
-        { id: 904, title: 'Sanitation Awareness', status: 'completed', year_count: 5, start_date: '2026-01-02', end_date: '2026-01-10' },
-        { id: 905, title: 'Cattle Health Camp', status: 'upcoming', year_count: 3, start_date: '2026-05-20', end_date: '2026-05-30' }
-      ]
-    },
-    {
-      name: 'Nav Nirman Group',
-      location: 'Rajnandgaon, CG',
-      since: 2022,
-      totalEvents: 3,
-      events: [
-        { id: 1001, title: 'Entrepreneurship Meet', status: 'started', year_count: 2, start_date: '2026-01-31', end_date: '2026-02-10' },
-        { id: 1002, title: 'Career Counselling', status: 'upcoming', year_count: 4, start_date: '2026-05-01', end_date: '2026-05-08' },
-        { id: 1003, title: 'Youth Icon Awards', status: 'upcoming', year_count: 1, start_date: '2026-08-12', end_date: '2026-08-20' }
-      ]
-    },
-    {
-      name: 'Jan Kalyan Trust',
-      location: 'Mahasamund, CG',
-      since: 2000,
-      totalEvents: 7,
-      events: [
-        { id: 1101, title: 'Eye Surgery Camp', status: 'started', year_count: 22, start_date: '2026-02-01', end_date: '2026-02-15' },
-        { id: 1102, title: 'Women Empowerment Talk', status: 'started', year_count: 5, start_date: '2026-01-28', end_date: '2026-02-05' },
-        { id: 1103, title: 'Cycle Marathon', status: 'upcoming', year_count: 3, start_date: '2026-06-05', end_date: '2026-06-12' },
-        { id: 1104, title: 'Legal Aid Workshop', status: 'upcoming', year_count: 2, start_date: '2026-07-15', end_date: '2026-07-22' },
-        { id: 1105, title: 'Organic Farming Intro', status: 'started', year_count: 4, start_date: '2026-01-25', end_date: '2026-02-04' },
-        { id: 1106, title: 'Blood Group Testing', status: 'started', year_count: 8, start_date: '2026-01-30', end_date: '2026-02-08' },
-        { id: 1107, title: 'Evening School Support', status: 'started', year_count: 10, start_date: '2026-01-20', end_date: '2026-02-04' }
-      ]
-    }
-  ];
-  onCreateSamiti() {
-
-  }
-
-  openEventDetails(event: any) {
-    this.dialog.open(EventDetailsDialogComponent, {
-      width: '600px',
-      data: event,
-      autoFocus: false // Prevent auto-focusing the first button for better UX
-    });
-  }
-
-  openGroupProfile(group: any) {
-    this.dialog.open(GroupProfileDialogComponent, {
-      width: '500px',
-      data: group,
-      autoFocus: false
-    });
+  trackByEventId(index: number, event: SamitiEvent): number {
+    return event.id;
   }
 }
