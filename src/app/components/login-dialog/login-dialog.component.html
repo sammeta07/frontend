@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>Login</h2>
+<mat-dialog-content class="login-content">
+  <p class="login-instruction">Please enter your credentials to continue.</p>
+  
+  <form (ngSubmit)="onSubmit()" class="login-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="email" name="email" placeholder="Ex. user@example.com" required email>
+      <mat-icon matPrefix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="password" name="password" required>
+      <mat-icon matPrefix>lock</mat-icon>
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" type="button">
+        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!email || !password">Login</button>
+</mat-dialog-actions>

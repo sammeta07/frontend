@@ -139,10 +139,154 @@
   border-color: #d0d0d0;
 }
 
+/* Distinct background colors for cards */
+.group-card:nth-child(5n+1) {
+  background-color: #f0f4ff; /* Light Indigo */
+}
+
+.group-card:nth-child(5n+2) {
+  background-color: #fcefe3; /* Light Orange */
+}
+
+.group-card:nth-child(5n+3) {
+  background-color: #f3fcf4; /* Light Green */
+}
+
+.group-card:nth-child(5n+4) {
+  background-color: #fef2f2; /* Light Red */
+}
+
+.group-card:nth-child(5n+5) {
+  background-color: #faf5ff; /* Light Purple */
+}
+
+/* Metadata Wrapper */
+.group-meta-wrapper {
+  display: flex !important;
+  flex-direction: column;
+  gap: 8px; /* Space between location line and stats line */
+  margin-top: 8px !important;
+  font-family: 'Roboto', sans-serif;
+}
+
+.meta-row {
+  display: flex;
+  align-items: center;
+  line-height: normal;
+}
+
+/* Location Link Design */
+.location-row {
+  cursor: pointer;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  width: fit-content; /* Ensure hover only triggers on content */
+  align-self: flex-start;
+}
+
+.location-row:hover {
+  color: var(--primary-color);
+}
+
+.location-text {
+  border-bottom: 1px dotted transparent; 
+  transition: border-color 0.2s;
+}
+
+.location-row:hover .location-text {
+  border-bottom-color: var(--primary-color);
+}
+
+.meta-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  color: #9e9e9e; /* Muted default */
+  transition: color 0.2s;
+  vertical-align: middle;
+}
+
+.location-row:hover .meta-icon {
+  color: var(--primary-color);
+}
+
+.link-arrow {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  color: var(--primary-color);
+}
+
+.location-row:hover .link-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stats Row Design */
+.stats-row {
+  font-size: 0.8rem;
+  color: #757575;
+  margin-left: 2px; /* Slight offset to align with text above icon */
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+}
+
+.meta-icon.tiny {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  margin-right: 4px;
+}
+
+.stat-divider {
+  margin: 0 10px;
+  color: #e0e0e0;
+  font-size: 0.8rem;
+}
+
+/* Join Button on Card Header - Absolute Positioning */
+.card-join-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border-radius: 20px; /* Pillow shape */
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+  font-weight: 600;
+  height: 36px; /* Slightly taller to accommodate icon comfortably */
+  padding: 0 16px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* Spacing between icon and text */
+}
+
+.card-join-btn mat-icon {
+  font-size: 18px; /* Icon size adjustment */
+  width: 18px;
+  height: 18px;
+}
+
+.card-join-btn:hover {
+  background-color: rgba(103, 58, 183, 0.05);
+}
+
+
+
 .group-card mat-card-header {
   /* padding: 16px; */
-  background: #fafafa;
-  border-bottom: 1px solid #eeeeee;
+  position: relative; /* Context for absolute button */
+  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   flex-shrink: 0; /* Prevent header from shrinking */
   display: flex; /* Ensure flex behavior */
 }
@@ -153,42 +297,17 @@
   flex-grow: 1; /* Allow text to take up available space */
 }
 
-.header-right {
-  margin-left: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: start;
-  gap: 4px;
-}
 
-.since-badge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: white;
-  background-color: var(--accent-color);
-  padding: 4px 8px;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  white-space: nowrap;
-}
 
-.total-events-text {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
 
-.view-profile-header-link {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--primary-color);
+
+.clickable-title {
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  transition: color 0.2s;
 }
 
-.view-profile-header-link:hover {
+.clickable-title:hover {
+  color: var(--primary-color);
   text-decoration: underline;
 }
 
@@ -251,17 +370,19 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 }
 
 .event-item {
-  min-width: 300px;
+  /* Fit exactly 4 items: (100% width - 3 gaps of 12px) / 4 */
+  min-width: calc(25% - 9px); 
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 12px;
+  padding: 6px; /* Reduced padding to save space */
   border-radius: 8px;
   border: 1px solid #f0f0f0;
   background: #ffffff;
   transition: background-color 0.2s;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box; /* Ensure border and padding are included in width */
 }
 
 .event-item:hover {
@@ -296,6 +417,16 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
   color: var(--text-secondary);
 }
 
+.clickable-location {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.clickable-location:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
 .small-icon {
   font-size: 16px;
   width: 16px;
@@ -305,7 +436,6 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 
 /* Badges */
 .year-count-badge {
-  background: linear-gradient(45deg, #ffca28, #ff6f00);
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
@@ -313,6 +443,19 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
   border-radius: 12px;
   text-transform: uppercase;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Year Count Badge Colors based on Status */
+.event-item[data-status="started"] .year-count-badge {
+  background: linear-gradient(45deg, #42a5f5, #1565c0); /* Blue Gradient */
+}
+
+.event-item[data-status="upcoming"] .year-count-badge {
+  background: linear-gradient(45deg, #ffca28, #ff6f00); /* Orange Gradient (Original) */
+}
+
+.event-item[data-status="completed"] .year-count-badge {
+  background: linear-gradient(45deg, #66bb6a, #2e7d32); /* Green Gradient */
 }
 
 .event-status-text {
@@ -352,6 +495,25 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
   border-left: 4px solid #388e3c;
 }
 
+/* Icon Colors based on Status */
+.event-item[data-status="started"] .location-icon,
+.event-item[data-status="started"] .calendar-icon,
+.event-item[data-status="started"] .arrow-icon {
+  color: #1976d2;
+}
+
+.event-item[data-status="upcoming"] .location-icon,
+.event-item[data-status="upcoming"] .calendar-icon,
+.event-item[data-status="upcoming"] .arrow-icon {
+  color: #f57c00;
+}
+
+.event-item[data-status="completed"] .location-icon,
+.event-item[data-status="completed"] .calendar-icon,
+.event-item[data-status="completed"] .arrow-icon {
+  color: #388e3c;
+}
+
 .event-footer {
   display: flex;
   justify-content: space-between;
@@ -361,18 +523,20 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 }
 
 .view-details-link {
-  font-size: 0.9rem;
-  font-weight: 600;
   color: var(--primary-color);
   cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, color 0.2s;
+  padding: 4px;
+  border-radius: 50%;
 }
 
 .view-details-link:hover {
-  text-decoration: underline;
+  background-color: rgba(103, 58, 183, 0.1);
   color: var(--primary-dark);
+  transform: scale(1.1);
 }
 
 

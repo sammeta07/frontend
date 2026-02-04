@@ -1,0 +1,26 @@
+.login-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 350px;
+  padding-top: 10px;
+}
+
+.login-instruction {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  margin-bottom: 8px;
+  padding-right: 16px;
+}

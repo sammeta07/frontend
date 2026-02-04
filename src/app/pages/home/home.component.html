@@ -22,19 +22,32 @@
         <mat-card class="group-card" *ngFor="let group of samitiGroups">
           <mat-card-header>
             <img mat-card-avatar [src]="getGroupLogoUrl(group.name)" class="group-logo" alt="{{group.name}}">
-            <mat-card-title>{{ group.name }}</mat-card-title>
-            <mat-card-subtitle>
-              <mat-icon
-                style="font-size: 16px; width: 16px; height: 16px; vertical-align: middle; margin-right: 4px;">location_on</mat-icon>
-              {{ group.location }}
+            <mat-card-title class="clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</mat-card-title>
+            <mat-card-subtitle class="group-meta-wrapper">
+              <!-- Location Link -->
+              <div class="meta-row location-row" (click)="$event.stopPropagation(); openMap(group.location)" title="Open in Maps">
+                <mat-icon class="meta-icon">place</mat-icon>
+                <span class="location-text">{{ group.location }}</span>
+                <mat-icon class="link-arrow">open_in_new</mat-icon>
+              </div>
+
+              <!-- Stats Info -->
+              <div class="meta-row stats-row">
+                <span class="stat-item" title="Established Date">
+                  <mat-icon class="meta-icon tiny">verified_user</mat-icon>
+                  Est. {{ group.since }}
+                </span>
+                <span class="stat-divider">|</span>
+                <span class="stat-item" title="Events Count">
+                  <mat-icon class="meta-icon tiny">event_note</mat-icon>
+                  {{ group.totalEvents }} Events
+                </span>
+              </div>
             </mat-card-subtitle>
-            <mat-card-subtitle>
-              <span class="view-profile-header-link" (click)="openGroupProfile(group)">VIEW GROUP PROFILE</span>
-            </mat-card-subtitle>
-            <div class="header-right">
-              <span class="since-badge">Est. {{ group.since }}</span>
-              <span class="total-events-text">Total {{ group.totalEvents }} events</span>
-            </div>
+            
+            <button mat-stroked-button class="card-join-btn" (click)="$event.stopPropagation(); openJoinGroupDialog(group)">
+              <mat-icon>group_add</mat-icon> JOIN
+            </button>
           </mat-card-header>
 
           <mat-card-content>
@@ -46,14 +59,21 @@
                     <span class="year-count-badge" *ngIf="event.year_count">{{ getYearLabel(event.year_count) }}</span>
                   </div>
                   <span class="event-dates">
-                    <mat-icon class="small-icon">calendar_today</mat-icon>
+                    <mat-icon class="small-icon calendar-icon">calendar_today</mat-icon>
                     {{ event.start_date | date:'mediumDate' }} - {{ event.end_date | date:'mediumDate' }}
                   </span>
+                  <span class="event-dates clickable-location" *ngIf="event.location" (click)="openMap(event.location)" title="View on Map">
+                    <mat-icon class="small-icon location-icon">location_on</mat-icon>
+                    {{ event.location }}
+                  </span>
+
                   <div class="event-footer">
                     <span class="event-status-text" [attr.data-status]="event.status">
                       {{ event.status | titlecase }}
                     </span>
-                    <span class="view-details-link" (click)="openEventDetails(event)">View</span>
+                    <span class="view-details-link" (click)="openEventDetails(event)" title="View Details">
+                      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+                    </span>
                   </div>
                 </div>
               </div>

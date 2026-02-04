@@ -12,7 +12,9 @@
   </button>
 
   <div class="auth-buttons">
-    <button mat-button>LOGIN</button>
-    <button mat-raised-button color="accent">REGISTER</button>
+    <button mat-button (click)="openLoginDialog()">
+      <mat-icon>login</mat-icon>
+      LOGIN
+    </button>
   </div>
 </mat-toolbar>
