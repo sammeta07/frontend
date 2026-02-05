@@ -10,7 +10,7 @@ import { GroupProfileDialogComponent } from '../../components/group-profile-dial
 import { JoinGroupDialogComponent } from '../../components/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './home.service';
 import { enrichGroupData, getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
-import { SamitiGroup, SamitiEvent } from '../../models/samiti-group.model';
+import { groupDetailsModel, eventDetailsModel } from './home.model';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
 
-  samitiGroups: SamitiGroup[] = [];
+  samitiGroups: groupDetailsModel[] = [];
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
 
   getGroupsAndEventsData() {
     this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
-      this.samitiGroups = data as SamitiGroup[];
+      this.samitiGroups = data as groupDetailsModel[];
       enrichGroupData(this.samitiGroups);
       sortEvents(this.samitiGroups);
     });
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
     // TODO: Implement Create Samiti logic
   }
 
-  openEventDetails(event: SamitiEvent) {
+  openEventDetails(event: eventDetailsModel) {
     this.dialog.open(EventDetailsDialogComponent, {
       width: '600px',
       data: event,
@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  openGroupProfile(group: SamitiGroup) {
+  openGroupProfile(group: groupDetailsModel) {
     this.dialog.open(GroupProfileDialogComponent, {
       width: '500px',
       data: group,
@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  openJoinGroupDialog(group: SamitiGroup) {
+  openJoinGroupDialog(group: groupDetailsModel) {
     this.dialog.open(JoinGroupDialogComponent, {
       width: '400px',
       data: group,

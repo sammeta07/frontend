@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { groupDetailsModel } from './home.model';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +11,12 @@ export class HomeService {
 
   constructor(private http: HttpClient) {}
 
-  samitiGroups = [
+  samitiGroups: groupDetailsModel[] = [
     {
       id: 1,
       name: 'Azad Navyuvak Mandal',
       location: 'Raipur, CG',
       since: 2018,
-      totalEvents: 3,
       events: [
         { id: 101, title: 'Ganesh Utsav 2026', year_count: 5, start_date: '2026-02-01', end_date: '2026-02-11', location: 'Raipur Main Ground' },
         { id: 102, title: 'Blood Donation Camp', year_count: 2, start_date: '2026-03-10', end_date: '2026-03-15', location: 'City Hospital' },
@@ -28,7 +28,6 @@ export class HomeService {
       name: 'Ekta Samiti Bhilai',
       location: 'Bhilai, CG',
       since: 2010,
-      totalEvents: 4,
       events: [
         { id: 201, title: 'Durga Puja 2025', year_count: 51, start_date: '2026-01-10', end_date: '2026-01-20', location: 'Sector 6 Park' },
         { id: 202, title: 'Garba Night', year_count: 5, start_date: '2025-12-15', end_date: '2025-12-25', location: 'Community Hall' },
@@ -41,7 +40,6 @@ export class HomeService {
       name: 'Shiv Shakti Sewa Mandal',
       location: 'Durg, CG',
       since: 2005,
-      totalEvents: 5,
       events: [
         { id: 301, title: 'Maha Shivratri Bhandara', year_count: 15, start_date: '2026-01-30', end_date: '2026-02-10', location: 'Shiv Mandir' },
         { id: 302, title: 'Yoga Workshop', year_count: 3, start_date: '2026-04-01', end_date: '2026-04-12', location: 'Yoga Center' },
@@ -55,7 +53,6 @@ export class HomeService {
       name: 'Pragati Welfare Group',
       location: 'Bilaspur, CG',
       since: 2019,
-      totalEvents: 3,
       events: [
         { id: 401, title: 'Street Play (Nukkad)', year_count: 2, start_date: '2026-01-27', end_date: '2026-02-06', location: 'Main Market' },
         { id: 402, title: 'Clean City Campaign', year_count: 5, start_date: '2026-01-25', end_date: '2026-02-08', location: 'City Squares' },
@@ -67,7 +64,6 @@ export class HomeService {
       name: 'Rising Star Youth Club',
       location: 'Raigarh, CG',
       since: 2021,
-      totalEvents: 4,
       events: [
         { id: 501, title: 'Dance Competition', year_count: 4, start_date: '2026-05-15', end_date: '2026-05-25', location: 'Town Hall' },
         { id: 502, title: 'Summer Coaching', year_count: 8, start_date: '2026-01-22', end_date: '2026-02-05', location: 'School Ground' },
@@ -80,7 +76,6 @@ export class HomeService {
       name: 'Maitri Pariwar',
       location: 'Korba, CG',
       since: 1995,
-      totalEvents: 6,
       events: [
         { id: 601, title: 'Holi Milan', year_count: 20, start_date: '2026-01-05', end_date: '2026-01-15', location: 'Club House' },
         { id: 602, title: 'Tree Adoption', year_count: 3, start_date: '2026-01-26', end_date: '2026-02-06', location: 'City Parks' },
@@ -95,7 +90,6 @@ export class HomeService {
       name: 'Sanskriti Kala Manch',
       location: 'Jagdalpur, CG',
       since: 2008,
-      totalEvents: 3,
       events: [
         { id: 701, title: 'Tribal Art Fest', year_count: 25, start_date: '2026-01-29', end_date: '2026-02-09', location: 'Art Gallery' },
         { id: 702, title: 'Photography Contest', year_count: 4, start_date: '2026-08-19', end_date: '2026-08-30', location: 'Online' },
@@ -107,7 +101,6 @@ export class HomeService {
       name: 'Umeed Foundation',
       location: 'Ambikapur, CG',
       since: 2012,
-      totalEvents: 4,
       events: [
         { id: 801, title: 'Scholarship Exam', year_count: 10, start_date: '2026-01-30', end_date: '2026-02-12', location: 'School Exam Hall' },
         { id: 802, title: 'Winter Clothes Drive', year_count: 15, start_date: '2026-01-25', end_date: '2026-02-08', location: 'City Square' },
@@ -120,7 +113,6 @@ export class HomeService {
       name: 'Adarsh Gram Samiti',
       location: 'Dhamtari, CG',
       since: 2016,
-      totalEvents: 5,
       events: [
         { id: 901, title: 'Agri-Tech Seminar', year_count: 4, start_date: '2026-02-01', end_date: '2026-02-06', location: 'Panchayat Bhawan' },
         { id: 902, title: 'Pond Cleaning', year_count: 8, start_date: '2026-01-28', end_date: '2026-02-05', location: 'Village Pond' },
@@ -134,7 +126,6 @@ export class HomeService {
       name: 'Nav Nirman Group',
       location: 'Rajnandgaon, CG',
       since: 2022,
-      totalEvents: 3,
       events: [
         { id: 1001, title: 'Entrepreneurship Meet', year_count: 2, start_date: '2026-01-31', end_date: '2026-02-10', location: 'Hotel Grand' },
         { id: 1002, title: 'Career Counselling', year_count: 4, start_date: '2026-05-01', end_date: '2026-05-08', location: 'School Auditorium' },
@@ -146,7 +137,6 @@ export class HomeService {
       name: 'Jan Kalyan Trust',
       location: 'Mahasamund, CG',
       since: 2000,
-      totalEvents: 7,
       events: [
         { id: 1101, title: 'Eye Surgery Camp', year_count: 22, start_date: '2026-02-01', end_date: '2026-02-15', location: 'District Hospital' },
         { id: 1102, title: 'Women Empowerment Talk', year_count: 5, start_date: '2026-01-28', end_date: '2026-02-05', location: 'Community Hall' },
@@ -159,7 +149,7 @@ export class HomeService {
     }
   ];
 
-  getGroupsAndEvents(): Observable<any> {
+  getGroupsAndEvents(): Observable<groupDetailsModel[]> {
     // return this.http.get<any>(this.apiUrl);
     return new Observable(observer => {
       observer.next(this.samitiGroups);

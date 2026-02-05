@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { SamitiGroup } from '../../models/samiti-group.model';
+import { groupDetailsModel } from '../../pages/home/home.model';
 
 @Component({
   selector: 'app-join-group-dialog',
@@ -14,7 +14,7 @@ import { SamitiGroup } from '../../models/samiti-group.model';
 export class JoinGroupDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<JoinGroupDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: SamitiGroup
+    @Inject(MAT_DIALOG_DATA) public data: groupDetailsModel
   ) {}
 
   onCancel(): void {
