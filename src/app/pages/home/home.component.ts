@@ -10,7 +10,7 @@ import { GroupProfileDialogComponent } from '../../components/group-profile-dial
 import { JoinGroupDialogComponent } from '../../components/join-group-dialog/join-group-dialog.component';
 import { CreateSamitiDialogComponent } from '../../components/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './home.service';
-import { getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
+import { calculateStatus,getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
 import { groupDetailsModel, eventDetailsModel } from './home.model';
 
 @Component({
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
   private homeService = inject(HomeService);
 
   samitiGroups: groupDetailsModel[] = [];
+  private allGroups: groupDetailsModel[] = [];
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
@@ -43,9 +44,25 @@ export class HomeComponent implements OnInit {
   getGroupsAndEventsData() {
     this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
       this.samitiGroups = data as groupDetailsModel[];
+      this.allGroups = [...this.samitiGroups]; // Store original list
+      calculateStatus(this.samitiGroups);
       // enrichGroupData(this.samitiGroups);
       sortEvents(this.samitiGroups);
     });
+  }
+
+  onSearchGroups(event: any) {
+    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase().trim();
+    
+    if (!searchTerm) {
+      // Reset to all groups if search is empty
+      this.samitiGroups = [...this.allGroups];
+    } else {
+      // Filter groups by name
+      this.samitiGroups = this.allGroups.filter(group =>
+        group.name.toLowerCase().includes(searchTerm)
+      );
+    }
   }
 
   onCreateSamiti() {

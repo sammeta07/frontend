@@ -1,15 +1,23 @@
-export function calculateStatus(startDate: string, endDate: string): string {
-    const today = new Date();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+// export function calculateStatus(startDate: string, endDate: string): string {
+export function calculateStatus(groups: any[]) {
+    groups.forEach((group: any) => {
+      if (group.events) {
+          group.events.forEach((event: any) => {
+             const today = new Date();
+             const start = new Date(event.start_date);
+             const end = new Date(event.end_date);
+         
+             if (today < start) {
+                 event.status = 'upcoming';
+             } else if (today >= start && today <= end) {
+                 event.status = 'started';
+             } else {
+                 event.status = 'completed';
+             }
+          });
+      }
+    });
 
-    if (today < start) {
-        return 'upcoming';
-    } else if (today >= start && today <= end) {
-        return 'started';
-    } else {
-        return 'completed';
-    }
 }
 
 // export function enrichGroupData(groups: any[]) {
@@ -23,12 +31,7 @@ export function calculateStatus(startDate: string, endDate: string): string {
 //       group.president = getName();
 //       group.vicePresident = getName();
 //       group.treasurer = getName();
-      
-//       if (group.events) {
-//           group.events.forEach((event: any) => {
-//              event.status = calculateStatus(event.start_date, event.end_date);
-//           });
-//       }
+    
       
 //       // Generate unique members list
 //       const members = new Set<string>();
