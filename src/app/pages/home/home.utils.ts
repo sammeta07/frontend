@@ -12,32 +12,32 @@ export function calculateStatus(startDate: string, endDate: string): string {
     }
 }
 
-export function enrichGroupData(groups: any[]) {
-    const firstNames = ['Ramesh', 'Suresh', 'Mahesh', 'Dinesh', 'Vikram', 'Rahul', 'Amit', 'Priya', 'Neha', 'Anil', 'Sanjay', 'Viay', 'Rajesh'];
-    const lastNames = ['Kumar', 'Patel', 'Verma', 'Singh', 'Yadav', 'Sharma', 'Gupta', 'Das', 'Mishra', 'Tiwari'];
+// export function enrichGroupData(groups: any[]) {
+//     const firstNames = ['Ramesh', 'Suresh', 'Mahesh', 'Dinesh', 'Vikram', 'Rahul', 'Amit', 'Priya', 'Neha', 'Anil', 'Sanjay', 'Viay', 'Rajesh'];
+//     const lastNames = ['Kumar', 'Patel', 'Verma', 'Singh', 'Yadav', 'Sharma', 'Gupta', 'Das', 'Mishra', 'Tiwari'];
     
-    const getName = () => `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
+//     const getName = () => `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
 
-    groups.forEach((group: any) => {
-      group.totalMembers = Math.floor(Math.random() * 50) + 15;
-      group.president = getName();
-      group.vicePresident = getName();
-      group.treasurer = getName();
+//     groups.forEach((group: any) => {
+//       group.totalMembers = Math.floor(Math.random() * 50) + 15;
+//       group.president = getName();
+//       group.vicePresident = getName();
+//       group.treasurer = getName();
       
-      if (group.events) {
-          group.events.forEach((event: any) => {
-             event.status = calculateStatus(event.start_date, event.end_date);
-          });
-      }
+//       if (group.events) {
+//           group.events.forEach((event: any) => {
+//              event.status = calculateStatus(event.start_date, event.end_date);
+//           });
+//       }
       
-      // Generate unique members list
-      const members = new Set<string>();
-      while(members.size < group.totalMembers) {
-        members.add(getName());
-      }
-      group.members = Array.from(members);
-    });
-}
+//       // Generate unique members list
+//       const members = new Set<string>();
+//       while(members.size < group.totalMembers) {
+//         members.add(getName());
+//       }
+//       group.members = Array.from(members);
+//     });
+// }
 
 export function getGroupLogoUrl(name: string): string {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;

@@ -1,0 +1,134 @@
+<header>
+  <h2>Create New Organization</h2>
+  <button mat-icon-button (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</header>
+
+<div class="dialog-body">
+  
+  <form [formGroup]="samitiForm">
+    <mat-tab-group animationDuration="300ms">
+      <!-- TAB 1: Organization Profile -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px">business</mat-icon>
+          Group Details
+        </ng-template>
+        
+        <div class="setup-card" style="margin-top: 20px;">
+          <div class="card-content">
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Group Name</mat-label>
+              <input matInput placeholder="Ex. Azad Navyuvak Mandal" formControlName="samitiName" required>
+            </mat-form-field>
+
+            <div class="grid-2">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Location</mat-label>
+                <input matInput placeholder="Ex. Raipur" formControlName="location" required>
+                <mat-icon matSuffix>place</mat-icon>
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Year Founded</mat-label>
+                <input matInput type="number" formControlName="since" required>
+                <mat-icon matSuffix>event</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" subscriptSizing="dynamic">
+              <mat-label>Group Description</mat-label>
+              <textarea matInput placeholder="Describe your mission or activities..." formControlName="description" rows="3"></textarea>
+            </mat-form-field>
+
+            <div style="margin-top: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span style="font-weight: 500; color: rgba(0,0,0,0.87);">Group Contact Numbers</span>
+                <button mat-stroked-button color="primary" (click)="addContactNumber()" type="button">
+                  <mat-icon>add</mat-icon> Add Number
+                </button>
+              </div>
+              
+              <div formArrayName="groupContactNumbers">
+                <div *ngFor="let contact of groupContactNumbers.controls; let i = index" style="display: flex; gap: 8px; margin-bottom: 12px;">
+                  <mat-form-field appearance="outline" subscriptSizing="dynamic" style="flex: 1;">
+                    <mat-label>Contact Number {{i+1}}</mat-label>
+                    <input matInput type="tel" [formControlName]="i" placeholder="+91 98765 43210">
+                    <mat-icon matSuffix>phone</mat-icon>
+                  </mat-form-field>
+                  <button mat-icon-button color="warn" (click)="removeContactNumber(i)" [disabled]="groupContactNumbers.length === 1" type="button" style="margin-top: 4px;">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- TAB 2: Administrative Access -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon style="margin-right: 8px">shield</mat-icon>
+          Admin Details
+        </ng-template>
+        
+        <div class="setup-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <span class="card-title">Administrator Management</span>
+            <div style="flex: 1"></div>
+            <button mat-stroked-button color="primary" (click)="addAdmin()" type="button">
+              <mat-icon>add</mat-icon> Add Group Admin
+            </button>
+          </div>
+          
+          <div class="card-content" formArrayName="admins">
+            <div class="admin-item" *ngFor="let admin of admins.controls; let i = index" [formGroupName]="i">
+              <div class="admin-header">
+                <span class="admin-badge">GROUP Admin #{{i+1}}</span>
+                <button mat-icon-button color="warn" (click)="removeAdmin(i)" [disabled]="admins.length === 1" title="Remove" type="button">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+              
+              <div class="grid-2" style="margin-bottom: 12px;">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Email Address</mat-label>
+                  <input matInput type="email" formControlName="email" required placeholder="name@example.com">
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput type="tel" formControlName="contactNumber" required placeholder="+91 98765 43210">
+                </mat-form-field>
+              </div>
+
+              <div class="grid-2">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Password</mat-label>
+                  <input matInput formControlName="password" required type="password">
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                  <mat-label>Confirm Password</mat-label>
+                  <input matInput formControlName="confirmPassword" required type="password">
+                  <mat-icon matSuffix>verified_user</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </form>
+
+</div>
+
+<footer>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="onSubmit()" [disabled]="!samitiForm.valid">
+    Create Organization
+  </button>
+</footer>

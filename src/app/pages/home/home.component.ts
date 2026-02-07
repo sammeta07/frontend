@@ -8,8 +8,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { EventDetailsDialogComponent } from '../../components/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from '../../components/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from '../../components/join-group-dialog/join-group-dialog.component';
+import { CreateSamitiDialogComponent } from '../../components/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './home.service';
-import { enrichGroupData, getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
+import { getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
 import { groupDetailsModel, eventDetailsModel } from './home.model';
 
 @Component({
@@ -42,18 +43,39 @@ export class HomeComponent implements OnInit {
   getGroupsAndEventsData() {
     this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
       this.samitiGroups = data as groupDetailsModel[];
-      enrichGroupData(this.samitiGroups);
+      // enrichGroupData(this.samitiGroups);
       sortEvents(this.samitiGroups);
     });
   }
 
   onCreateSamiti() {
-    // TODO: Implement Create Samiti logic
+    const dialogRef = this.dialog.open(CreateSamitiDialogComponent, {
+      position: { right: '0', top: '0' },
+      height: '100%',
+      width: '50%',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      panelClass: 'slide-in-dialog',
+      autoFocus: false,
+      enterAnimationDuration: '300ms',
+      exitAnimationDuration: '300ms'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('New Samiti Created:', result);
+      if (0) {
+        // logic to add new samiti to the list
+        const newGroup = result as groupDetailsModel;
+        newGroup.id = this.samitiGroups.length + 1; // simple id generation
+        this.samitiGroups.unshift(newGroup);
+        // enrichGroupData([newGroup]); // Create placeholder members etc
+      }
+    });
   }
 
   openEventDetails(event: eventDetailsModel) {
     this.dialog.open(EventDetailsDialogComponent, {
-      width: '600px',
+      width: '800px',
       data: event,
       autoFocus: false 
     });

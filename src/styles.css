@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Dialog Slide-in Animation */
+@keyframes slideInFromRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in-dialog .mat-mdc-dialog-container {
+  animation: slideInFromRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Optional: Make the dialog look more like a sidebar */
+.slide-in-dialog .mat-mdc-dialog-surface {
+  border-radius: 0 !important;
+}
