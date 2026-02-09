@@ -7,6 +7,7 @@ export interface eventDetailsModel {
   location: string;
   year_count: number;
   description: string;
+  images?: string[]; // Array of image URLs for carousel
 }
 
 export interface GroupAdmin {

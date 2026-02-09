@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,7 +28,7 @@ import { MatTabsModule } from '@angular/material/tabs';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
   private snackBar = inject(MatSnackBar);
@@ -38,6 +38,18 @@ export class HomeComponent implements OnInit {
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
   selectedYearIndex: number = 0;
   searchTerm: string = '';
+  currentLocationLabel: string = 'Detecting your location...';
+  currentCoords: { lat: number; lng: number } | null = null;
+  isLocationLoading: boolean = true;
+  
+  // Carousel state tracking - key is event.id, value is current image index
+  private carouselIndices: Map<number, number> = new Map();
+  
+  // Auto-play intervals - key is event.id, value is interval ID
+  private carouselIntervals: Map<number, any> = new Map();
+  
+  // Auto-play configuration
+  private readonly AUTO_PLAY_INTERVAL = 4000; // 4 seconds
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
@@ -48,21 +60,71 @@ export class HomeComponent implements OnInit {
     const currentYear = new Date().getFullYear();
     const currentYearIndex = this.years.indexOf(currentYear);
     this.selectedYearIndex = currentYearIndex >= 0 ? currentYearIndex : 0;
-    
-    this.getGroupsAndEventsData();
+
+    this.initLocationAndFetch(currentYear);
+  }
+
+  ngOnDestroy() {
+    // Clean up all auto-play intervals
+    this.carouselIntervals.forEach((intervalId) => {
+      clearInterval(intervalId);
+    });
+    this.carouselIntervals.clear();
+  }
+
+  private initLocationAndFetch(year: number) {
+    if (!navigator.geolocation) {
+      this.currentLocationLabel = 'Location unavailable';
+      this.isLocationLoading = false;
+      this.getGroupsAndEventsData();
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        this.currentCoords = { lat: latitude, lng: longitude };
+        this.currentLocationLabel = `Lat ${latitude.toFixed(2)}, Lng ${longitude.toFixed(2)}`;
+        this.isLocationLoading = false;
+        this.getGroupsAndEventsByLocationYear(latitude, longitude, year);
+      },
+      () => {
+        this.currentLocationLabel = 'Location unavailable';
+        this.isLocationLoading = false;
+        this.getGroupsAndEventsData();
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 10000,
+        maximumAge: 600000
+      }
+    );
   }
 
   getGroupsAndEventsData() {
     this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
-      this.samitiGroups = data as groupDetailsModel[];
-      this.allGroups = [...this.samitiGroups]; // Store original list
-      calculateStatus(this.samitiGroups);
-      // enrichGroupData(this.samitiGroups);
-      sortEvents(this.samitiGroups);
-      // Sort groups alphabetically by name
-      this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
-      this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
+      this.setGroupsData(data as groupDetailsModel[]);
     });
+  }
+
+  getGroupsAndEventsByLocationYear(lat: number, lng: number, year: number) {
+    this.homeService.getGroupsAndEventsByLocationYear(lat, lng, year).subscribe((result) => {
+      this.setGroupsData(result.groups);
+      if (result.locationLabel) {
+        this.currentLocationLabel = result.locationLabel;
+      }
+    });
+  }
+
+  private setGroupsData(data: groupDetailsModel[]) {
+    this.samitiGroups = data;
+    this.allGroups = [...this.samitiGroups]; // Store original list
+    calculateStatus(this.samitiGroups);
+    // enrichGroupData(this.samitiGroups);
+    sortEvents(this.samitiGroups);
+    // Sort groups alphabetically by name
+    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+    this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   onSearchGroups(event: Event) {
@@ -164,5 +226,88 @@ export class HomeComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     });
+  }
+
+  // Carousel Methods
+  getCarouselIndex(eventId: number): number {
+    // Initialize auto-play when carousel index is first accessed
+    if (!this.carouselIndices.has(eventId)) {
+      this.carouselIndices.set(eventId, 0);
+      this.startAutoPlay(eventId);
+    }
+    return this.carouselIndices.get(eventId) ?? 0;
+  }
+
+  nextImage(eventId: number) {
+    const event = this.samitiGroups
+      .flatMap(g => g.events)
+      .find(e => e.id === eventId);
+    
+    if (event && event.images && event.images.length > 0) {
+      const currentIndex = this.getCarouselIndex(eventId);
+      const nextIndex = (currentIndex + 1) % event.images.length;
+      this.carouselIndices.set(eventId, nextIndex);
+      // Reset auto-play when user manually navigates
+      this.restartAutoPlay(eventId);
+    }
+  }
+
+  previousImage(eventId: number) {
+    const event = this.samitiGroups
+      .flatMap(g => g.events)
+      .find(e => e.id === eventId);
+    
+    if (event && event.images && event.images.length > 0) {
+      const currentIndex = this.getCarouselIndex(eventId);
+      const previousIndex = (currentIndex - 1 + event.images.length) % event.images.length;
+      this.carouselIndices.set(eventId, previousIndex);
+      // Reset auto-play when user manually navigates
+      this.restartAutoPlay(eventId);
+    }
+  }
+
+  setCarouselIndex(eventId: number, index: number) {
+    const event = this.samitiGroups
+      .flatMap(g => g.events)
+      .find(e => e.id === eventId);
+    
+    if (event && event.images && index >= 0 && index < event.images.length) {
+      this.carouselIndices.set(eventId, index);
+      // Reset auto-play when user manually navigates
+      this.restartAutoPlay(eventId);
+    }
+  }
+
+  // Auto-play methods
+  private startAutoPlay(eventId: number) {
+    // Don't start if the carousel interval already exists
+    if (this.carouselIntervals.has(eventId)) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      const event = this.samitiGroups
+        .flatMap(g => g.events)
+        .find(e => e.id === eventId);
+      
+      if (event && event.images && event.images.length > 0) {
+        const currentIndex = this.carouselIndices.get(eventId) ?? 0;
+        const nextIndex = (currentIndex + 1) % event.images.length;
+        this.carouselIndices.set(eventId, nextIndex);
+      }
+    }, this.AUTO_PLAY_INTERVAL);
+
+    this.carouselIntervals.set(eventId, intervalId);
+  }
+
+  private restartAutoPlay(eventId: number) {
+    // Clear existing interval
+    const existingInterval = this.carouselIntervals.get(eventId);
+    if (existingInterval) {
+      clearInterval(existingInterval);
+    }
+    
+    // Start a new interval
+    this.startAutoPlay(eventId);
   }
 }

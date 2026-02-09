@@ -23,6 +23,10 @@
   <section class="near-you-section">
       <div class="section-header">
         <h2>Explore Active Events</h2>
+        <div class="section-location" [class.is-loading]="isLocationLoading">
+          <mat-icon>my_location</mat-icon>
+          <span>{{ currentLocationLabel }}</span>
+        </div>
         <div class="search-bar-wrapper">
           <mat-icon class="search-icon">search</mat-icon>
           <input
@@ -106,49 +110,105 @@
             <mat-tab *ngFor="let year of years" [label]="year.toString()">
               <div class="events-section">
                 <div class="events-grid-enhanced">
-                  <div class="event-card-enhanced" *ngFor="let event of group.events" [attr.data-status]="event.status">
+                  <div class="event-card-enhanced" *ngFor="let event of group.events; let eventIdx = index" [attr.data-status]="event.status">
                     <!-- Status indicator bar -->
                     <div class="event-status-bar" [attr.data-status]="event.status"></div>
-                    <div class="event-card-body">
-                      <!-- Event Header -->
-                      <div class="event-card-header">
-                        <h5 class="event-card-title">{{ event.title }}</h5>
-                        <span class="event-year-badge-new" [attr.data-status]="event.status">
-                          ⭐ {{ getYearLabel(event.year_count) }}
-                        </span>
-                      </div>
-
-                      <!-- Event Description -->
-                      <p class="event-card-description">{{ event.description }}</p>
-
-                      <!-- Event Meta Information -->
-                      <div class="event-card-meta">
-                        <div class="meta-row">
-                          <mat-icon>calendar_today</mat-icon>
-                          <span class="meta-text">
-                            {{ event.start_date | date:'MMM d, yyyy' }} - {{ event.end_date | date:'MMM d, yyyy' }}
-                          </span>
-                        </div>
-
-                        <div class="meta-row clickable" (click)="$event.stopPropagation(); openMap(event.location)"
-                          title="Open in Maps">
-                          <mat-icon>location_on</mat-icon>
-                          <span class="meta-text">{{ event.location }}</span>
-                        </div>
-                      </div>
-
-                      <!-- Event Footer -->
-                      <div class="event-card-footer">
-                        <span class="event-status-chip" [attr.data-status]="event.status">
-                          <mat-icon>{{ event.status === 'started' ? 'play_circle' : event.status === 'completed' ?
-                            'check_circle' : 'schedule' }}</mat-icon>
+                    
+                    <div class="event-card-container">
+                      <!-- Top: Images Carousel -->
+                      <div class="event-carousel-top" *ngIf="event.images && event.images.length > 0">
+                        <img [src]="event.images[getCarouselIndex(event.id)]" 
+                             [alt]="event.title + ' image'" 
+                             class="carousel-top-image">
+                        
+                        <!-- Image overlay gradient -->
+                        <div class="carousel-top-overlay"></div>
+                        
+                        <!-- Navigation Buttons -->
+                        <button class="carousel-btn carousel-btn-prev" 
+                          (click)="previousImage(event.id)"
+                          aria-label="Previous image">
+                          <mat-icon>chevron_left</mat-icon>
+                        </button>
+                        <button class="carousel-btn carousel-btn-next" 
+                          (click)="nextImage(event.id)"
+                          aria-label="Next image">
+                          <mat-icon>chevron_right</mat-icon>
+                        </button>
+                        
+                        <!-- Status Badge -->
+                        <span class="event-status-badge-overlay" [attr.data-status]="event.status">
+                          <mat-icon>{{ event.status === 'started' ? 'play_circle' : event.status === 'completed' ? 'check_circle' : 'schedule' }}</mat-icon>
                           {{ event.status | titlecase }}
                         </span>
+                        
+                        <!-- Year Badge -->
+                        <span class="event-year-badge-overlay" [attr.data-status]="event.status">
+                          {{ getYearLabel(event.year_count) }}
+                        </span>
+                        
+                        <!-- Carousel Indicators -->
+                        <div class="carousel-indicators-bottom">
+                          <button *ngFor="let img of event.images; let i = index" 
+                            class="indicator-dot"
+                            [class.active]="i === getCarouselIndex(event.id)"
+                            (click)="setCarouselIndex(event.id, i)"
+                            [attr.aria-label]="'Image ' + (i + 1)">
+                          </button>
+                        </div>
+                      </div>
 
-                        <button mat-button class="event-details-btn" (click)="openEventDetails(event)">
-                          Details
-                          <mat-icon>arrow_forward</mat-icon>
-                        </button>
+                      <!-- Placeholder when no images -->
+                      <div class="event-carousel-top event-no-images-top" *ngIf="!event.images || event.images.length === 0">
+                        <div class="no-image-placeholder-top">
+                          <mat-icon>image_not_supported</mat-icon>
+                          <p>No images</p>
+                        </div>
+                        
+                        <!-- Status Badge -->
+                        <span class="event-status-badge-overlay" [attr.data-status]="event.status">
+                          <mat-icon>{{ event.status === 'started' ? 'play_circle' : event.status === 'completed' ? 'check_circle' : 'schedule' }}</mat-icon>
+                          {{ event.status | titlecase }}
+                        </span>
+                        
+                        <!-- Year Badge -->
+                        <span class="event-year-badge-overlay" [attr.data-status]="event.status">
+                          {{ getYearLabel(event.year_count) }}
+                        </span>
+                      </div>
+
+                      <!-- Bottom: Compact Details -->
+                      <div class="event-details-compact">
+                        <div class="event-title-header">
+                          <h5 class="event-title-compact">{{ event.title }}</h5>
+                          <span class="event-status-badge-details" [attr.data-status]="event.status">
+                            <mat-icon>{{ event.status === 'started' ? 'play_circle' : event.status === 'completed' ? 'check_circle' : 'schedule' }}</mat-icon>
+                            {{ event.status | titlecase }}
+                          </span>
+                        </div>
+                        
+                        <p class="event-description-compact">{{ event.description }}</p>
+                        
+                        <div class="event-meta-compact">
+                          <div class="meta-item-compact">
+                            <mat-icon>calendar_today</mat-icon>
+                            <span>{{ event.start_date | date:'MMM d' }} - {{ event.end_date | date:'MMM d, yyyy' }}</span>
+                          </div>
+                          
+                          <div class="event-meta-location-row">
+                            <div class="meta-item-compact clickable" 
+                                 (click)="$event.stopPropagation(); openMap(event.location)"
+                                 title="Open in Maps">
+                              <mat-icon>location_on</mat-icon>
+                              <span>{{ event.location }}</span>
+                            </div>
+                            
+                            <button mat-button class="details-action-btn" (click)="openEventDetails(event)">
+                              View Details
+                              <mat-icon>arrow_forward</mat-icon>
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -168,8 +228,8 @@
       <div class="no-results-state" *ngIf="samitiGroups.length === 0 && searchTerm">
         <mat-icon>search_off</mat-icon>
         <h3>No groups found</h3>
-        <p>No groups match your search for "<strong>{{ searchTerm }}</strong>" and location "<strong>location</strong>"</p>
-        <p class="suggestion">Try searching with a different group name, group ID.</p>
+        <p>No groups match your search for "<strong>{{ searchTerm }}</strong>" near "<strong>{{ currentLocationLabel || 'your area' }}</strong>"</p>
+        <p class="suggestion">Try searching with a different group name, group ID, or location.</p>
       </div>
   </section>
 </div>
