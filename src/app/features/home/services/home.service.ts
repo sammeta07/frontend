@@ -190,6 +190,17 @@ export class HomeService {
         { id: 1106, title: 'Blood Group Testing', year_count: 8, start_date: '2026-01-30', end_date: '2026-02-08', location: 'Red Cross', description: 'Know your blood group, save lives! Free blood group testing camps help people understand their blood type and contribute to blood banks. Essential for emergencies and medical situations.' },
         { id: 1107, title: 'Evening School Support', year_count: 10, start_date: '2026-01-20', end_date: '2026-02-04', location: 'Local School', description: 'Education for all, even after sunset! Our 10-year evening school program supports working children and adults in completing their education. Quality learning with flexible schedules for everyone.' }
       ]
+    },
+    {
+      id: 12,
+      groupId: 'NSM_12',
+      name: 'Naya Savera Mandal',
+      location: 'Kanker, CG',
+      since: 2024,
+      description: 'Naya Savera Mandal is a newly established community organization committed to bringing positive change through social initiatives and community development programs.',
+      contactNumbers: ['9876012345', '9123456791'],
+      admins: [],
+      events: []
     }
   ];
 

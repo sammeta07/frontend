@@ -63,7 +63,9 @@ export function getYearLabel(year: number): string {
 }
 
 export function sortEvents(groups: any[]) {
-    const priority: { [key: string]: number } = { 'completed': 1, 'started': 2, 'upcoming': 3 };
+    // Priority: started (1) -> upcoming (2) -> completed (3)
+    // This ensures ongoing events appear first, followed by future events, then past events
+    const priority: { [key: string]: number } = { 'started': 1, 'upcoming': 2, 'completed': 3 };
     groups.forEach((group: any) => {
       group.events.sort((a: { status: string | number; }, b: { status: string | number; }) => (priority[a.status] || 99) - (priority[b.status] || 99));
     });

@@ -12,6 +12,7 @@ import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/crea
 import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +22,8 @@ import { groupDetailsModel, eventDetailsModel } from './models/home.model';
     MatCardModule,
     MatButtonModule,
     MatIcon,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -33,12 +35,20 @@ export class HomeComponent implements OnInit {
 
   samitiGroups: groupDetailsModel[] = [];
   private allGroups: groupDetailsModel[] = [];
+  years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
+  selectedYearIndex: number = 0;
+  searchTerm: string = '';
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
   ngOnInit() {
+    // Set current year as default selected tab
+    const currentYear = new Date().getFullYear();
+    const currentYearIndex = this.years.indexOf(currentYear);
+    this.selectedYearIndex = currentYearIndex >= 0 ? currentYearIndex : 0;
+    
     this.getGroupsAndEventsData();
   }
 
@@ -49,21 +59,36 @@ export class HomeComponent implements OnInit {
       calculateStatus(this.samitiGroups);
       // enrichGroupData(this.samitiGroups);
       sortEvents(this.samitiGroups);
+      // Sort groups alphabetically by name
+      this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+      this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
     });
   }
 
-  onSearchGroups(event: any) {
-    const searchTerm = (event.target as HTMLInputElement).value.toLowerCase().trim();
+  onSearchGroups(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm = input.value.toLowerCase().trim();
     
-    if (!searchTerm) {
+    if (!this.searchTerm) {
       // Reset to all groups if search is empty
       this.samitiGroups = [...this.allGroups];
     } else {
-      // Filter groups by name
+      // Filter groups by name, group ID, or location
       this.samitiGroups = this.allGroups.filter(group =>
-        group.name.toLowerCase().includes(searchTerm)
+        group.name.toLowerCase().includes(this.searchTerm) ||
+        (group.groupId && group.groupId.toLowerCase().includes(this.searchTerm)) ||
+        (group.location && group.location.toLowerCase().includes(this.searchTerm))
       );
     }
+    // Maintain alphabetical order after search
+    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  clearSearch(input: HTMLInputElement) {
+    input.value = '';
+    this.searchTerm = '';
+    this.samitiGroups = [...this.allGroups];
+    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   onCreateSamiti() {
