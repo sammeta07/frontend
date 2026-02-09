@@ -2,17 +2,16 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips'; 
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { EventDetailsDialogComponent } from '../../components/event-details-dialog/event-details-dialog.component';
-import { GroupProfileDialogComponent } from '../../components/group-profile-dialog/group-profile-dialog.component';
-import { JoinGroupDialogComponent } from '../../components/join-group-dialog/join-group-dialog.component';
-import { CreateSamitiDialogComponent } from '../../components/create-samiti-dialog/create-samiti-dialog.component';
-import { HomeService } from './home.service';
-import { calculateStatus,getGroupLogoUrl, getYearLabel, sortEvents } from './home.utils';
-import { groupDetailsModel, eventDetailsModel } from './home.model';
+import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/event-details-dialog.component';
+import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
+import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
+import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
+import { HomeService } from './services/home.service';
+import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
+import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 
 @Component({
   selector: 'app-home',
@@ -21,7 +20,6 @@ import { groupDetailsModel, eventDetailsModel } from './home.model';
     CommonModule,
     MatCardModule,
     MatButtonModule,
-    MatChipsModule,
     MatIcon,
     MatSnackBarModule
   ],
