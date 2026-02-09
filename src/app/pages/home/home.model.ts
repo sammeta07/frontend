@@ -18,6 +18,7 @@ export interface GroupAdmin {
 
 export interface groupDetailsModel {
   id: number;
+  groupId: string; // Combination of first letters of group name words and id
   name: string;
   location: string;
   since: number;

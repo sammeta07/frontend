@@ -64,6 +64,11 @@
                 </div>
               </div>
               <div class="header-actions">
+                <div class="group-id-info" *ngIf="group.groupId">
+                  <span class="group-id-label">Group Id:</span>
+                  <span class="group-id-value">{{ group.groupId }}</span>
+                  <mat-icon class="copy-icon" (click)="copyToClipboard(group.groupId)" title="Copy Group ID">content_copy</mat-icon>
+                </div>
                 <button mat-raised-button color="primary" (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
                   class="join-btn">
                   <mat-icon>group_add</mat-icon>

@@ -14,6 +14,7 @@ export class HomeService {
   samitiGroups: groupDetailsModel[] = [
     {
       id: 1,
+      groupId: 'ANM_1',
       name: 'Azad Navyuvak Mandal',
       location: 'Raipur, CG',
       since: 2018,
@@ -28,6 +29,7 @@ export class HomeService {
     },
     {
       id: 2,
+      groupId: 'ESB_2',
       name: 'Ekta Samiti Bhilai',
       location: 'Bhilai, CG',
       since: 2010,
@@ -43,6 +45,7 @@ export class HomeService {
     },
     {
       id: 3,
+      groupId: 'SSSM_3',
       name: 'Shiv Shakti Sewa Mandal',
       location: 'Durg, CG',
       since: 2005,
@@ -59,6 +62,7 @@ export class HomeService {
     },
     {
       id: 4,
+      groupId: 'PWG_4',
       name: 'Pragati Welfare Group',
       location: 'Bilaspur, CG',
       since: 2019,
@@ -73,6 +77,7 @@ export class HomeService {
     },
     {
       id: 5,
+      groupId: 'RSYC_5',
       name: 'Rising Star Youth Club',
       location: 'Raigarh, CG',
       since: 2021,
@@ -88,6 +93,7 @@ export class HomeService {
     },
     {
       id: 6,
+      groupId: 'MP_6',
       name: 'Maitri Pariwar',
       location: 'Korba, CG',
       since: 1995,
@@ -105,6 +111,7 @@ export class HomeService {
     },
     {
       id: 7,
+      groupId: 'SKM_7',
       name: 'Sanskriti Kala Manch',
       location: 'Jagdalpur, CG',
       since: 2008,
@@ -119,6 +126,7 @@ export class HomeService {
     },
     {
       id: 8,
+      groupId: 'UF_8',
       name: 'Umeed Foundation',
       location: 'Ambikapur, CG',
       since: 2012,
@@ -134,6 +142,7 @@ export class HomeService {
     },
     {
       id: 9,
+      groupId: 'AGS_9',
       name: 'Adarsh Gram Samiti',
       location: 'Dhamtari, CG',
       since: 2016,
@@ -150,6 +159,7 @@ export class HomeService {
     },
     {
       id: 10,
+      groupId: 'NNG_10',
       name: 'Nav Nirman Group',
       location: 'Rajnandgaon, CG',
       since: 2022,
@@ -164,6 +174,7 @@ export class HomeService {
     },
     {
       id: 11,
+      groupId: 'JKT_11',
       name: 'Jan Kalyan Trust',
       location: 'Mahasamund, CG',
       since: 2000,

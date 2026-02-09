@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips'; 
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EventDetailsDialogComponent } from '../../components/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from '../../components/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from '../../components/join-group-dialog/join-group-dialog.component';
@@ -21,7 +22,8 @@ import { groupDetailsModel, eventDetailsModel } from './home.model';
     MatCardModule,
     MatButtonModule,
     MatChipsModule,
-    MatIcon
+    MatIcon,
+    MatSnackBarModule
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -29,6 +31,7 @@ import { groupDetailsModel, eventDetailsModel } from './home.model';
 export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
+  private snackBar = inject(MatSnackBar);
 
   samitiGroups: groupDetailsModel[] = [];
   private allGroups: groupDetailsModel[] = [];
@@ -117,6 +120,26 @@ export class HomeComponent implements OnInit {
       width: '400px',
       data: group,
       autoFocus: false
+    });
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Group ID copied to clipboard:', text);
+      this.snackBar.open(`Group Id '${text}' copied to clipboard`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['copy-snackbar']
+      });
+    }).catch(err => {
+      console.error('Failed to copy to clipboard:', err);
+      this.snackBar.open('Failed to copy Group Id', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['error-snackbar']
+      });
     });
   }
 }
