@@ -11,6 +11,23 @@
       </div>
       <h1 class="hero-title">Manage Your Samiti Digitally</h1>
       <p class="hero-subtitle">Apne Mandal ya Group ka hisaab-kitaab rakhein ekdam asaan aur transparent.</p>
+      
+      <!-- Stats Counter Section -->
+      <div class="hero-stats" aria-label="Key platform stats">
+        <div class="hero-stat-card">
+          <span class="stat-value">500+</span>
+          <span class="stat-label">Total Members</span>
+        </div>
+        <div class="hero-stat-card">
+          <span class="stat-value">20+</span>
+          <span class="stat-label">Success Stories</span>
+        </div>
+        <div class="hero-stat-card">
+          <span class="stat-value">12</span>
+          <span class="stat-label">Active Groups</span>
+        </div>
+      </div>
+      
       <div class="hero-actions">
         <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="hero-primary-btn">
           <mat-icon>add</mat-icon> 
@@ -199,7 +216,7 @@
                               <span>{{ event.location }}</span>
                             </div>
                             
-                            <button mat-button class="details-action-btn" (click)="openEventDetails(event)">
+                            <button mat-stroked-button class="details-action-btn" (click)="openEventDetails(event)">
                               View Details
                               <mat-icon>arrow_forward</mat-icon>
                             </button>
