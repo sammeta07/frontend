@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,7 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './services/home.service';
+import { LocationService } from '../../services/location.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -27,10 +28,12 @@ import { MatTabsModule } from '@angular/material/tabs';
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
+  private locationService = inject(LocationService);
   private snackBar = inject(MatSnackBar);
 
   samitiGroups: groupDetailsModel[] = [];
@@ -38,9 +41,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
   selectedYearIndex: number = 0;
   searchTerm: string = '';
-  currentLocationLabel: string = 'Detecting your location...';
-  currentCoords: { lat: number; lng: number } | null = null;
-  isLocationLoading: boolean = true;
   
   // Carousel state tracking - key is event.id, value is current image index
   private carouselIndices: Map<number, number> = new Map();
@@ -73,32 +73,20 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private initLocationAndFetch(year: number) {
-    if (!navigator.geolocation) {
-      this.currentLocationLabel = 'Location unavailable';
-      this.isLocationLoading = false;
-      this.getGroupsAndEventsData();
-      return;
+    const coords = this.locationService.getCoords();
+    if (coords) {
+      this.getGroupsAndEventsByLocationYear(coords.lat, coords.lng, year);
+    } else {
+      // Wait a moment for location service to get coords, then try again
+      setTimeout(() => {
+        const updatedCoords = this.locationService.getCoords();
+        if (updatedCoords) {
+          this.getGroupsAndEventsByLocationYear(updatedCoords.lat, updatedCoords.lng, year);
+        } else {
+          this.getGroupsAndEventsData();
+        }
+      }, 1000);
     }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        this.currentCoords = { lat: latitude, lng: longitude };
-        this.currentLocationLabel = `Lat ${latitude.toFixed(2)}, Lng ${longitude.toFixed(2)}`;
-        this.isLocationLoading = false;
-        this.getGroupsAndEventsByLocationYear(latitude, longitude, year);
-      },
-      () => {
-        this.currentLocationLabel = 'Location unavailable';
-        this.isLocationLoading = false;
-        this.getGroupsAndEventsData();
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 10000,
-        maximumAge: 600000
-      }
-    );
   }
 
   getGroupsAndEventsData() {
@@ -110,9 +98,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   getGroupsAndEventsByLocationYear(lat: number, lng: number, year: number) {
     this.homeService.getGroupsAndEventsByLocationYear(lat, lng, year).subscribe((result) => {
       this.setGroupsData(result.groups);
-      if (result.locationLabel) {
-        this.currentLocationLabel = result.locationLabel;
-      }
     });
   }
 

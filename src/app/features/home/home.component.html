@@ -23,10 +23,6 @@
   <section class="near-you-section">
       <div class="section-header">
         <h2>Explore Active Events</h2>
-        <div class="section-location" [class.is-loading]="isLocationLoading">
-          <mat-icon>my_location</mat-icon>
-          <span>{{ currentLocationLabel }}</span>
-        </div>
         <div class="search-bar-wrapper">
           <mat-icon class="search-icon">search</mat-icon>
           <input
@@ -228,7 +224,7 @@
       <div class="no-results-state" *ngIf="samitiGroups.length === 0 && searchTerm">
         <mat-icon>search_off</mat-icon>
         <h3>No groups found</h3>
-        <p>No groups match your search for "<strong>{{ searchTerm }}</strong>" near "<strong>{{ currentLocationLabel || 'your area' }}</strong>"</p>
+        <p>No groups match your search for "<strong>{{ searchTerm }}</strong>" near "<strong>your area</strong>"</p>
         <p class="suggestion">Try searching with a different group name, group ID, or location.</p>
       </div>
   </section>

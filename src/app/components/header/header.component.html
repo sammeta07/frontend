@@ -6,10 +6,10 @@
 
   <span class="spacer"></span>
 
-  <button mat-button>
-    <mat-icon>location_on</mat-icon>
-    Raipur, CG
-  </button>
+  <div class="section-location" [class.is-loading]="isLocationLoading$ | async">
+    <mat-icon>my_location</mat-icon>
+    <span>{{ currentLocationLabel$ | async }}</span>
+  </div>
 
   <div class="auth-buttons">
     <button mat-button (click)="openLoginDialog()">
