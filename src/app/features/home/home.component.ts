@@ -40,6 +40,7 @@ export class HomeComponent implements OnInit {
   selectedYearIndex: number = 0;
   searchTerm: string = '';
   carouselPagination = { clickable: true };
+  carouselAutoplay = { delay: 3500, disableOnInteraction: false };
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;

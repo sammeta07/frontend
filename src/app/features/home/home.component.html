@@ -117,6 +117,7 @@
                         [spaceBetween]="8"
                         [navigation]="true"
                         [pagination]="carouselPagination"
+                        [autoplay]="carouselAutoplay"
                         [loop]="event.images.length > 2"
                       >
                         <swiper-slide *ngFor="let image of event.images">
