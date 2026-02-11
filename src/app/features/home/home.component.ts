@@ -10,7 +10,6 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './services/home.service';
-import { LocationService } from '../../services/location.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -33,7 +32,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 export class HomeComponent implements OnInit, OnDestroy {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
-  private locationService = inject(LocationService);
+  // private locationService = inject(LocationService);
   private snackBar = inject(MatSnackBar);
 
   samitiGroups: groupDetailsModel[] = [];
@@ -61,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const currentYearIndex = this.years.indexOf(currentYear);
     this.selectedYearIndex = currentYearIndex >= 0 ? currentYearIndex : 0;
 
-    this.initLocationAndFetch(currentYear);
+    // this.initLocationAndFetch(currentYear);
   }
 
   ngOnDestroy() {
@@ -72,45 +71,46 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.carouselIntervals.clear();
   }
 
-  private initLocationAndFetch(year: number) {
-    const coords = this.locationService.getCoords();
-    if (coords) {
-      this.getGroupsAndEventsByLocationYear(coords.lat, coords.lng, year);
-    } else {
-      // Wait a moment for location service to get coords, then try again
-      setTimeout(() => {
-        const updatedCoords = this.locationService.getCoords();
-        if (updatedCoords) {
-          this.getGroupsAndEventsByLocationYear(updatedCoords.lat, updatedCoords.lng, year);
-        } else {
-          this.getGroupsAndEventsData();
-        }
-      }, 1000);
-    }
-  }
+  // private initLocationAndFetch(year: number) {
+  //   const coords = this.locationService.getCoords();
+  //   if (coords) {
+  //     this.getGroupsAndEventsByLocationYear(coords.lat, coords.lng, year);
+  //   } else {
+  //     // Wait a moment for location service to get coords, then try again
+  //     setTimeout(() => {
+  //       const updatedCoords = this.locationService.getCoords();
+  //       if (updatedCoords) {
+  //         this.getGroupsAndEventsByLocationYear(updatedCoords.lat, updatedCoords.lng, year);
+  //       } else {
+  //         this.getGroupsAndEventsData();
+  //       }
+  //     }, 1000);
+  //   }
+  // }
 
-  getGroupsAndEventsData() {
-    this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
-      this.setGroupsData(data as groupDetailsModel[]);
-    });
-  }
+  // getGroupsAndEventsData() {
+  //   this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
+  //     this.setGroupsData(data as groupDetailsModel[]);
+  //   });
+  // }
 
-  getGroupsAndEventsByLocationYear(lat: number, lng: number, year: number) {
-    this.homeService.getGroupsAndEventsByLocationYear(lat, lng, year).subscribe((result) => {
-      this.setGroupsData(result.groups);
-    });
-  }
+  // getGroupsAndEventsByLocationYear(lat: number, lng: number, year: number) {
+  //   this.homeService.getGroupsAndEventsByLocationYear(lat, lng, year).subscribe((result) => {
+  //     console.log(result);
+  //     this.setGroupsData(result.groups);
+  //   });
+  // }
 
-  private setGroupsData(data: groupDetailsModel[]) {
-    this.samitiGroups = data;
-    this.allGroups = [...this.samitiGroups]; // Store original list
-    calculateStatus(this.samitiGroups);
-    // enrichGroupData(this.samitiGroups);
-    sortEvents(this.samitiGroups);
-    // Sort groups alphabetically by name
-    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
-    this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
-  }
+  // private setGroupsData(data: groupDetailsModel[]) {
+  //   this.samitiGroups = data;
+  //   this.allGroups = [...this.samitiGroups]; // Store original list
+  //   calculateStatus(this.samitiGroups);
+  //   // enrichGroupData(this.samitiGroups);
+  //   sortEvents(this.samitiGroups);
+  //   // Sort groups alphabetically by name
+  //   this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+  //   this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
+  // }
 
   onSearchGroups(event: Event) {
     const input = event.target as HTMLInputElement;
