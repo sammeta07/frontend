@@ -409,7 +409,7 @@
 .header-content {
   position: relative;
   z-index: 1;
-  padding: 24px;
+  padding: 10px 10px 0px 10px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -916,7 +916,6 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 }
 
 .event-card-enhanced:hover {
-  /* transform: translateY(-4px); */
   box-shadow: var(--shadow-lg);
   border-color: var(--primary-color);
 }
@@ -954,8 +953,8 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
 }
 
 .event-card-body {
-  padding: 20px;
-  padding-left: 25px;
+  padding: 10px;
+  padding-left: 15px;
 }
 
 .event-carousel {
@@ -1613,9 +1612,9 @@ mat-card-actions button {
 
 :host ::ng-deep .tabs-fixed-width .mat-mdc-tab-labels {
   justify-content: flex-start;
-  border-bottom: 3px solid var(--border-color);
+  /* border-bottom: 3px solid var(--border-color); */
   background: linear-gradient(to bottom, var(--bg-secondary), var(--bg-hover));
-  padding: 8px 8px 0 8px;
+  /* padding: 8px 8px 0 8px; */
 }
 
 :host ::ng-deep .tabs-fixed-width .mdc-tab__text-label {
@@ -1658,16 +1657,14 @@ mat-card-actions button {
 
 /* Adjust events section when inside tabs */
 :host ::ng-deep .tabs-fixed-width .events-section {
-  padding: 28px 20px 20px 20px;
-  background: transparent;
+  padding: 10px 10px 0px 10px;
   border: none;
 }
 
 :host ::ng-deep .tabs-fixed-width .events-grid-enhanced {
-  gap: 18px;
+  gap: 10px;
   padding-bottom: 12px;
-  padding-top: 8px;
-  grid-auto-columns: calc((100% - 36px) / 3);
+  grid-auto-columns: calc((100% - 30px) / 3);
 }
 
 /* Custom scrollbar for tabs */
@@ -1702,7 +1699,7 @@ mat-card-actions button {
 }
 
 :host ::ng-deep .tabs-fixed-width .event-card-enhanced:hover {
-  transform: translateY(-6px);
+  transform: translateY(4px);
   box-shadow: var(--shadow-xl);
 }
 
