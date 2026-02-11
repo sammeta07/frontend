@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSnackBarModule,
     MatTabsModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -38,6 +39,7 @@ export class HomeComponent implements OnInit {
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
   selectedYearIndex: number = 0;
   searchTerm: string = '';
+  carouselPagination = { clickable: true };
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;

@@ -110,6 +110,24 @@
                     <!-- Status indicator bar -->
                     <div class="event-status-bar" [attr.data-status]="event.status"></div>
                     <div class="event-card-body">
+                      <swiper-container
+                        *ngIf="event.images?.length"
+                        class="event-carousel"
+                        [slidesPerView]="1"
+                        [spaceBetween]="8"
+                        [navigation]="true"
+                        [pagination]="carouselPagination"
+                        [loop]="event.images.length > 2"
+                      >
+                        <swiper-slide *ngFor="let image of event.images">
+                          <img
+                            class="event-carousel-image"
+                            [src]="image"
+                            [alt]="event.title + ' image'"
+                            loading="lazy"
+                          >
+                        </swiper-slide>
+                      </swiper-container>
                       <!-- Event Header -->
                       <div class="event-card-header">
                         <h5 class="event-card-title">{{ event.title }}</h5>

@@ -955,6 +955,45 @@ mat-card-content::-webkit-scrollbar-thumb:hover {
   padding-left: 25px;
 }
 
+.event-carousel {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  margin-bottom: 12px;
+}
+
+.event-carousel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.event-carousel::part(button-prev),
+.event-carousel::part(button-next) {
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.event-carousel::part(pagination) {
+  bottom: 6px;
+}
+
+.event-carousel::part(bullet) {
+  background: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
+.event-carousel::part(bullet-active) {
+  background: white;
+}
+
 .event-card-header {
   display: flex;
   justify-content: space-between;
