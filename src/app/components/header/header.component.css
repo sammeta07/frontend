@@ -2,6 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo-section {
@@ -14,6 +15,50 @@
 
 .spacer {
   flex: 1 1 auto;
+}
+
+.location-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px !important;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #6366f1 !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.location-button:hover:not(:disabled) {
+  background-color: white !important;
+  color: #4f46e5 !important;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px);
+}
+
+.location-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.location-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.location-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.location-text {
+  letter-spacing: 0.3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .auth-buttons {

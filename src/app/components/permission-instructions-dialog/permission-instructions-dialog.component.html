@@ -1,0 +1,49 @@
+<div class="permission-dialog-container">
+  <div class="dialog-header">
+    <div class="header-left">
+      <div class="icon-circle">
+        <mat-icon>location_on</mat-icon>
+      </div>
+      <div class="header-text">
+        <h2>Enabling Location</h2>
+        <p>We will access your location to discover nearby samitis</p>
+      </div>
+    </div>
+    <button mat-icon-button (click)="closeDialog()" class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="browser-tabs">
+    <button 
+      *ngFor="let browser of browsers; let i = index" 
+      [class.active]="selectedBrowser === i"
+      class="browser-tab"
+      (click)="selectedBrowser = i"
+    >
+      <mat-icon class="browser-icon">{{ browser.icon }}</mat-icon>
+      <span>{{ browser.name }}</span>
+    </button>
+  </div>
+
+  <div class="browser-content">
+    Your Location : <div class="current-location">📍 {{ userLocation }}</div>
+  </div>
+
+  <div class="dialog-footer">
+    <div class="tip-box">
+      <mat-icon>lightbulb</mat-icon>
+      <div>
+        <strong>Tip:</strong>
+        <p>After allowing location, refresh this page to get started.</p>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button mat-stroked-button (click)="closeDialog()">Close</button>
+      <button mat-raised-button color="primary" (click)="refreshPage()">
+        <mat-icon>refresh</mat-icon>
+        Refresh Page
+      </button>
+    </div>
+  </div>
+</div>
