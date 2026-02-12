@@ -27,5 +27,6 @@ export interface groupDetailsModel {
   events: eventDetailsModel[];
   description: string;
   contactNumbers: string[];
+  logo?: string; // Optional logo URL
 }
 

@@ -20,6 +20,7 @@ export class HomeService {
       since: 2018,
       description: 'Azad Navyuvak Mandal is a vibrant youth organization based in Raipur, Chhattisgarh. Founded in 2018, the group has quickly become a hub for young people passionate about community service, cultural activities, and social change. With a focus on empowering youth and fostering a sense of unity, Azad Navyuvak Mandal organizes a wide range of events throughout the year, including festivals, charity drives, educational workshops, and sports tournaments. The group is known for its inclusive and energetic approach, attracting members from diverse backgrounds who share a common goal of making a positive impact in their community.',
       contactNumbers: ['9876543210', '9123456780'],
+      logo: 'https://picsum.photos/seed/anm-logo/200/200',
       admins: [],
       events: [
         { id: 101, title: 'Ganesh Utsav 2026', year_count: 5, start_date: '2026-02-01', end_date: '2026-02-11', location: 'Raipur Main Ground', images: ['https://picsum.photos/seed/ganesh-utsav/800/500', 'https://picsum.photos/seed/ganesh-utsav-2/800/500'], description: 'Celebrate the vibrant festival of Ganesh Utsav with us! Join us for 10 days of cultural performances, community feasts, and spiritual activities as we honor Lord Ganesha. The event will feature traditional music and dance, delicious food stalls, and a grand procession on the final day. Don\'t miss this opportunity to experience the rich cultural heritage of Raipur and connect with fellow community members in a joyous celebration!' },
@@ -35,6 +36,7 @@ export class HomeService {
       since: 2010,
       description: 'Ekta Samiti Bhilai is a cultural and social organization dedicated to preserving local traditions and supporting community welfare.',
       contactNumbers: ['9876123456', '9123456781'],
+      logo: 'https://picsum.photos/seed/esb-logo/200/200',
       admins: [],
       events: [
         { id: 201, title: 'Durga Puja 2025', year_count: 51, start_date: '2026-01-10', end_date: '2026-01-20', location: 'Sector 6 Park', images: ['https://picsum.photos/seed/durga-puja/800/500', 'https://picsum.photos/seed/durga-puja-2/800/500'], description: 'Join us for the most revered festival celebration! This 51-year-old tradition brings together thousands of devotees for cultural performances, traditional feasts, and spiritual ceremonies to honor Goddess Durga. Experience intricate decorations, elaborate pujas, and community bonding at its finest!' },
@@ -51,6 +53,7 @@ export class HomeService {
       since: 2005,
       description: 'Shiv Shakti Sewa Mandal is a spiritual and social organization focused on community service and religious ceremonies.',
       contactNumbers: ['9876234567', '9123456782'],
+      logo: 'https://picsum.photos/seed/sssm-logo/200/200',
       admins: [],
       events: [
         { id: 301, title: 'Maha Shivratri Bhandara', year_count: 15, start_date: '2026-01-30', end_date: '2026-02-10', location: 'Shiv Mandir', images: ['https://picsum.photos/seed/maha-shivratri/800/500', 'https://picsum.photos/seed/maha-shivratri-2/800/500'], description: 'Celebrate the great night of Lord Shiva with traditional bhandara (community feast)! This 15-year-old event honors Shiva worship through prayers, meditation, and free meals for all devotees. Experience spiritual awakening and community solidarity.' },
@@ -68,6 +71,7 @@ export class HomeService {
       since: 2019,
       description: 'Pragati Welfare Group drives social change through street awareness, environmental conservation, and community empowerment initiatives.',
       contactNumbers: ['9876345678', '9123456783'],
+      logo: 'https://picsum.photos/seed/pwg-logo/200/200',
       admins: [],
       events: [
         { id: 401, title: 'Street Play (Nukkad)', year_count: 2, start_date: '2026-01-27', end_date: '2026-02-06', location: 'Main Market', images: ['https://picsum.photos/seed/street-play/800/500', 'https://picsum.photos/seed/street-play-2/800/500'], description: 'Experience socially relevant performances right on the streets! Our street plays tackle important social issues through engaging theatrical performances. This unique art form brings awareness and entertainment to the public square.' },
@@ -83,6 +87,7 @@ export class HomeService {
       since: 2021,
       description: 'Rising Star Youth Club nurtures young talent through sports, education, and personality development programs.',
       contactNumbers: ['9876456789', '9123456784'],
+      logo: 'https://picsum.photos/seed/rsyc-logo/200/200',
       admins: [],
       events: [
         { id: 501, title: 'Dance Competition', year_count: 4, start_date: '2026-05-15', end_date: '2026-05-25', location: 'Town Hall', images: ['https://picsum.photos/seed/dance-competition/800/500', 'https://picsum.photos/seed/dance-competition-2/800/500'], description: 'Showcase your dance talent! Our annual dance competition welcomes dancers of all styles and skill levels. Compete for prizes, recognition, and the opportunity to perform on stage. It\'s a celebration of movement, music, and talent!' },
@@ -99,6 +104,7 @@ export class HomeService {
       since: 1995,
       description: 'Maitri Pariwar is a trusted community organization with 28+ years of experience in social welfare, charity, and environmental conservation.',
       contactNumbers: ['9876567890', '9123456785'],
+      logo: 'https://picsum.photos/seed/mp-logo/200/200',
       admins: [],
       events: [
         { id: 601, title: 'Holi Milan', year_count: 20, start_date: '2026-01-05', end_date: '2026-01-15', location: 'Club House', images: ['https://picsum.photos/seed/holi-milan/800/500', 'https://picsum.photos/seed/holi-milan-2/800/500'], description: 'Celebrate colors and unity! Our 20-year tradition of Holi brings the community together for a joyous festival. Experience colored powder showers, traditional sweets, and genuine bonding. This is the perfect time to forgive, forget, and celebrate relationships!' },
@@ -117,6 +123,7 @@ export class HomeService {
       since: 2008,
       description: 'Sanskriti Kala Manch celebrates tribal and local art, promoting cultural heritage and artistic expression through festivals and exhibitions.',
       contactNumbers: ['9876678901', '9123456786'],
+      logo: 'https://picsum.photos/seed/skm-logo/200/200',
       admins: [],
       events: [
         { id: 701, title: 'Tribal Art Fest', year_count: 25, start_date: '2026-01-29', end_date: '2026-02-09', location: 'Art Gallery', images: ['https://picsum.photos/seed/tribal-art-fest/800/500', 'https://picsum.photos/seed/tribal-art-fest-2/800/500'], description: 'Celebrate tribal heritage and artistry! This 25-year celebration showcases magnificent tribal art, traditional crafts, and cultural performances. Discover the rich history and talent of tribal communities through art exhibitions and demonstrations.' },
@@ -132,6 +139,7 @@ export class HomeService {
       since: 2012,
       description: 'Umeed Foundation works towards educational empowerment and skill development for underprivileged communities.',
       contactNumbers: ['9876789012', '9123456787'],
+      logo: 'https://picsum.photos/seed/uf-logo/200/200',
       admins: [],
       events: [
         { id: 801, title: 'Scholarship Exam', year_count: 10, start_date: '2026-01-30', end_date: '2026-02-12', location: 'School Exam Hall', images: ['https://picsum.photos/seed/scholarship-exam/800/500', 'https://picsum.photos/seed/scholarship-exam-2/800/500'], description: 'Transform education through scholarships! Our 10-year scholarship program helps deserving students access quality education. Participate in our merit-based exam and earn financial support for your academic journey.' },
@@ -148,6 +156,7 @@ export class HomeService {
       since: 2016,
       description: 'Adarsh Gram Samiti focuses on agricultural advancement, environmental conservation, and rural development in village communities.',
       contactNumbers: ['9876890123', '9123456788'],
+      logo: 'https://picsum.photos/seed/ags-logo/200/200',
       admins: [],
       events: [
         { id: 901, title: 'Agri-Tech Seminar', year_count: 4, start_date: '2026-02-01', end_date: '2026-02-06', location: 'Panchayat Bhawan', images: ['https://picsum.photos/seed/agri-tech/800/500', 'https://picsum.photos/seed/agri-tech-2/800/500'], description: 'Modernize agriculture! Learn about technological advancements in farming including precision agriculture, organic farming, and sustainable practices. Our seminars bring together farmers and experts to boost productivity and sustainability.' },
@@ -165,6 +174,7 @@ export class HomeService {
       since: 2022,
       description: 'Nav Nirman Group is a youth-focused organization supporting entrepreneurship, career development, and leadership building.',
       contactNumbers: ['9876901234', '9123456789'],
+      logo: 'https://picsum.photos/seed/nng-logo/200/200',
       admins: [],
       events: [
         { id: 1001, title: 'Entrepreneurship Meet', year_count: 2, start_date: '2026-01-31', end_date: '2026-02-10', location: 'Hotel Grand', images: ['https://picsum.photos/seed/entrepreneurship-meet/800/500', 'https://picsum.photos/seed/entrepreneurship-meet-2/800/500'], description: 'Ignite the entrepreneur within! Meet successful business leaders, investors, and mentors. Learn startup strategies, fundraising tips, and business growth hacks. Perfect for aspiring entrepreneurs and innovators!' },
@@ -180,6 +190,7 @@ export class HomeService {
       since: 2000,
       description: 'Jan Kalyan Trust is a 26-year-old healthcare and social welfare organization dedicated to improving lives through medical camps and community services.',
       contactNumbers: ['9877012345', '9123456790'],
+      logo: 'https://picsum.photos/seed/jkt-logo/200/200',
       admins: [],
       events: [
         { id: 1101, title: 'Eye Surgery Camp', year_count: 22, start_date: '2026-02-01', end_date: '2026-02-15', location: 'District Hospital', images: ['https://picsum.photos/seed/eye-surgery/800/500', 'https://picsum.photos/seed/eye-surgery-2/800/500'], description: 'Restore sight, restore hope! Our 22-year free eye surgery camp has restored vision to thousands. Expert ophthalmologists perform cataract and other surgeries. Vision is a right, not a privilege—join us in this noble mission!' },
@@ -199,6 +210,7 @@ export class HomeService {
       since: 2024,
       description: 'Naya Savera Mandal is a newly established community organization committed to bringing positive change through social initiatives and community development programs.',
       contactNumbers: ['9876012345', '9123456791'],
+      logo: 'https://picsum.photos/seed/nsm-logo/200/200',
       admins: [],
       events: []
     }

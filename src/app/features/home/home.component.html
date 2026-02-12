@@ -51,7 +51,7 @@
           <div class="header-background"></div>
           <div class="header-content">
             <div class="header-main">
-              <img [src]="getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
+              <img [src]="group.logo || getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
               <div class="group-details">
                 <h3 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h3>
                 <div class="header-info">
