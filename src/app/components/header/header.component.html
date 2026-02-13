@@ -8,7 +8,7 @@
 
   <button mat-button class="location-button" [disabled]="!readableLocation">
     <mat-icon class="location-icon">location_on</mat-icon>
-    <span class="location-text">{{ readableLocation }}</span>
+    <span class="location-text">{{ readableLocation || 'Detecting your location...' }}</span>
   </button>
 
   <div class="auth-buttons">

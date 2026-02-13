@@ -147,11 +147,9 @@ export class LocationService {
           address.state || 'Unknown';
         
         const country = address.country || 'Unknown';
-
-        const code = address['ISO3166-2-lvl4'] ;
         
         // const result = `${city}, ${state}, ${country}`;
-         const result = `${city}, ${code}`;
+         const result = `${city}, ${state}`;
         console.log('Formatted location:', result);
         return result;
       }),
