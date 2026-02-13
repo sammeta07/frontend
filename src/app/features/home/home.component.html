@@ -1,5 +1,5 @@
 <div class="home-container">
-  <section class="hero-section">
+  <section class="hero-section" *ngIf="locationName$ | async">
     <div class="hero-background-elements">
       <div class="hero-circle hero-circle-1"></div>
       <div class="hero-circle hero-circle-2"></div>
@@ -31,6 +31,7 @@
           class="search-input"
           placeholder="Search group ..."
           (input)="onSearchGroups($event)"
+          [disabled]="!(locationName$ | async)"
         />
         <button
           *ngIf="searchTerm"
