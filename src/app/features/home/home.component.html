@@ -51,61 +51,123 @@
           <div class="header-background"></div>
           <div class="header-content">
             <div class="header-main">
-              <img [src]="group.logo || getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
+              <ng-container *ngIf="isLocationLoading; else groupLogo">
+                <div class="group-avatar skeleton skeleton-avatar" aria-label="Loading group logo"></div>
+              </ng-container>
+              <ng-template #groupLogo>
+                <img [src]="group.logo || getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
+              </ng-template>
               <div class="group-details">
-                <h3 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h3>
+                <ng-container *ngIf="isLocationLoading; else groupNameText">
+                  <h3 class="group-name clickable-title">
+                    <span class="skeleton skeleton-info" style="width: 60%; height: 28px;"></span>
+                  </h3>
+                </ng-container>
+                <ng-template #groupNameText>
+                  <h3 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h3>
+                </ng-template>
                 <div class="header-info">
-                  <div
-                    class="info-item location-clickable"
-                    (click)="$event.stopPropagation(); openMap(group.location)"
-                    title="Open in Maps"
-                  >
-                    <mat-icon>location_on</mat-icon>
-                    <span>{{ group.location }}</span>
-                  </div>
+                  <ng-container *ngIf="isLocationLoading; else locationText">
+                    <div class="info-item location-clickable">
+                      <span class="skeleton skeleton-info" style="width: 80px; height: 18px;"></span>
+                    </div>
+                  </ng-container>
+                  <ng-template #locationText>
+                    <div
+                      class="info-item location-clickable"
+                      (click)="$event.stopPropagation(); openMap(group.location)"
+                      title="Open in Maps"
+                    >
+                      <mat-icon>location_on</mat-icon>
+                      <span>{{ group.location }}</span>
+                    </div>
+                  </ng-template>
                   <div class="info-divider"></div>
-                  <div class="info-item">
-                    <mat-icon>calendar_today</mat-icon>
-                    <span>Since {{ group.since }}</span>
-                  </div>
+                  <ng-container *ngIf="isLocationLoading; else sinceText">
+                    <div class="info-item">
+                      <span class="skeleton skeleton-info" style="width: 70px; height: 18px;"></span>
+                    </div>
+                  </ng-container>
+                  <ng-template #sinceText>
+                    <div class="info-item">
+                      <mat-icon>calendar_today</mat-icon>
+                      <span>Since {{ group.since }}</span>
+                    </div>
+                  </ng-template>
                   <div class="info-divider"></div>
-                  <div class="info-item" [title]="group.events.length + ' Events'">
-                    <mat-icon>event</mat-icon>
-                    <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
-                  </div>
+                  <ng-container *ngIf="isLocationLoading; else eventsCountText">
+                    <div class="info-item">
+                      <span class="skeleton skeleton-info" style="width: 60px; height: 18px;"></span>
+                    </div>
+                  </ng-container>
+                  <ng-template #eventsCountText>
+                    <div class="info-item" [title]="group.events.length + ' Events'">
+                      <mat-icon>event</mat-icon>
+                      <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
+                    </div>
+                  </ng-template>
                   <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
-                  <div class="info-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
-                    <mat-icon>phone</mat-icon>
-                    <span>{{ group.contactNumbers.join(', ') }}</span>
-                  </div>
+                  <ng-container *ngIf="isLocationLoading; else contactNumbersText">
+                    <div class="info-item">
+                      <span class="skeleton skeleton-info" style="width: 100px; height: 18px;"></span>
+                    </div>
+                  </ng-container>
+                  <ng-template #contactNumbersText>
+                    <div class="info-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
+                      <mat-icon>phone</mat-icon>
+                      <span>{{ group.contactNumbers.join(', ') }}</span>
+                    </div>
+                  </ng-template>
                 </div>
-                <p class="group-description">{{ group.description }}</p>
+                <ng-container *ngIf="isLocationLoading; else descriptionText">
+                  <p class="group-description">
+                    <span class="skeleton skeleton-info" style="width: 80%; height: 16px; margin-bottom: 6px;"></span>
+                  </p>
+                </ng-container>
+                <ng-template #descriptionText>
+                  <p class="group-description">{{ group.description }}</p>
+                </ng-template>
               </div>
             </div>
             <div class="header-actions">
               <div class="group-id-info" *ngIf="group.groupId">
-                <span class="group-id-label">Group Id:</span>
-                <span class="group-id-value">{{ group.groupId }}</span>
-                <button
-                  mat-icon-button
-                  type="button"
-                  class="copy-icon"
-                  (click)="copyToClipboard(group.groupId)"
-                  aria-label="Copy Group ID"
-                  title="Copy Group ID"
-                >
-                  <mat-icon>content_copy</mat-icon>
-                </button>
+                <ng-container *ngIf="isLocationLoading; else groupIdContent">
+                  <span class="skeleton skeleton-info" style="width: 220px; height: 36px; border-radius: 18px; margin-top: 10px;"></span>
+                </ng-container>
+                <ng-template #groupIdContent>
+                  <span class="group-id-label">Group Id:</span>
+                  <span class="group-id-value">{{ group.groupId }}</span>
+                  <ng-container *ngIf="isLocationLoading; else copyBtnContent">
+                    <span class="skeleton skeleton-info" style="width: 220px; height: 36px; border-radius: 18px;"></span>
+                  </ng-container>
+                  <ng-template #copyBtnContent>
+                    <button
+                      mat-icon-button
+                      type="button"
+                      class="copy-icon"
+                      (click)="copyToClipboard(group.groupId)"
+                      aria-label="Copy Group ID"
+                      title="Copy Group ID"
+                    >
+                      <mat-icon>content_copy</mat-icon>
+                    </button>
+                  </ng-template>
+                </ng-template>
               </div>
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
-                class="join-btn"
-              >
-                <mat-icon>group_add</mat-icon>
-                <span>JOIN GROUP</span>
-              </button>
+              <ng-container *ngIf="isLocationLoading; else joinBtnContent">
+                <span class="skeleton skeleton-info" style="width: 140px; height: 44px; border-radius: 22px;"></span>
+              </ng-container>
+              <ng-template #joinBtnContent>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
+                  class="join-btn"
+                >
+                  <mat-icon>group_add</mat-icon>
+                  <span>JOIN GROUP</span>
+                </button>
+              </ng-template>
             </div>
           </div>
         </div>
