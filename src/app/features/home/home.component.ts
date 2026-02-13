@@ -14,6 +14,7 @@ import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './ut
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationService } from '../../location.service';
+import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ import { LocationService } from '../../location.service';
     MatButtonModule,
     MatIcon,
     MatSnackBarModule,
-    MatTabsModule
+    MatTabsModule,
+    SkeletonComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
