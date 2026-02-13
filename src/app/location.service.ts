@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, DestroyRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { PermissionInstructionsDialogComponent } from './components/permission-instructions-dialog/permission-instructions-dialog.component';
 
 export interface IpLocationData {
   ip: string;
@@ -25,9 +28,59 @@ export interface LocationCoordinates {
 export class LocationService {
   private readonly IP_LOCATION_API_URL = 'https://ipapi.co/json/';
   private readonly REVERSE_GEOCODING_API = 'https://nominatim.openstreetmap.org/reverse';
+  private dialog = inject(MatDialog);
+  location$ = new BehaviorSubject<{ lat: number; lng: number } | null>(null);
+  locationName$ = new BehaviorSubject<string>('');
+  private destroyRef = inject(DestroyRef);
+  
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.detectLocation();
+  }
 
+  async detectLocation() {
+    try {
+      // First check what the permission status is
+      const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
+
+      if (permissionStatus.state === 'denied') {
+        this.dialog.open(PermissionInstructionsDialogComponent, {
+          autoFocus: false,
+          disableClose: true
+        });
+        return;
+      }
+
+      // If not denied, this line will trigger browser's default permission popup
+      const pos = await this.getGeolocation();
+      console.log('pos',pos);
+      this.location$.next(pos);
+      
+      // Convert coordinates to readable location name
+      this.reverseGeocode(pos)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (readableLocation: string) => {
+            setTimeout(() => {
+              this.locationName$.next(readableLocation);
+            }, 5000);
+          },
+          error: (error) => {
+            this.locationName$.next('error');
+          }
+        });
+
+    } catch (error) {
+      console.error("Location error:", error);
+      // Show instructions dialog on error
+      this.dialog.open(PermissionInstructionsDialogComponent, {
+        width: '700px',
+        maxWidth: '90vw',
+        autoFocus: false,
+        disableClose: false
+      });
+    }
+  }
   /**
    * Browser se coordinates lene ka promise function
    */
@@ -101,26 +154,26 @@ export class LocationService {
   /**
    * Get location with all details
    */
-  getFullLocationInfo(): Observable<{
-    coordinates: LocationCoordinates;
-    city: string;
-    region: string;
-    country: string;
-    timezone: string;
-  }> {
-    return this.getIpLocationDetails().pipe(
-      map(data => ({
-        coordinates: {
-          lat: data.latitude,
-          lng: data.longitude
-        },
-        city: data.city,
-        region: data.region,
-        country: data.country,
-        timezone: data.timezone
-      }))
-    );
-  }
+  // getFullLocationInfo(): Observable<{
+  //   coordinates: LocationCoordinates;
+  //   city: string;
+  //   region: string;
+  //   country: string;
+  //   timezone: string;
+  // }> {
+  //   return this.getIpLocationDetails().pipe(
+  //     map(data => ({
+  //       coordinates: {
+  //         lat: data.latitude,
+  //         lng: data.longitude
+  //       },
+  //       city: data.city,
+  //       region: data.region,
+  //       country: data.country,
+  //       timezone: data.timezone
+  //     }))
+  //   );
+  // }
 
   /**
    * Convert coordinates to readable location name using reverse geocoding
@@ -132,25 +185,12 @@ export class LocationService {
       lon: coord.lng.toString(),
       zoom: '10'
     };
-
     return this.http.get<any>(this.REVERSE_GEOCODING_API, { params }).pipe(
       map(data => {
         const address = data.address || {};
-        console.log('Nominatim API Response Address:', address);
-        
-        // Try multiple fields for city name
-        const city = 
-          address.state_district || 'Unknown';
-        
-        // Try multiple fields for state/region
-        const state = 
-          address.state || 'Unknown';
-        
-        const country = address.country || 'Unknown';
-        
-        // const result = `${city}, ${state}, ${country}`;
-         const result = `${city}, ${state}`;
-        console.log('Formatted location:', result);
+        const city = address.state_district || 'Unknown';
+        const state = address.state || 'Unknown';
+        const result = `${city}, ${state}`;
         return result;
       }),
       catchError(error => {
@@ -159,22 +199,23 @@ export class LocationService {
       })
     );
   }
-  calculateDistance(
-    coord1: LocationCoordinates,
-    coord2: LocationCoordinates
-  ): number {
-    const R = 6371; // Earth's radius in km
-    const dLat = (coord2.lat - coord1.lat) * (Math.PI / 180);
-    const dLng = (coord2.lng - coord1.lng) * (Math.PI / 180);
 
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(coord1.lat * (Math.PI / 180)) *
-        Math.cos(coord2.lat * (Math.PI / 180)) *
-        Math.sin(dLng / 2) *
-        Math.sin(dLng / 2);
+  // calculateDistance(
+  //   coord1: LocationCoordinates,
+  //   coord2: LocationCoordinates
+  // ): number {
+  //   const R = 6371; // Earth's radius in km
+  //   const dLat = (coord2.lat - coord1.lat) * (Math.PI / 180);
+  //   const dLng = (coord2.lng - coord1.lng) * (Math.PI / 180);
 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
+  //   const a =
+  //     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  //     Math.cos(coord1.lat * (Math.PI / 180)) *
+  //       Math.cos(coord2.lat * (Math.PI / 180)) *
+  //       Math.sin(dLng / 2) *
+  //       Math.sin(dLng / 2);
+
+  //   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  //   return R * c;
+  // }
 }

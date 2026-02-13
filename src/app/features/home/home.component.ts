@@ -13,6 +13,7 @@ import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
+import { LocationService } from '../../location.service';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,9 @@ export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
   private snackBar = inject(MatSnackBar);
-
+  private locationService = inject(LocationService);
+  locationName$ = this.locationService.locationName$;
+  
   samitiGroups: groupDetailsModel[] = [];
   private allGroups: groupDetailsModel[] = [];
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
@@ -41,12 +44,17 @@ export class HomeComponent implements OnInit {
   searchTerm: string = '';
   carouselPagination = { clickable: true };
   carouselAutoplay = { delay: 3500, disableOnInteraction: false };
-  
+  isLocationLoading: boolean = true;
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
   ngOnInit() {
+
+    this.locationService.locationName$.subscribe(location => {
+      console.log('User location updated:', location);
+      // Trigger change detection to update the UI with the new location
+    });
     // Set current year as default selected tab
     const currentYear = new Date().getFullYear();
     const currentYearIndex = this.years.indexOf(currentYear);

@@ -6,9 +6,14 @@
 
   <span class="spacer"></span>
 
-  <button mat-button class="location-button" [disabled]="!readableLocation">
+  <button mat-button class="location-button">
     <mat-icon class="location-icon">location_on</mat-icon>
-    <span class="location-text">{{ readableLocation || 'Detecting your location...' }}</span>
+    <span class="location-text" *ngIf="(locationName$ | async) as locationName; else loading">
+      {{ locationName }}
+    </span>
+    <ng-template #loading>
+      <span class="location-text">Detecting your location...</span>
+    </ng-template>
   </button>
 
   <div class="auth-buttons">

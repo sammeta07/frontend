@@ -51,14 +51,14 @@
           <div class="header-background"></div>
           <div class="header-content">
             <div class="header-main">
-              <ng-container *ngIf="isLocationLoading; else groupLogo">
+              <ng-container *ngIf="!(locationName$ | async); else groupLogo">
                 <div class="group-avatar skeleton skeleton-avatar" aria-label="Loading group logo"></div>
               </ng-container>
               <ng-template #groupLogo>
                 <img [src]="group.logo || getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
               </ng-template>
               <div class="group-details">
-                <ng-container *ngIf="isLocationLoading; else groupNameText">
+                <ng-container *ngIf="!(locationName$ | async); else groupNameText">
                   <h3 class="group-name clickable-title">
                     <span class="skeleton skeleton-info" style="width: 60%; height: 28px;"></span>
                   </h3>
@@ -67,7 +67,7 @@
                   <h3 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h3>
                 </ng-template>
                 <div class="header-info">
-                  <ng-container *ngIf="isLocationLoading; else locationText">
+                  <ng-container *ngIf="!(locationName$ | async); else locationText">
                     <div class="info-item location-clickable">
                       <span class="skeleton skeleton-info" style="width: 80px; height: 18px;"></span>
                     </div>
@@ -83,7 +83,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider"></div>
-                  <ng-container *ngIf="isLocationLoading; else sinceText">
+                  <ng-container *ngIf="!(locationName$ | async); else sinceText">
                     <div class="info-item">
                       <span class="skeleton skeleton-info" style="width: 70px; height: 18px;"></span>
                     </div>
@@ -95,7 +95,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider"></div>
-                  <ng-container *ngIf="isLocationLoading; else eventsCountText">
+                  <ng-container *ngIf="!(locationName$ | async); else eventsCountText">
                     <div class="info-item">
                       <span class="skeleton skeleton-info" style="width: 60px; height: 18px;"></span>
                     </div>
@@ -107,7 +107,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
-                  <ng-container *ngIf="isLocationLoading; else contactNumbersText">
+                  <ng-container *ngIf="!(locationName$ | async); else contactNumbersText">
                     <div class="info-item">
                       <span class="skeleton skeleton-info" style="width: 100px; height: 18px;"></span>
                     </div>
@@ -119,7 +119,7 @@
                     </div>
                   </ng-template>
                 </div>
-                <ng-container *ngIf="isLocationLoading; else descriptionText">
+                <ng-container *ngIf="!(locationName$ | async); else descriptionText">
                   <p class="group-description">
                     <span class="skeleton skeleton-info" style="width: 80%; height: 16px; margin-bottom: 6px;"></span>
                   </p>
@@ -131,13 +131,13 @@
             </div>
             <div class="header-actions">
               <div class="group-id-info" *ngIf="group.groupId">
-                <ng-container *ngIf="isLocationLoading; else groupIdContent">
+                <ng-container *ngIf="!(locationName$ | async); else groupIdContent">
                   <span class="skeleton skeleton-info" style="width: 220px; height: 36px; border-radius: 18px; margin-top: 10px;"></span>
                 </ng-container>
                 <ng-template #groupIdContent>
                   <span class="group-id-label">Group Id:</span>
                   <span class="group-id-value">{{ group.groupId }}</span>
-                  <ng-container *ngIf="isLocationLoading; else copyBtnContent">
+                  <ng-container *ngIf="!(locationName$ | async); else copyBtnContent">
                     <span class="skeleton skeleton-info" style="width: 220px; height: 36px; border-radius: 18px;"></span>
                   </ng-container>
                   <ng-template #copyBtnContent>
@@ -154,7 +154,7 @@
                   </ng-template>
                 </ng-template>
               </div>
-              <ng-container *ngIf="isLocationLoading; else joinBtnContent">
+              <ng-container *ngIf="!(locationName$ | async); else joinBtnContent">
                 <span class="skeleton skeleton-info" style="width: 140px; height: 44px; border-radius: 22px;"></span>
               </ng-container>
               <ng-template #joinBtnContent>
