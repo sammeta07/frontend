@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { GroupAdmin } from '../../models/home.model';
+import { GroupAdminModel } from '../../models/home.model';
 
 @Component({
   selector: 'app-create-samiti-dialog',

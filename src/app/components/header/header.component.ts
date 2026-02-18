@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,inject } from '@angular/core';
+import { Component, Input, OnInit,inject,OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,12 +23,17 @@ import { LocationService } from '../../location.service';
 export class HeaderComponent {
   private locationService = inject(LocationService);
   locationName$ = this.locationService.locationName$;
+  location$ = this.locationService.location$;
 
   constructor( public dialog: MatDialog ) {
-    this.locationService.locationName$.subscribe(location => {
-      console.log('User location updated:', location);
-      // Trigger change detection to update the UI with the new location
-    });
+    // this.locationService.locationName$.subscribe(locationName => {
+    //   console.log('locationName$:', locationName);
+    //   // Trigger change detection to update the UI with the new location
+    // });
+    //  this.locationService.location$.subscribe(location => {
+    //   console.log('location$:', location);
+    //   // Trigger change detection to update the UI with the new location
+    // });
   }
 
   openLoginDialog() {

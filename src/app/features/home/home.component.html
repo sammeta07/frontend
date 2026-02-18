@@ -76,11 +76,11 @@
                   <ng-template #locationText>
                     <div
                       class="info-item location-clickable"
-                      (click)="$event.stopPropagation(); openMap(group.location)"
+                      (click)="$event.stopPropagation(); openMap('group.locationName')"
                       title="Open in Maps"
                     >
                       <mat-icon>location_on</mat-icon>
-                      <span>{{ group.location }}</span>
+                      <span>{{ group.locationName }}</span>
                     </div>
                   </ng-template>
                   <div class="info-divider"></div>
@@ -217,11 +217,11 @@
 
                         <div
                           class="meta-row clickable"
-                          (click)="$event.stopPropagation(); openMap(event.location)"
+                          (click)="$event.stopPropagation(); openMap('event.locationName')"
                           title="Open in Maps"
                         >
                           <mat-icon>location_on</mat-icon>
-                          <span class="meta-text">{{ event.location }}</span>
+                          <span class="meta-text">{{ event.location.lat }}, {{ event.location.long }} </span>
                         </div>
                       </div>
 

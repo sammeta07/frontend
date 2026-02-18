@@ -53,8 +53,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.locationService.locationName$.subscribe(location => {
-      console.log('User location updated:', location);
+    this.locationService.locationName$.subscribe(locationName => {
+      console.log('locationName$:', locationName);
       // Trigger change detection to update the UI with the new location
     });
     // Set current year as default selected tab
@@ -70,9 +70,21 @@ export class HomeComponent implements OnInit {
       this.samitiGroups = data as groupDetailsModel[];
       this.allGroups = [...this.samitiGroups]; // Store original list
       calculateStatus(this.samitiGroups);
-      // enrichGroupData(this.samitiGroups);
       sortEvents(this.samitiGroups);
+      // enrichGroupData(this.samitiGroups);
       // Sort groups alphabetically by name
+      this.samitiGroups.forEach(group => {
+        group.locationName = 'Fetching location...';
+        this.locationService.reverseGeocode(group.location).subscribe({
+          next: (readableLocation: string) => {
+            group.locationName = readableLocation; // Add a new property for display
+          },
+          error: (error) => {
+            console.error('Error reverse geocoding group location:', error);
+            group.locationName = 'Unknown Location';
+          }
+        });
+      })
       this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
       this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
     });
@@ -90,7 +102,7 @@ export class HomeComponent implements OnInit {
       this.samitiGroups = this.allGroups.filter(group =>
         group.name.toLowerCase().includes(this.searchTerm) ||
         (group.groupId && group.groupId.toLowerCase().includes(this.searchTerm)) ||
-        (group.location && group.location.toLowerCase().includes(this.searchTerm))
+        (group.locationName && group.locationName.toLowerCase().includes(this.searchTerm))
       );
     }
     // Maintain alphabetical order after search

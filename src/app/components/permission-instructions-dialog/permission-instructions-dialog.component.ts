@@ -110,27 +110,27 @@ export class PermissionInstructionsDialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<PermissionInstructionsDialogComponent>) {}
 
   ngOnInit(): void {
-    this.fetchUserLocation();
+    // this.fetchUserLocation();
   }
 
   /**
    * Fetch user location from IP address
    */
   private fetchUserLocation(): void {
-    this.locationService.getLocationInfo()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (locationInfo: string) => {
-          this.userLocation = locationInfo;
-          this.cdr.markForCheck();
-          console.log('User location:', this.userLocation);
-        },
-        error: (error) => {
-          console.error('Error fetching location info:', error);
-          this.userLocation = 'Unable to fetch location';
-          this.cdr.markForCheck();
-        }
-      });
+    // this.locationService.getLocationInfo()
+    //   .pipe(takeUntilDestroyed(this.destroyRef))
+    //   .subscribe({
+    //     next: (locationInfo: string) => {
+    //       this.userLocation = locationInfo;
+    //       this.cdr.markForCheck();
+    //       console.log('User location:', this.userLocation);
+    //     },
+    //     error: (error) => {
+    //       console.error('Error fetching location info:', error);
+    //       this.userLocation = 'Unable to fetch location';
+    //       this.cdr.markForCheck();
+    //     }
+    //   });
   }
 
   closeDialog(): void {
