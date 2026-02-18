@@ -74,9 +74,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.searchTerm = '';
-    if (this.location()) {
-      this.filterGroupsByDistance();
-    }
+    // if (this.location()) {
+    //   this.filterGroupsByDistance();
+    // }
     // Set current year as default selected tab
     const currentYear = new Date().getFullYear();
     const currentYearIndex = this.years.indexOf(currentYear);
@@ -234,6 +234,11 @@ export class HomeComponent implements OnInit {
     if (location) {
       window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
     }
+  }
+
+  scrollToGroups() {
+    const el = document.querySelector('.near-you-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   openJoinGroupDialog(group: groupDetailsModel) {

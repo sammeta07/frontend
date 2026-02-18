@@ -9,6 +9,10 @@
       <div class="hero-icon-wrapper">
         <mat-icon class="hero-main-icon">groups</mat-icon>
       </div>
+      <div class="hero-location-chip">
+        <mat-icon>location_on</mat-icon>
+        <span>{{ locationName() }}</span>
+      </div>
       <h1 class="hero-title">Manage Your Samiti Digitally</h1>
       <p class="hero-subtitle">Apne Mandal ya Group ka hisaab-kitaab rakhein ekdam asaan aur transparent.</p>
       <div class="hero-actions">
@@ -16,19 +20,40 @@
           <mat-icon>add</mat-icon>
           <span>CREATE NEW SAMITI</span>
         </button>
+        <button mat-stroked-button class="hero-secondary-btn" (click)="scrollToGroups()">
+          <mat-icon>explore</mat-icon>
+          <span>BROWSE GROUPS</span>
+        </button>
       </div>
     </div>
   </section>
   <hr class="section-divider" />
   <section class="near-you-section">
     <div class="section-header">
-      <h2>Groups Near You <span *ngIf="samitiGroups.length > 0" class="group-count">({{ samitiGroups.length }})</span></h2>
-      <div class="distance-dropdown-glass premium-group-count-row">
-        <mat-form-field appearance="outline" class="distance-dropdown-modern">
-          <mat-label><mat-icon class="location-icon-modern">my_location</mat-icon> Distance</mat-label>
-          <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)">
+      <div class="section-title-group">
+        <h2>
+          Groups Near You
+          <span *ngIf="samitiGroups.length > 0" class="group-count-badge">
+            <mat-icon class="group-count-icon">groups</mat-icon>
+            {{ samitiGroups.length }}
+          </span>
+        </h2>
+        <p class="section-subtitle">Discover samiti groups in your area</p>
+      </div>
+      <div class="distance-filter-wrapper">
+        <mat-form-field appearance="outline" class="distance-dropdown-modern enhanced-glass">
+          <mat-label>
+            <mat-icon class="location-icon-modern" aria-hidden="true">my_location</mat-icon>
+            <span class="distance-label-title">Distance</span>
+          </mat-label>
+          <mat-select
+            [(value)]="selectedDistance"
+            (selectionChange)="onDistanceChange($event.value)"
+            aria-label="Select distance radius"
+            disableRipple
+          >
             <mat-option *ngFor="let km of distanceOptions" [value]="km">
-              <span class="distance-label-modern">Within {{ km }} km</span>
+              <span class="distance-label-modern">Within <strong>{{ km }}</strong> km</span>
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -36,9 +61,6 @@
     </div>
     <div class="group-grid" *ngIf="samitiGroups.length > 0">
       <mat-card class="group-card" *ngFor="let group of samitiGroups">
-        <div *ngIf="group.distanceFromUser !== undefined" class="distance-label">
-          <span>{{ group.distanceFromUser | number:'1.0-0' }} kms from you</span>
-        </div>
         <div class="group-header-enhanced">
           <div class="header-background"></div>
           <div class="header-content">
@@ -129,9 +151,11 @@
                 <ng-template #groupIdContent>
                   <span class="group-id-label">Group Id:</span>
                   <span class="group-id-value">{{ group.groupId }}</span>
+
                   <ng-container *ngIf="!locationName(); else copyBtnContent">
                     <app-skeleton type="info" width="220px" height="36px" style="border-radius:18px;"></app-skeleton>
                   </ng-container>
+                  
                   <ng-template #copyBtnContent>
                     <button
                       mat-icon-button
@@ -146,6 +170,10 @@
                   </ng-template>
                 </ng-template>
               </div>
+              <span class="distance-badge">
+                <mat-icon>near_me</mat-icon>
+                {{ group.distanceFromUser | number:'1.0-1' }} km away
+              </span>
               <ng-container *ngIf="!locationName(); else joinBtnContent">
                 <app-skeleton type="info" width="140px" height="44px" style="border-radius:22px;"></app-skeleton>
               </ng-container>
@@ -212,7 +240,8 @@
                           title="Open in Maps"
                         >
                           <mat-icon>location_on</mat-icon>
-                          <span class="meta-text">{{ event.location.lat }}, {{ event.location.long }} </span>
+                          <span class="meta-text">{{ event.location.lat | number:'1.4-4' }}, {{ event.location.long | number:'1.4-4' }}</span>
+                          <mat-icon class="map-link-icon">open_in_new</mat-icon>
                         </div>
                       </div>
 
@@ -273,9 +302,10 @@
       <mat-icon>search_off</mat-icon>
       <h3>No groups found</h3>
       <p>
-        No groups match your search for "<strong>{{ searchTerm }}</strong>" and location "<strong>location</strong>"
+        No groups match <strong>"{{ searchTerm }}"</strong>
+        <ng-container *ngIf="locationName()"> near <strong>{{ locationName() }}</strong></ng-container>
       </p>
-      <p class="suggestion">Try searching with a different group name, group ID.</p>
+      <p class="suggestion">Try a different group name, group ID, or increase your distance radius.</p>
     </div>
   </section>
 </div>

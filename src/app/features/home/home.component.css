@@ -1,3 +1,54 @@
+/* Enhanced glassmorphic Distance dropdown styles */
+.enhanced-glass {
+  background: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: 0 4px 24px 0 rgba(30, 41, 59, 0.10), 0 1.5px 6px 0 rgba(99, 102, 241, 0.08);
+  border-radius: 18px !important;
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  border: 1.5px solid rgba(99, 102, 241, 0.13);
+  min-width: 160px;
+  margin-left: 12px !important;
+  margin-right: 8px !important;
+  padding: 2px 12px 2px 8px !important;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.enhanced-glass .mat-form-field-outline {
+  border-radius: 18px !important;
+}
+
+.distance-label-title {
+  font-weight: 600;
+  font-size: 1.08rem;
+  margin-left: 4px;
+  color: #3730a3;
+  letter-spacing: 0.01em;
+}
+
+.location-icon-modern {
+  color: #6366f1;
+  font-size: 1.2rem;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.distance-label-modern {
+  font-size: 1.01rem;
+  color: #373737;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 600px) {
+  .enhanced-glass {
+    min-width: 120px;
+    padding: 2px 6px 2px 4px !important;
+    font-size: 0.97rem;
+  }
+  .distance-label-title {
+    font-size: 0.98rem;
+  }
+}
 /* Compact distance dropdown section */
 .distance-dropdown-glass.premium-group-count-row {
   margin: 4px 0 4px 0 !important;
@@ -309,6 +360,69 @@
   overflow-x: hidden;
 }
 
+/* Hero location chip */
+.hero-location-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 6px 16px 6px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+  animation: slideUp 0.6s ease-out 0.1s both;
+}
+
+.hero-location-chip mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Distance badge on group cards */
+.distance-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(5, 150, 105, 0.1));
+  color: var(--success-dark);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.distance-badge mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  color: var(--success-dark);
+}
+
+/* Map link icon in event meta row */
+.map-link-icon {
+  font-size: 13px !important;
+  width: 13px !important;
+  height: 13px !important;
+  opacity: 0.5;
+  margin-left: 4px;
+  transition: opacity 0.2s;
+}
+
+.meta-row.clickable:hover .map-link-icon {
+  opacity: 1;
+}
+
 /* Hero Section */
 .hero-section {
   position: relative;
@@ -559,6 +673,53 @@
   flex: 1;
 }
 
+/* Section title group */
+.section-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.section-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 400;
+  padding-left: 18px; /* aligns with the ::before bar on h2 */
+}
+
+/* Group count badge */
+.group-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 3px 10px 3px 6px;
+  border-radius: 999px;
+  margin-left: 10px;
+  vertical-align: middle;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  letter-spacing: 0.02em;
+  animation: popInModern 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.group-count-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+}
+
+/* Distance filter wrapper */
+.distance-filter-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 
 .group-grid {
   display: flex;
@@ -735,7 +896,7 @@
 .header-actions {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 2px;
   align-items: flex-end;
   flex-shrink: 0;
 }
