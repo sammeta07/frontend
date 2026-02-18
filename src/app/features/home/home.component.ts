@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
@@ -26,19 +27,22 @@ import { SkeletonComponent } from '../../components/skeleton/skeleton.component'
     MatIcon,
     MatSnackBarModule,
     MatTabsModule,
-    SkeletonComponent
+    SkeletonComponent,
+    MatSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
+  distanceOptions: number[] = [50, 100, 200, 500];
+  selectedDistance: number = 50;
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
   private snackBar = inject(MatSnackBar);
   private locationService = inject(LocationService);
   locationName$ = this.locationService.locationName$;
-  
+  userLocation: { lat: number; long: number } | null = null;
   samitiGroups: groupDetailsModel[] = [];
   private allGroups: groupDetailsModel[] = [];
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
@@ -52,10 +56,19 @@ export class HomeComponent implements OnInit {
   getYearLabel = getYearLabel;
 
   ngOnInit() {
-
-    this.locationService.locationName$.subscribe(locationName => {
-      console.log('locationName$:', locationName);
-      // Trigger change detection to update the UI with the new location
+    this.homeService.searchTerm$.subscribe(term => {
+      this.searchTerm = term;
+      if(this.searchTerm === ''){
+        this.clearSearch();
+      }else if(this.searchTerm){
+        this.onSearchGroups();
+      }
+    });
+    this.locationService.location$.subscribe(location => {
+      this.userLocation = location;
+      if (location) {
+        this.filterGroupsByDistance();
+      }
     });
     // Set current year as default selected tab
     const currentYear = new Date().getFullYear();
@@ -75,25 +88,59 @@ export class HomeComponent implements OnInit {
       // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
         group.locationName = 'Fetching location...';
-        this.locationService.reverseGeocode(group.location).subscribe({
-          next: (readableLocation: string) => {
-            group.locationName = readableLocation; // Add a new property for display
-          },
-          error: (error) => {
-            console.error('Error reverse geocoding group location:', error);
-            group.locationName = 'Unknown Location';
-          }
-        });
+        // this.locationService.reverseGeocode(group.location).subscribe({
+        //   next: (readableLocation: string) => {
+        //     group.locationName = readableLocation; // Add a new property for display
+        //   },
+        //   error: (error) => {
+        //     console.error('Error reverse geocoding group location:', error);
+        //     group.locationName = 'Unknown Location';
+        //   }
+        // });
       })
       this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
       this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
+      this.filterGroupsByDistance();
     });
   }
 
-  onSearchGroups(event: Event) {
-    const input = event.target as HTMLInputElement;
-    this.searchTerm = input.value.toLowerCase().trim();
-    
+  onDistanceChange(distance: number) {
+    this.selectedDistance = distance;
+    this.filterGroupsByDistance();
+  }
+
+  filterGroupsByDistance() {
+    if (!this.userLocation) {
+      this.samitiGroups = [...this.allGroups];
+      return;
+    }
+    this.samitiGroups = this.allGroups.filter(group => {
+      const dist = this.calculateDistance(
+        this.userLocation!.lat,
+        this.userLocation!.long,
+        group.location.lat,
+        group.location.long
+      );
+      return dist <= this.selectedDistance;
+    });
+    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  // Haversine formula to calculate distance between two lat/long points in km
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const toRad = (value: number) => (value * Math.PI) / 180;
+    const R = 6371; // Radius of the Earth in km
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  onSearchGroups() {
     if (!this.searchTerm) {
       // Reset to all groups if search is empty
       this.samitiGroups = [...this.allGroups];
@@ -109,8 +156,7 @@ export class HomeComponent implements OnInit {
     this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  clearSearch(input: HTMLInputElement) {
-    input.value = '';
+  clearSearch() {
     this.searchTerm = '';
     this.samitiGroups = [...this.allGroups];
     this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));

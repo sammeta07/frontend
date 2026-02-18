@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { groupDetailsModel } from '../models/home.model';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -88,7 +88,7 @@ export class HomeService {
         "long": 81.3509
       },
       "since": 2010,
-      "description": "Ekta Samiti Bhilai is a cultural and social organization dedicated to preserving local traditions and supporting community welfare.",
+      "description": "",
       "contactNumbers": [
         "9876123456",
         "9123456781"
@@ -692,6 +692,8 @@ export class HomeService {
       ]
     }
   ];
+
+  searchTerm$ = new BehaviorSubject<string>('');
 
   getGroupsAndEvents(): Observable<groupDetailsModel[]> {
     // return this.http.get<any>(this.apiUrl);

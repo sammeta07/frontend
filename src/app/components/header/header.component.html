@@ -5,7 +5,28 @@
   </div>
 
   <span class="spacer"></span>
-
+  <div class="search-bar-wrapper">
+    <input
+      #searchInput
+      type="text"
+      class="search-input"
+      placeholder="Search groups within XX kms ..."
+      (input)="onSearchGroups($event)"
+      [disabled]="!(locationName$ | async)"
+    />
+    <button
+      *ngIf="searchTerm"
+      mat-icon-button
+      type="button"
+      class="search-clear-btn"
+      (click)="clearSearch(searchInput)"
+      aria-label="Clear search"
+      title="Clear search"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-icon *ngIf="!searchTerm" class="search-icon">search</mat-icon>
+  </div>
   <button mat-button class="location-button">
     <mat-icon class="location-icon">location_on</mat-icon>
     <span class="location-text" *ngIf="(locationName$ | async) as locationName; else loading">

@@ -1,5 +1,5 @@
 <div class="home-container">
-  <section class="hero-section" *ngIf="locationName$ | async">
+  <section class="hero-section" *ngIf="(locationName$ | async) && !searchTerm">
     <div class="hero-background-elements">
       <div class="hero-circle hero-circle-1"></div>
       <div class="hero-circle hero-circle-2"></div>
@@ -23,27 +23,15 @@
   <section class="near-you-section">
     <div class="section-header">
       <h2>Explore Active Events</h2>
-      <div class="search-bar-wrapper">
-        <mat-icon class="search-icon">search</mat-icon>
-        <input
-          #searchInput
-          type="text"
-          class="search-input"
-          placeholder="Search group ..."
-          (input)="onSearchGroups($event)"
-          [disabled]="!(locationName$ | async)"
-        />
-        <button
-          *ngIf="searchTerm"
-          mat-icon-button
-          type="button"
-          class="search-clear-btn"
-          (click)="clearSearch(searchInput)"
-          aria-label="Clear search"
-          title="Clear search"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
+      <div class="distance-dropdown-glass premium-group-count-row">
+        <mat-form-field appearance="outline" class="distance-dropdown-modern">
+          <mat-label><mat-icon class="location-icon-modern">my_location</mat-icon> Distance</mat-label>
+          <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)">
+            <mat-option *ngFor="let km of distanceOptions" [value]="km">
+              <span class="distance-label-modern">Within {{ km }} km</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <div class="group-grid" *ngIf="samitiGroups.length > 0">
