@@ -409,6 +409,37 @@
   color: var(--success-dark);
 }
 
+/* Join badge — mirrors distance-badge in primary (indigo) color */
+.join-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(79, 70, 229, 0.08));
+  color: var(--primary-dark);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 12px 4px 8px;
+  border-radius: 999px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-badge:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.16));
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.18);
+}
+
+.join-badge mat-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  color: var(--primary-color);
+}
+
 /* Map link icon in event meta row */
 .map-link-icon {
   font-size: 13px !important;
