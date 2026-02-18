@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { groupDetailsModel } from '../models/home.model';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
@@ -693,7 +694,7 @@ export class HomeService {
     }
   ];
 
-  searchTerm$ = new BehaviorSubject<string>('');
+  searchTerm = signal<string>('');
 
   getGroupsAndEvents(): Observable<groupDetailsModel[]> {
     // return this.http.get<any>(this.apiUrl);

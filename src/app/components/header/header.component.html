@@ -12,7 +12,7 @@
       class="search-input"
       placeholder="Search groups within XX kms ..."
       (input)="onSearchGroups($event)"
-      [disabled]="!(locationName$ | async)"
+      [disabled]="!locationName()"
     />
     <button
       *ngIf="searchTerm"
@@ -29,8 +29,8 @@
   </div>
   <button mat-button class="location-button">
     <mat-icon class="location-icon">location_on</mat-icon>
-    <span class="location-text" *ngIf="(locationName$ | async) as locationName; else loading">
-      {{ locationName }}
+    <span class="location-text" *ngIf="locationName(); else loading">
+      {{ locationName() }}
     </span>
     <ng-template #loading>
       <span class="location-text">Detecting your location...</span>

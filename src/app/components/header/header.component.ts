@@ -7,7 +7,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { LocationService } from '../../location.service';
+import { LocationService } from '../../shared/location.service';
 import { HomeService } from '../../features/home/services/home.service';
 
 
@@ -29,30 +29,23 @@ import { HomeService } from '../../features/home/services/home.service';
 export class HeaderComponent {
   private locationService = inject(LocationService);
   private homeService = inject(HomeService);
-  locationName$ = this.locationService.locationName$;
-  location$ = this.locationService.location$;
+  locationName = this.locationService.locationName$;
+  location = this.locationService.location$;
   searchTerm: string = '';
   
 
   constructor( public dialog: MatDialog ) {
-    // this.locationService.locationName$.subscribe(locationName => {
-    //   console.log('locationName$:', locationName);
-    //   // Trigger change detection to update the UI with the new location
-    // });
-    //  this.locationService.location$.subscribe(location => {
-    //   console.log('location$:', location);
-    //   // Trigger change detection to update the UI with the new location
-    // });
+    console.log('HeaderComponent initialized. Current location:', this.location(), 'Location name:', this.locationName());
   }
   onSearchGroups(event: Event){
     const input = event.target as HTMLInputElement;
     this.searchTerm = input.value.toLowerCase().trim();
-    this.homeService.searchTerm$.next(this.searchTerm);
+    this.homeService.searchTerm.set(this.searchTerm);
   }
   clearSearch(input: HTMLInputElement){
     input.value = '';
     this.searchTerm = '';
-    this.homeService.searchTerm$.next(this.searchTerm);
+    this.homeService.searchTerm.set(this.searchTerm);
   }
 
   openLoginDialog() {

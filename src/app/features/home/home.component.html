@@ -1,5 +1,5 @@
 <div class="home-container">
-  <section class="hero-section" *ngIf="(locationName$ | async) && !searchTerm">
+  <section class="hero-section" *ngIf="locationName() && !searchTerm">
     <div class="hero-background-elements">
       <div class="hero-circle hero-circle-1"></div>
       <div class="hero-circle hero-circle-2"></div>
@@ -22,7 +22,7 @@
   <hr class="section-divider" />
   <section class="near-you-section">
     <div class="section-header">
-      <h2>Explore Active Events</h2>
+      <h2>Groups Near You <span *ngIf="samitiGroups.length > 0" class="group-count">({{ samitiGroups.length }})</span></h2>
       <div class="distance-dropdown-glass premium-group-count-row">
         <mat-form-field appearance="outline" class="distance-dropdown-modern">
           <mat-label><mat-icon class="location-icon-modern">my_location</mat-icon> Distance</mat-label>
@@ -36,18 +36,21 @@
     </div>
     <div class="group-grid" *ngIf="samitiGroups.length > 0">
       <mat-card class="group-card" *ngFor="let group of samitiGroups">
+        <div *ngIf="group.distanceFromUser !== undefined" class="distance-label">
+          <span>{{ group.distanceFromUser | number:'1.0-0' }} kms from you</span>
+        </div>
         <div class="group-header-enhanced">
           <div class="header-background"></div>
           <div class="header-content">
             <div class="header-main">
-              <ng-container *ngIf="!(locationName$ | async); else groupLogo">
+              <ng-container *ngIf="!locationName(); else groupLogo">
                 <app-skeleton type="avatar" width="100px" height="100px" ariaLabel="Loading group logo"></app-skeleton>
               </ng-container>
               <ng-template #groupLogo>
                 <img [src]="group.logo || getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
               </ng-template>
               <div class="group-details">
-                <ng-container *ngIf="!(locationName$ | async); else groupNameText">
+                <ng-container *ngIf="!locationName(); else groupNameText">
                   <h3 class="group-name clickable-title">
                     <app-skeleton type="info" width="60%" height="28px"></app-skeleton>
                   </h3>
@@ -56,7 +59,7 @@
                   <h3 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h3>
                 </ng-template>
                 <div class="header-info">
-                  <ng-container *ngIf="!(locationName$ | async); else locationText">
+                  <ng-container *ngIf="!locationName(); else locationText">
                     <div class="info-item location-clickable">
                       <app-skeleton type="info" width="80px" height="18px"></app-skeleton>
                     </div>
@@ -72,7 +75,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider"></div>
-                  <ng-container *ngIf="!(locationName$ | async); else sinceText">
+                  <ng-container *ngIf="!locationName(); else sinceText">
                     <div class="info-item">
                       <app-skeleton type="info" width="70px" height="18px"></app-skeleton>
                     </div>
@@ -84,7 +87,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider"></div>
-                  <ng-container *ngIf="!(locationName$ | async); else eventsCountText">
+                  <ng-container *ngIf="!locationName(); else eventsCountText">
                     <div class="info-item">
                       <app-skeleton type="info" width="60px" height="18px"></app-skeleton>
                     </div>
@@ -96,7 +99,7 @@
                     </div>
                   </ng-template>
                   <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
-                  <ng-container *ngIf="!(locationName$ | async); else contactNumbersText">
+                  <ng-container *ngIf="!locationName(); else contactNumbersText">
                     <div class="info-item">
                       <app-skeleton type="info" width="100px" height="18px"></app-skeleton>
                     </div>
@@ -108,7 +111,7 @@
                     </div>
                   </ng-template>
                 </div>
-                <ng-container *ngIf="!(locationName$ | async); else descriptionText">
+                <ng-container *ngIf="!locationName(); else descriptionText">
                   <p class="group-description">
                     <app-skeleton type="info" width="80%" height="16px" customClass="mb-6"></app-skeleton>
                   </p>
@@ -120,13 +123,13 @@
             </div>
             <div class="header-actions">
               <div class="group-id-info" *ngIf="group.groupId">
-                <ng-container *ngIf="!(locationName$ | async); else groupIdContent">
+                <ng-container *ngIf="!locationName(); else groupIdContent">
                   <app-skeleton type="info" width="220px" height="36px" customClass="mt-10" style="border-radius:18px; margin-top:10px;"></app-skeleton>
                 </ng-container>
                 <ng-template #groupIdContent>
                   <span class="group-id-label">Group Id:</span>
                   <span class="group-id-value">{{ group.groupId }}</span>
-                  <ng-container *ngIf="!(locationName$ | async); else copyBtnContent">
+                  <ng-container *ngIf="!locationName(); else copyBtnContent">
                     <app-skeleton type="info" width="220px" height="36px" style="border-radius:18px;"></app-skeleton>
                   </ng-container>
                   <ng-template #copyBtnContent>
@@ -143,7 +146,7 @@
                   </ng-template>
                 </ng-template>
               </div>
-              <ng-container *ngIf="!(locationName$ | async); else joinBtnContent">
+              <ng-container *ngIf="!locationName(); else joinBtnContent">
                 <app-skeleton type="info" width="140px" height="44px" style="border-radius:22px;"></app-skeleton>
               </ng-container>
               <ng-template #joinBtnContent>
@@ -164,7 +167,7 @@
           <mat-tab *ngFor="let year of years" [label]="year.toString()">
             <div class="events-section">
               <div class="events-grid-enhanced">
-                <ng-container *ngIf="locationName$ | async; else eventSkeletons">
+                <ng-container *ngIf="locationName(); else eventSkeletons">
                   <div class="event-card-enhanced" *ngFor="let event of group.events" [attr.data-status]="event.status">
                     <!-- Status indicator bar -->
                     <div class="event-status-bar" [attr.data-status]="event.status"></div>
@@ -215,7 +218,7 @@
 
                       <!-- Event Footer -->
                       <div class="event-card-footer">
-                        <ng-container *ngIf="locationName$ | async; else statusSkeleton">
+                        <ng-container *ngIf="locationName(); else statusSkeleton">
                           <span class="event-status-chip" [attr.data-status]="event.status">
                             <mat-icon>
                               {{ event.status === 'started' ? 'play_circle' : event.status === 'completed' ? 'check_circle' : 'schedule' }}
@@ -255,7 +258,7 @@
                 </ng-template>
               </div>
               <!-- Empty State -->
-              <div class="empty-state" *ngIf="(locationName$ | async) && (!group.events || group.events.length === 0)">
+              <div class="empty-state" *ngIf="locationName() && (!group.events || group.events.length === 0)">
                 <mat-icon>event_busy</mat-icon>
                 <p class="empty-state-text">No events available for {{ year }}</p>
               </div>

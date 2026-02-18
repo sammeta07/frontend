@@ -1,11 +1,12 @@
 import { Injectable, inject, DestroyRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { signal } from '@angular/core';
 import { catchError, map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
-import { PermissionInstructionsDialogComponent } from './components/permission-instructions-dialog/permission-instructions-dialog.component';
-import { LocationModel } from './features/home/models/home.model';
+import { PermissionInstructionsDialogComponent } from '../components/permission-instructions-dialog/permission-instructions-dialog.component';
+import { LocationModel } from '../features/home/models/home.model';
 
 // export interface IpLocationData {
 //   ip: string;
@@ -25,8 +26,8 @@ export class LocationService {
   private readonly IP_LOCATION_API_URL = 'https://ipapi.co/json/';
   private readonly REVERSE_GEOCODING_API = 'https://nominatim.openstreetmap.org/reverse';
   private dialog = inject(MatDialog);
-  location$ = new BehaviorSubject<{ lat: number; long: number } | null>(null);
-  locationName$ = new BehaviorSubject<string>('Fetching location...');
+  location$ = signal<{ lat: number; long: number } | null>(null);
+  locationName$ = signal<string>('Fetching location...');
   private destroyRef = inject(DestroyRef);
   
 
@@ -50,17 +51,17 @@ export class LocationService {
       // If not denied, this line will trigger browser's default permission popup
       const pos = await this.getGeolocation();
       console.log('pos',pos);
-      this.location$.next(pos);
+      this.location$.set(pos);
       
       // Convert coordinates to readable location name
       this.reverseGeocode(pos)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (readableLocation: string) => {
-            this.locationName$.next(readableLocation);
+            this.locationName$.set(readableLocation);
           },
           error: (error) => {
-            this.locationName$.next('error');
+            this.locationName$.set('error');
           }
         });
 

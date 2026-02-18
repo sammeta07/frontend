@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
-import { LocationService } from '../../location.service';
+import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 
 @Component({
@@ -41,8 +41,6 @@ export class HomeComponent implements OnInit {
   private homeService = inject(HomeService);
   private snackBar = inject(MatSnackBar);
   private locationService = inject(LocationService);
-  locationName$ = this.locationService.locationName$;
-  userLocation: { lat: number; long: number } | null = null;
   samitiGroups: groupDetailsModel[] = [];
   private allGroups: groupDetailsModel[] = [];
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
@@ -50,26 +48,35 @@ export class HomeComponent implements OnInit {
   searchTerm: string = '';
   carouselPagination = { clickable: true };
   carouselAutoplay = { delay: 3500, disableOnInteraction: false };
-  isLocationLoading: boolean = true;
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
+  locationName = this.locationService.locationName$;
+  location = this.locationService.location$;
+
+  searchTermEffect = effect(() => {
+    this.searchTerm = this.homeService.searchTerm();
+    if(this.searchTerm === ''){
+      this.clearSearch();
+    }else if(this.searchTerm){
+      this.onSearchGroups();
+    }
+  });
+
+  locationEffect = effect(() => {
+    const loc = this.location();
+    const locName = this.locationName();
+    if (loc) {
+      this.filterGroupsByDistance();
+    }
+  });
+
   ngOnInit() {
-    this.homeService.searchTerm$.subscribe(term => {
-      this.searchTerm = term;
-      if(this.searchTerm === ''){
-        this.clearSearch();
-      }else if(this.searchTerm){
-        this.onSearchGroups();
-      }
-    });
-    this.locationService.location$.subscribe(location => {
-      this.userLocation = location;
-      if (location) {
-        this.filterGroupsByDistance();
-      }
-    });
+    this.searchTerm = '';
+    if (this.location()) {
+      this.filterGroupsByDistance();
+    }
     // Set current year as default selected tab
     const currentYear = new Date().getFullYear();
     const currentYearIndex = this.years.indexOf(currentYear);
@@ -88,15 +95,14 @@ export class HomeComponent implements OnInit {
       // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
         group.locationName = 'Fetching location...';
-        // this.locationService.reverseGeocode(group.location).subscribe({
-        //   next: (readableLocation: string) => {
-        //     group.locationName = readableLocation; // Add a new property for display
-        //   },
-        //   error: (error) => {
-        //     console.error('Error reverse geocoding group location:', error);
-        //     group.locationName = 'Unknown Location';
-        //   }
-        // });
+        this.locationService.reverseGeocode(group.location).subscribe({
+          next: (readableLocation: string) => {
+            group.locationName = readableLocation; // Add a new property for display
+          },
+          error: (error) => {
+            group.locationName = 'Unknown Location';
+          }
+        });
       })
       this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
       this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
@@ -110,20 +116,26 @@ export class HomeComponent implements OnInit {
   }
 
   filterGroupsByDistance() {
-    if (!this.userLocation) {
+    if (!this.location()) {
       this.samitiGroups = [...this.allGroups];
       return;
     }
-    this.samitiGroups = this.allGroups.filter(group => {
-      const dist = this.calculateDistance(
-        this.userLocation!.lat,
-        this.userLocation!.long,
-        group.location.lat,
-        group.location.long
-      );
-      return dist <= this.selectedDistance;
-    });
-    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+    const userLat = this.location()!.lat;
+    const userLong = this.location()!.long;
+    // Attach distance to each group for sorting and display
+    this.samitiGroups = this.allGroups
+      .map(group => {
+        const dist = this.calculateDistance(
+          userLat,
+          userLong,
+          group.location.lat,
+          group.location.long
+        );
+        // Type assertion to allow extra property
+        return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
+      })
+      .filter(group => group.distanceFromUser <= this.selectedDistance)
+      .sort((a, b) => a.distanceFromUser - b.distanceFromUser);
   }
 
   // Haversine formula to calculate distance between two lat/long points in km
@@ -141,25 +153,41 @@ export class HomeComponent implements OnInit {
   }
 
   onSearchGroups() {
-    if (!this.searchTerm) {
-      // Reset to all groups if search is empty
+    if (!this.location()) {
       this.samitiGroups = [...this.allGroups];
-    } else {
-      // Filter groups by name, group ID, or location
-      this.samitiGroups = this.allGroups.filter(group =>
+      return;
+    }
+    const userLat = this.location()!.lat;
+    const userLong = this.location()!.long;
+    // First filter by distance
+    let filtered = this.allGroups
+      .map(group => {
+        const dist = this.calculateDistance(
+          userLat,
+          userLong,
+          group.location.lat,
+          group.location.long
+        );
+        return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
+      })
+      .filter(group => group.distanceFromUser <= this.selectedDistance);
+
+    // Then filter by search term if present
+    if (this.searchTerm) {
+      filtered = filtered.filter(group =>
         group.name.toLowerCase().includes(this.searchTerm) ||
         (group.groupId && group.groupId.toLowerCase().includes(this.searchTerm)) ||
         (group.locationName && group.locationName.toLowerCase().includes(this.searchTerm))
       );
     }
-    // Maintain alphabetical order after search
-    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+    // Sort by distance
+    this.samitiGroups = filtered.sort((a, b) => a.distanceFromUser - b.distanceFromUser);
   }
 
   clearSearch() {
     this.searchTerm = '';
     this.samitiGroups = [...this.allGroups];
-    this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
+    this.filterGroupsByDistance();
   }
 
   onCreateSamiti() {
@@ -176,7 +204,6 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('New Samiti Created:', result);
       if (0) {
         // logic to add new samiti to the list
         const newGroup = result as groupDetailsModel;
@@ -219,7 +246,6 @@ export class HomeComponent implements OnInit {
 
   copyToClipboard(text: string) {
     navigator.clipboard.writeText(text).then(() => {
-      console.log('Group ID copied to clipboard:', text);
       this.snackBar.open(`Group Id '${text}' copied to clipboard`, 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
@@ -227,7 +253,6 @@ export class HomeComponent implements OnInit {
         panelClass: ['copy-snackbar']
       });
     }).catch(err => {
-      console.error('Failed to copy to clipboard:', err);
       this.snackBar.open('Failed to copy Group Id', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',

@@ -4,7 +4,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LocationService } from '../../location.service';
+import { LocationService } from '../../shared/location.service';
 
 interface Step {
   title: string;
