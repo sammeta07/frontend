@@ -730,6 +730,7 @@ export class HomeService {
   ];
 
   searchTerm = signal<string>('');
+  selectedDistance = signal<number>(50); // Default distance in kilometers
 
   getGroupsAndEvents(): Observable<groupDetailsModel[]> {
     // return this.http.get<any>(this.apiUrl);

@@ -40,11 +40,9 @@ export class HeaderComponent {
   constructor( public dialog: MatDialog ) {
     console.log('HeaderComponent initialized. Current location:', this.location(), 'Location name:', this.locationName());
   }
-  onDistanceChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const distance = Number(selectElement.value);
+  onDistanceChange(distance: number) {
     this.selectedDistance = distance;
-    // this.filterGroupsByDistance();
+    this.homeService.selectedDistance.set(this.selectedDistance);
   }
   onSearchGroups(event: Event){
     const input = event.target as HTMLInputElement;

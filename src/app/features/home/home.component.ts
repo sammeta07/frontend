@@ -35,7 +35,7 @@ import { SkeletonComponent } from '../../components/skeleton/skeleton.component'
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  distanceOptions: number[] = [50, 100, 200, 500];
+  // distanceOptions: number[] = [50, 100, 200, 500];
   selectedDistance: number = 50;
   private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
@@ -62,6 +62,11 @@ export class HomeComponent implements OnInit {
     }else if(this.searchTerm){
       this.onSearchGroups();
     }
+  });
+
+  selectedDistanceEffect = effect(() => {
+    this.selectedDistance = this.homeService.selectedDistance();
+    this.filterGroupsByDistance();
   });
 
   locationEffect = effect(() => {
