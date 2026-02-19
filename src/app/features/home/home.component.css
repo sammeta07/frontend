@@ -1,3 +1,13 @@
+.join-badge-large {
+  min-width: 160px;
+  min-height: 48px;
+  font-size: 1.2rem;
+  padding: 12px 28px;
+  border-radius: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* Enhanced glassmorphic Distance dropdown styles */
 .enhanced-glass {
   background: rgba(255, 255, 255, 0.18) !important;

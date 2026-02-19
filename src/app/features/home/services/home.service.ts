@@ -163,6 +163,41 @@ export class HomeService {
         }
       ]
     },
+
+    // Moved out: Nearby Test Group
+    {
+      "id": 10,
+      "groupId": "ANM_10",
+      "name": "Nearby Test Group",
+      "location": {
+        "lat": 21.2251827,
+        "long": 81.4535621
+      },
+      "since": 2025,
+      "description": "A test group located less than 1 km from Azad Navyuvak Mandal for proximity testing.",
+      "contactNumbers": [
+        "9000000000"
+      ],
+      "logo": "https://picsum.photos/seed/nearby-test/200/200",
+      "admins": [],
+      "events": [
+        {
+          "id": 1001,
+          "title": "Test Event",
+          "year_count": 1,
+          "start_date": "2026-02-20",
+          "end_date": "2026-02-21",
+          "location": {
+            "lat": 21.2251827,
+            "long": 81.4535621
+          },
+          "images": [
+            "https://picsum.photos/seed/test-event/800/500"
+          ],
+          "description": "A sample event for the nearby test group."
+        }
+      ]
+    },
     {
       "id": 3,
       "groupId": "SSSM_3",

@@ -106,7 +106,7 @@ export class LocationService {
         const address = data.address || {};
         const city = address.state_district || 'Unknown';
         const state = address.state || 'Unknown';
-        const result = `${city}, ${state}`;
+        const result = `${city}`;
         return result;
       }),
       catchError(error => {

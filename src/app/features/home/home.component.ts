@@ -27,7 +27,7 @@ import { SkeletonComponent } from '../../components/skeleton/skeleton.component'
     MatIcon,
     MatSnackBarModule,
     MatTabsModule,
-    SkeletonComponent,
+    // SkeletonComponent,
     MatSelectModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
