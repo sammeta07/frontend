@@ -1,9 +1,9 @@
 .join-badge-large {
-  min-width: 160px;
-  min-height: 48px;
-  font-size: 1.2rem;
-  padding: 12px 28px;
-  border-radius: 32px;
+  min-width: 120px;
+  min-height: 40px;
+  font-size: 1rem;
+  padding: 8px 18px;
+  border-radius: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
