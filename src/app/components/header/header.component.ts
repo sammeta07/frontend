@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { LocationService } from '../../shared/location.service';
 import { HomeService } from '../../features/home/services/home.service';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
@@ -21,7 +22,8 @@ import { HomeService } from '../../features/home/services/home.service';
     MatIconModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -32,10 +34,17 @@ export class HeaderComponent {
   locationName = this.locationService.locationName$;
   location = this.locationService.location$;
   searchTerm: string = '';
-  
+  distanceOptions: number[] = [50, 100, 200, 500];
+  selectedDistance: number = 50;
 
   constructor( public dialog: MatDialog ) {
     console.log('HeaderComponent initialized. Current location:', this.location(), 'Location name:', this.locationName());
+  }
+  onDistanceChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const distance = Number(selectElement.value);
+    this.selectedDistance = distance;
+    // this.filterGroupsByDistance();
   }
   onSearchGroups(event: Event){
     const input = event.target as HTMLInputElement;

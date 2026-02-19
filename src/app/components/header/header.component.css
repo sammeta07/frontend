@@ -1,79 +1,5 @@
-/* Modern search bar styles for header */
-.search-bar-wrapper {
-  position: relative;
-  display: block;
-  align-items: stretch;
-  width: 320px;
-  max-width: 100%;
-  margin: 0 16px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 24px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-  transition: box-shadow 0.2s;
-}
 
-.search-bar-wrapper:focus-within {
-  box-shadow: 0 2px 8px rgba(99,102,241,0.12);
-  background: rgba(255,255,255,0.18);
-}
-
-.search-icon {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #757575;
-  font-size: 30px;
-  pointer-events: none;
-
-}
-
-.search-input {
-  width: 100%;
-  outline: none;
-  background: transparent;
-  padding: 10px 12px 10px 10px;
-  font-size: 1rem;
-  color: #212121;
-  font-family: inherit;
-  min-width: 0;
-  caret-color: #3f51b5;
-  border-radius: 16px;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
-}
-.search-input:focus {
-  border-color: #bdbdbd;
-}
-
-.search-input::placeholder {
-  color: #757575;
-  opacity: 1;
-}
-
-.search-clear-btn {
-  position: absolute;
-  right: 0px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #757575;
-  font-size: 25px;
-  z-index: 2;
-}
-
-.search-clear-btn:hover {
-  background: rgba(255,255,255,0.18);
-  color: #ff5252;
-}
-
-.header-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.logo-section {
+.brand-section {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -85,51 +11,193 @@
   flex: 1 1 auto;
 }
 
-.location-button {
+/* Toolbar Setup */
+.header-toolbar {
+  height: 70px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px !important;
-  border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  color: #6366f1 !important;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+}
+
+/* The Search/Filter Island - THIS SOLVES YOUR READABILITY */
+.controls-container {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff; /* Stark white for maximum contrast */
+  border-radius: 50px;       /* Modern pill shape */
+  padding: 2px 16px;
+  width: 100%;
+  max-width: 500px;
+  height: 42px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Icons & Inputs inside the white box need to be dark */
+.search-icon, .dist-icon {
+  color: #5f6368; /* Dark grey */
+  margin-right: 8px;
+}
+
+.search-input {
   border: none;
+  background: transparent;
+  color: #202124; /* Near black text */
+  width: 100%;
+  font-size: 15px;
+  outline: none;
 }
 
-.location-button:hover:not(:disabled) {
-  background-color: white !important;
-  color: #4f46e5 !important;
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
-  transform: translateY(-2px);
+.search-input::placeholder {
+  color: #70757a;
 }
 
-.location-button:active:not(:disabled) {
-  transform: translateY(0);
+/* Vertical line between search and select */
+.divider {
+  width: 1px;
+  height: 24px;
+  background-color: #dadce0;
+  margin: 0 12px;
 }
 
-.location-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* The Select Element */
+.distance-filter {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
-.location-icon {
+select {
+  border: none;
+  background: transparent;
+  color: #202124; /* Dark text */
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+  padding-right: 4px;
+}
+
+/* LOGIN BUTTON - Make it pop against the Primary color */
+.login-cta {
+  background-color: #ffd740 !important; /* Material Amber/Gold */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 4px;
+  margin-left: 12px;
+}
+
+.location-btn {
+  color: rgb(24, 24, 23) !important;
+}
+.search-bar-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative; /* Anchor for the button */
+}
+
+.search-icon {
+  display: flex;       /* Allows the icon content to center */
+  align-items: center;
+  justify-content: center;
+  color: #5f6368;
+  margin-right: 8px;
+  font-size: 20px;     /* Adjust size if it feels too bulky */
+  width: 20px;         /* Match width to font-size for a perfect square */
+  height: 20px;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  color: #202124;
+  width: 100%;
+  font-size: 15px;
+  outline: none;
+  line-height: normal; /* Prevents the input text from pushing the icon */
+  display: flex;
+  align-items: center;
+}
+.clear-btn {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #70757a;
+  transition: color 0.2s;
+}
+
+.clear-btn:hover {
+  color: #d32f2f; /* Turns slightly red on hover for feedback */
+}
+
+.clear-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+.distance-filter {
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+}
+
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.custom-select {
+  appearance: none; /* Hides default browser arrow */
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  color: #202124;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 24px 4px 4px; /* Space for the custom arrow */
+  cursor: pointer;
+  outline: none;
+  z-index: 2;
+}
+
+/* Designing the actual 'Options' list (Limited support) */
+.custom-select option {
+  background-color: #ffffff;
+  color: #202124;
+  padding: 10px;
+  font-size: 14px;
+}
+
+/* The Icons */
+.dist-icon {
+  color: #5f6368;
   font-size: 18px;
   width: 18px;
   height: 18px;
 }
 
-.location-text {
-  letter-spacing: 0.3px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem;
-  font-weight: 600;
+.dropdown-arrow {
+  position: absolute;
+  right: 0;
+  color: #5f6368;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  pointer-events: none; /* Clicks go through to the select */
 }
 
-.auth-buttons {
-  display: flex;
-  gap: 8px;
+/* Hover Effect */
+.select-wrapper:hover .custom-select {
+  color: #1a73e8; /* Change text color on hover */
+}
+
+.select-wrapper:hover .dropdown-arrow,
+.select-wrapper:hover .dist-icon {
+  color: #1a73e8;
 }

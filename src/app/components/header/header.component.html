@@ -1,45 +1,71 @@
 <mat-toolbar color="primary" class="header-toolbar">
-  <div class="logo-section">
+  <div class="brand-section">
     <mat-icon>group</mat-icon>
-    <span>SAMITI</span>
+    <span class="brand-name">SAMITI</span>
   </div>
 
   <span class="spacer"></span>
+
+<div class="controls-container">
   <div class="search-bar-wrapper">
+    <mat-icon class="search-icon">search</mat-icon>
     <input
       #searchInput
       type="text"
       class="search-input"
-      placeholder="Search groups near you..."
+      placeholder="Search groups..."
+      [value]="searchTerm" 
       (input)="onSearchGroups($event)"
       [disabled]="!locationName()"
     />
-    <button
-      *ngIf="searchTerm"
-      mat-icon-button
-      type="button"
-      class="search-clear-btn"
+    
+    <button 
+      *ngIf="searchTerm" 
+      mat-icon-button 
+      class="clear-btn" 
       (click)="clearSearch(searchInput)"
-      aria-label="Clear search"
-      title="Clear search"
+      type="button"
     >
       <mat-icon>close</mat-icon>
     </button>
-    <mat-icon *ngIf="!searchTerm" class="search-icon">search</mat-icon>
   </div>
-  <button mat-button class="location-button">
-    <mat-icon class="location-icon">location_on</mat-icon>
-    <span class="location-text" *ngIf="locationName(); else loading">
-      {{ locationName() }}
-    </span>
-    <ng-template #loading>
-      <span class="location-text">Detecting your location...</span>
-    </ng-template>
-  </button>
 
-  <div class="auth-buttons">
-    <button mat-button (click)="openLoginDialog()">
-      <mat-icon>login</mat-icon>
+  <div class="divider"></div>
+
+  <!-- <div class="distance-filter">
+    <mat-icon class="dist-icon">my_location</mat-icon>
+    <select (change)="onDistanceChange($event)">
+      <option *ngFor="let km of distanceOptions" [value]="km">{{ km }} km</option>
+    </select>
+  </div> -->
+  <div class="distance-filter">
+  <div class="select-wrapper">
+    <mat-icon class="dist-icon">my_location</mat-icon>
+    
+    <select 
+      class="custom-select" 
+      (change)="onDistanceChange($event)"
+      aria-label="Select distance radius"
+    >
+      <option *ngFor="let km of distanceOptions" [value]="km">
+        Within {{ km }} km
+      </option>
+    </select>
+    
+    <mat-icon class="dropdown-arrow">expand_more</mat-icon>
+  </div>
+</div>
+</div>
+
+  <span class="spacer"></span>
+
+  <div class="action-section">
+    <button mat-button class="location-btn">
+      <mat-icon>location_on</mat-icon>
+      <span class="location-text">{{ locationName() || 'Locating...' }}</span>
+    </button>
+
+    <button mat-flat-button class="login-cta" (click)="openLoginDialog()">
       LOGIN
     </button>
   </div>
