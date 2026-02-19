@@ -14,17 +14,6 @@
       </button>
     </div>
     <div class="divider"></div>
-    <!-- <div C>
-      <div class="select-wrapper">
-        <mat-icon class="dist-icon">my_location</mat-icon>
-        <select class="custom-select" (change)="onDistanceChange($event)" aria-label="Select distance radius">
-          <option *ngFor="let km of distanceOptions" [value]="km">
-            Within {{ km }} km
-          </option>
-        </select>
-        <mat-icon class="dropdown-arrow">expand_more</mat-icon>
-      </div>
-    </div> -->
     <mat-form-field appearance="outline" class="borderless-field custom-select-field">
       <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)"
         aria-label="Select distance radius" disableRipple>
