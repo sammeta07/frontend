@@ -156,7 +156,7 @@ select {
   appearance: none; /* Hides default browser arrow */
   -webkit-appearance: none;
   background: transparent;
-  border: none;
+  border: 2px solid red;
   color: #202124;
   font-size: 14px;
   font-weight: 500;
@@ -201,3 +201,16 @@ select {
 .select-wrapper:hover .dist-icon {
   color: #1a73e8;
 }
+.borderless-field ::ng-deep .mdc-notched-outline__leading,
+.borderless-field ::ng-deep .mdc-notched-outline__notch,
+.borderless-field ::ng-deep .mdc-notched-outline__trailing {
+  border: none !important;
+}
+/* 1. Set the overall container height */
+.custom-select-field ::ng-deep .mat-mdc-text-field-wrapper {
+  height:48px !important; /* Set your desired height here */
+  min-height: 48px !important;
+  width: 180px;
+  margin-top: 17px !important;
+}
+

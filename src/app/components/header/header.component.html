@@ -3,59 +3,37 @@
     <mat-icon>group</mat-icon>
     <span class="brand-name">SAMITI</span>
   </div>
-
   <span class="spacer"></span>
-
-<div class="controls-container">
-  <div class="search-bar-wrapper">
-    <mat-icon class="search-icon">search</mat-icon>
-    <input
-      #searchInput
-      type="text"
-      class="search-input"
-      placeholder="Search groups..."
-      [value]="searchTerm" 
-      (input)="onSearchGroups($event)"
-      [disabled]="!locationName()"
-    />
-    
-    <button 
-      *ngIf="searchTerm" 
-      mat-icon-button 
-      class="clear-btn" 
-      (click)="clearSearch(searchInput)"
-      type="button"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
+  <div class="controls-container">
+    <div class="search-bar-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input #searchInput type="text" class="search-input" placeholder="Search groups..." [value]="searchTerm"
+        (input)="onSearchGroups($event)" [disabled]="!locationName()" />
+      <button *ngIf="searchTerm" mat-icon-button class="clear-btn" (click)="clearSearch(searchInput)" type="button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="divider"></div>
+    <!-- <div C>
+      <div class="select-wrapper">
+        <mat-icon class="dist-icon">my_location</mat-icon>
+        <select class="custom-select" (change)="onDistanceChange($event)" aria-label="Select distance radius">
+          <option *ngFor="let km of distanceOptions" [value]="km">
+            Within {{ km }} km
+          </option>
+        </select>
+        <mat-icon class="dropdown-arrow">expand_more</mat-icon>
+      </div>
+    </div> -->
+    <mat-form-field appearance="outline" class="borderless-field custom-select-field">
+      <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)"
+        aria-label="Select distance radius" disableRipple>
+        <mat-option *ngFor="let km of distanceOptions" [value]="km">
+          <span>Within <strong>{{ km }}</strong> km</span>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-
-  <div class="divider"></div>
-
-  <!-- <div class="distance-filter">
-    <mat-icon class="dist-icon">my_location</mat-icon>
-    <select (change)="onDistanceChange($event)">
-      <option *ngFor="let km of distanceOptions" [value]="km">{{ km }} km</option>
-    </select>
-  </div> -->
-  <div class="distance-filter">
-  <div class="select-wrapper">
-    <mat-icon class="dist-icon">my_location</mat-icon>
-    
-    <select 
-      class="custom-select" 
-      (change)="onDistanceChange($event)"
-      aria-label="Select distance radius"
-    >
-      <option *ngFor="let km of distanceOptions" [value]="km">
-        Within {{ km }} km
-      </option>
-    </select>
-    
-    <mat-icon class="dropdown-arrow">expand_more</mat-icon>
-  </div>
-</div>
-</div>
 
   <span class="spacer"></span>
 
