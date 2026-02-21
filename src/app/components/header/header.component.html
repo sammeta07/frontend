@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="header-toolbar">
+<mat-toolbar color="secondary" class="header-toolbar">
   <div class="brand-section">
     <mat-icon>group</mat-icon>
     <span class="brand-name">SAMITI</span>
@@ -23,16 +23,14 @@
       </mat-select>
     </mat-form-field>
   </div>
-
   <span class="spacer"></span>
-
   <div class="action-section">
-    <button mat-button class="location-btn">
+    <button mat-button>
       <mat-icon>location_on</mat-icon>
-      <span class="location-text">{{ locationName() || 'Locating...' }}</span>
+      <span>{{ locationName() || 'Locating...' }}</span>
     </button>
-
-    <button mat-flat-button class="login-cta" (click)="openLoginDialog()">
+    <button mat-flat-button (click)="openLoginDialog()">
+      <mat-icon>login</mat-icon>
       LOGIN
     </button>
   </div>

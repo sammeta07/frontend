@@ -1,18 +1,7 @@
-<app-header></app-header>
-
-<div class="main-layout" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp()">
-  @if (showSidebar()) {
-  <aside class="sidebar-container" [style.width.px]="sidebarWidth">
-    <app-sidebar></app-sidebar>
-  </aside>
-
-  <div class="resizer-handle" (mousedown)="onMouseDown($event)"></div>
-  }
-
-  <main class="content-container">
+<div class="container">
+  <app-header></app-header>
+  <main>
     <router-outlet></router-outlet>
-    <div style="height: 40px;"></div> 
   </main>
-</div>
-
-<app-footer></app-footer>
+  <app-footer></app-footer>
+</div>  

@@ -1,133 +1,92 @@
 
-.brand-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
+/* Cleaned up: removed duplicate, unused, and unnecessary styles */
 
-.spacer {
-  flex: 1 1 auto;
-}
-
-/* Toolbar Setup */
 .header-toolbar {
-  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+  .brand-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  .controls-container {
+    display: flex;
+    align-items: center;
+    background-color:   #f1f1ee00;
+    border-radius: 50px;
+    padding: 2px 16px;
+    height: 42px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .search-bar-wrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      .search-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0f6bdc;
+        margin-right: 8px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+      .search-input {
+        border: none;
+        background: transparent;
+        color: #202124;
+        width: 100%;
+        font-size: 15px;
+        outline: none;
+        line-height: normal;
+      }
+      .clear-btn {
+        width: 28px;
+        height: 28px;
+        line-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #70757a;
+        transition: color 0.2s;
+        .clear-btn mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+      .clear-btn:hover {
+        color: #d32f2f;
+      }
+    }
+    .divider {
+      width: 1px;
+      height: 24px;
+      background-color: #b9babd;
+      margin: 0 12px;
+    }
+    .borderless-field ::ng-deep .mdc-notched-outline__leading,
+    .borderless-field ::ng-deep .mdc-notched-outline__notch,
+    .borderless-field ::ng-deep .mdc-notched-outline__trailing {
+      border: none;
+    }
+    .custom-select-field ::ng-deep .mat-mdc-text-field-wrapper {
+      height: 48px;
+      min-height: 45px;
+      width: 180px;
+      margin-top: 17px;
+      padding-left: 0;
+    }
+  }
+  .action-section {}
+  .spacer {
+    flex: 1 1 auto;
+  }
 }
 
-/* The Search/Filter Island - THIS SOLVES YOUR READABILITY */
-.controls-container {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff; /* Stark white for maximum contrast */
-  border-radius: 50px;       /* Modern pill shape */
-  padding: 2px 16px;
-  width: 100%;
-  max-width: 500px;
-  height: 42px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-
-.search-input {
-  border: none;
-  background: transparent;
-  color: #202124; /* Near black text */
-  width: 100%;
-  font-size: 15px;
-  outline: none;
-}
-
-.search-input::placeholder {
-  color: #70757a;
-}
-
-/* Vertical line between search and select */
-.divider {
-  width: 1px;
-  height: 24px;
-  background-color: #dadce0;
-  margin: 0 12px;
-}
-
-
-/* LOGIN BUTTON - Make it pop against the Primary color */
-.login-cta {
-  background-color: #ffd740 !important; /* Material Amber/Gold */
-  color: #000 !important;
-  font-weight: bold;
-  border-radius: 4px;
-  margin-left: 12px;
-}
-
-.location-btn {
-  color: rgb(24, 24, 23) !important;
-}
-.search-bar-wrapper {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  position: relative; /* Anchor for the button */
-}
-
-.search-icon {
-  display: flex;       /* Allows the icon content to center */
-  align-items: center;
-  justify-content: center;
-  color: #5f6368;
-  margin-right: 8px;
-  font-size: 20px;     /* Adjust size if it feels too bulky */
-  width: 20px;         /* Match width to font-size for a perfect square */
-  height: 20px;
-}
-
-.search-input {
-  border: none;
-  background: transparent;
-  color: #202124;
-  width: 100%;
-  font-size: 15px;
-  outline: none;
-  line-height: normal; /* Prevents the input text from pushing the icon */
-  display: flex;
-  align-items: center;
-}
-.clear-btn {
-  width: 28px !important;
-  height: 28px !important;
-  line-height: 28px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #70757a;
-  transition: color 0.2s;
-}
-
-.clear-btn:hover {
-  color: #d32f2f; /* Turns slightly red on hover for feedback */
-}
-
-.clear-btn mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-}
-.borderless-field ::ng-deep .mdc-notched-outline__leading,
-.borderless-field ::ng-deep .mdc-notched-outline__notch,
-.borderless-field ::ng-deep .mdc-notched-outline__trailing {
-  border: none !important;
-}
-/* 1. Set the overall container height */
-.custom-select-field ::ng-deep .mat-mdc-text-field-wrapper {
-  height:48px !important; /* Set your desired height here */
-  min-height: 45px !important;
-  width: 180px;
-  /* background-color: red; */
-  margin-top: 17px !important;
-  padding-left: 0px !important;
-}
 

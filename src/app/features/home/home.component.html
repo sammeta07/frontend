@@ -1,4 +1,4 @@
-<div class="home-container">
+<!-- <div class="home-container">
   <section class="hero-section" *ngIf="locationName() && !searchTerm">
     <div class="hero-background-elements">
       <div class="hero-circle hero-circle-1"></div>
@@ -9,7 +9,7 @@
       <div class="hero-icon-wrapper">
         <mat-icon class="hero-main-icon">groups</mat-icon>
       </div>
-      <h1 class="hero-title">Manage Your Samiti Digitally</h1>
+      <h1 class="hero-title">Manage Your Samiti Digitallyyyyy</h1>
       <p class="hero-subtitle">Apne Mandal ya Group ka hisaab-kitaab rakhein ekdam asaan aur transparent.</p>
       <div class="hero-actions">
         <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="hero-primary-btn">
@@ -35,24 +35,6 @@
           </span>
         </h2>
         <p class="section-subtitle">Discover samiti groups in your area</p>
-      </div>
-      <div class="distance-filter-wrapper">
-        <!-- <mat-form-field appearance="outline" class="distance-dropdown-modern enhanced-glass">
-          <mat-label>
-            <mat-icon class="location-icon-modern" aria-hidden="true">my_location</mat-icon>
-            <span class="distance-label-title">Distance</span>
-          </mat-label>
-          <mat-select
-            [(value)]="selectedDistance"
-            (selectionChange)="onDistanceChange($event.value)"
-            aria-label="Select distance radius"
-            disableRipple
-          >
-            <mat-option *ngFor="let km of distanceOptions" [value]="km">
-              <span class="distance-label-modern">Within <strong>{{ km }}</strong> km</span>
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
       </div>
     </div>
     <div class="group-grid" *ngIf="samitiGroups.length > 0">
@@ -118,7 +100,7 @@
             <div class="events-section">
               <div class="events-grid-enhanced">
                 <div class="event-card-enhanced" *ngFor="let event of group.events" [attr.data-status]="event.status">
-                  <!-- Status indicator bar -->
+                  
                   <div class="event-status-bar" [attr.data-status]="event.status"></div>
                   <div class="event-card-body">
                     <swiper-container
@@ -135,7 +117,7 @@
                         <img class="event-carousel-image" [src]="image" [alt]="event.title + ' image'" loading="lazy" />
                       </swiper-slide>
                     </swiper-container>
-                    <!-- Event Header -->
+                    
                     <div class="event-card-header">
                       <h5 class="event-card-title">{{ event.title }}</h5>
                       <span class="event-year-badge-new" [attr.data-status]="event.status">
@@ -143,10 +125,10 @@
                       </span>
                     </div>
 
-                    <!-- Event Description -->
+                   
                     <p class="event-card-description">{{ event.description }}</p>
 
-                    <!-- Event Meta Information -->
+                    
                     <div class="event-card-meta">
                       <div class="meta-row">
                         <mat-icon>calendar_today</mat-icon>
@@ -166,7 +148,7 @@
                       </div>
                     </div>
 
-                    <!-- Event Footer -->
+                  
                     <div class="event-card-footer">
                       <span class="event-status-chip" [attr.data-status]="event.status">
                         <mat-icon>
@@ -182,7 +164,7 @@
                   </div>
                 </div>
               </div>
-              <!-- Empty State -->
+            
               <div class="empty-state" *ngIf="locationName() && (!group.events || group.events.length === 0)">
                 <mat-icon>event_busy</mat-icon>
                 <p class="empty-state-text">No events available for {{ year }}</p>
@@ -193,7 +175,7 @@
       </mat-card>
     </div>
 
-    <!-- No Search Results -->
+  
     <div class="no-results-state" *ngIf="samitiGroups.length === 0 && searchTerm">
       <mat-icon>search_off</mat-icon>
       <h3>No groups found</h3>
@@ -204,4 +186,112 @@
       <p class="suggestion">Try a different group name, group ID, or increase your distance radius.</p>
     </div>
   </section>
+</div> -->
+
+<!-- <div class="home-container">
+  <div class="groups-section">
+    <div class="groups-section-header">
+      <h2>kpofru ders nki</h2>
+      <button matButton (click)="accordion().openAll()">Expand All</button>
+      <button matButton (click)="accordion().closeAll()">Collapse All</button>
+      <button mat-raised-button color="primary" (click)="onCreateSamiti()">
+        <mat-icon>add</mat-icon>
+        <span>kiu</span>
+      </button>
+    </div>
+    <div class="groups-section-data">
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> Personal data </mat-panel-title>
+            <mat-panel-description>
+              Type your name and age
+              <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+  <div class="events-section">
+    <div class="events-section-header">
+      <h2>events near you</h2>
+      <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="create-group-btn">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    <div class="events-section-data">
+
+    </div>
+  </div>
+</div> -->
+<div class="home-container">
+  <!-- <div class="groups-section">
+    <div class="groups-section-header">
+      <h2>Groups Near You</h2>
+      <button mat-raised-button color="primary" (click)="onCreateSamiti()">
+        <mat-icon>add</mat-icon>
+        <span>Create</span>
+      </button>
+    </div>
+    <div class="groups-section-data">
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel *ngFor="let group of samitiGroups">
+          <mat-expansion-panel-header>
+            <mat-panel-title> {{ group.name }} </mat-panel-title>
+            <mat-panel-description>
+              {{ group.locationName }}
+              <mat-icon>location_on</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p>{{ group.description }}</p>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+  <div class="events-section">
+    <div class="events-section-header">
+      <h2>Events Near You</h2>
+      <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="create-group-btn">
+        <mat-icon>add</mat-icon>
+        <span>Create</span>
+      </button>
+    </div>
+    <div class="events-section-data">
+      Event data will go here
+    </div>
+  </div> -->
+
+  <div class="groups-section-header">
+    <h2>Groups Near You</h2>
+    <button mat-raised-button color="primary" (click)="onCreateSamiti()">
+      <mat-icon>add</mat-icon>
+      <span>Create</span>
+    </button>
+  </div>
+  <div class="groups-section-data">
+    <mat-accordion class="example-headers-align" multi>
+      <mat-expansion-panel *ngFor="let group of samitiGroups">
+        <mat-expansion-panel-header>
+          <mat-panel-title> {{ group.name }} </mat-panel-title>
+          <mat-panel-description>
+            {{ group.locationName }}
+            <mat-icon>location_on</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>{{ group.description }}</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+ <div class="three">3</div>
+ <div class="events-section-header">
+    <h2>Events Near You</h2>
+    <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="create-group-btn">
+      <mat-icon>add</mat-icon>
+      <span>Create</span>
+    </button>
+  </div>
+  <div class="events-section-data">
+    Event data will go here
+  </div>
 </div>

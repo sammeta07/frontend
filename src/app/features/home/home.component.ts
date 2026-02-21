@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, effect } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, effect, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,8 @@ import { groupDetailsModel, eventDetailsModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+
 
 @Component({
   selector: 'app-home',
@@ -28,7 +30,8 @@ import { SkeletonComponent } from '../../components/skeleton/skeleton.component'
     MatSnackBarModule,
     MatTabsModule,
     // SkeletonComponent,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
@@ -54,6 +57,10 @@ export class HomeComponent implements OnInit {
 
   locationName = this.locationService.locationName$;
   location = this.locationService.location$;
+
+
+  accordion = viewChild.required(MatAccordion);
+
 
   searchTermEffect = effect(() => {
     this.searchTerm = this.homeService.searchTerm();

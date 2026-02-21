@@ -1,35 +1,38 @@
-.main-layout {
+/* .container {
+  display: grid;
+  height: 100vh; 
+  grid-template-rows: auto 1fr 40px;
+
+  app-header {
+    grid-column: 1 / 13;
+    border: 1px solid #d45050;
+  }
+
+  main {
+    grid-column: 1 / 13;
+    border: 1px solid #1e14dd;
+    overflow: scroll; 
+  }
+
+  app-footer {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-column: 1 / 13;
+    border: 1px solid #40c219;
+    font-size: 16px;
+    align-items: center;
+  }
+} */
+
+.container {
   display: flex;
-  height: calc(100vh - 64px);
+  flex-direction: column;
+  height: 100vh;
+  row-gap: 5px;
   overflow: hidden;
-  position: relative;
-  user-select: none; /* Drag karte waqt text select na ho */
+  main {
+    flex: 1; 
+    overflow-y: auto; 
+    -webkit-overflow-scrolling: touch;
+  }
 }
-
-.sidebar-container {
-  /* Width ab TS se control ho rahi hai */
-  background-color: #f1f5f9; /* Light Steel Grey */
-  border-right: 1px solid #e2e8f0;
-  overflow-y: auto;
-}
-
-/* Ye hai hamara drag handle */
-.resizer-handle {
-  width: 6px;
-  cursor: col-resize;
-  background-color: #f3a149;
-  transition: background-color 0.2s;
-  z-index: 10;
-}
-
-.resizer-handle:hover, .resizer-handle:active {
-  background-color: #d7780b; /* Primary color line dikhegi drag karte waqt */
-}
-
-.content-container {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #ffffff; /* Pure White */
-}
-  
