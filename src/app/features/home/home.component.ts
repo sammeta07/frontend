@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatSnackBarModule,
     MatTabsModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   encapsulation: ViewEncapsulation.Emulated
@@ -40,15 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
   selectedYearIndex: number = 0;
   searchTerm: string = '';
-  
-  // Carousel state tracking - key is event.id, value is current image index
-  private carouselIndices: Map<number, number> = new Map();
-  
-  // Auto-play intervals - key is event.id, value is interval ID
-  private carouselIntervals: Map<number, any> = new Map();
-  
-  // Auto-play configuration
-  private readonly AUTO_PLAY_INTERVAL = 4000; // 4 seconds
+  carouselPagination = { clickable: true };
+  carouselAutoplay = { delay: 3500, disableOnInteraction: false };
   
   // Expose utility functions to the template
   getGroupLogoUrl = getGroupLogoUrl;
