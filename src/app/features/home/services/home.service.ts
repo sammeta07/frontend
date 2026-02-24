@@ -163,8 +163,6 @@ export class HomeService {
         }
       ]
     },
-
-    // Moved out: Nearby Test Group
     {
       "id": 10,
       "groupId": "ANM_10",

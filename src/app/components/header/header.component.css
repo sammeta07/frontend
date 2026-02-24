@@ -4,8 +4,9 @@
 .header-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #e0e0e0;
+  justify-content: space-between;      
+  border: 1px solid #151414;
+  border-radius: 10px;
   .brand-section {
     display: flex;
     align-items: center;

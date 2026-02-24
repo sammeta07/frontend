@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, OnInit, effect, viewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, effect, viewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,25 +38,37 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
   styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  // distanceOptions: number[] = [50, 100, 200, 500];
-  selectedDistance: number = 50;
-  private dialog = inject(MatDialog);
   private homeService = inject(HomeService);
-  private snackBar = inject(MatSnackBar);
   private locationService = inject(LocationService);
-  samitiGroups: groupDetailsModel[] = [];
-  private allGroups: groupDetailsModel[] = [];
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
+  selectedDistance: number = 50;
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
+
+  
   selectedYearIndex: number = 0;
   searchTerm: string = '';
   carouselPagination = { clickable: true };
   carouselAutoplay = { delay: 3500, disableOnInteraction: false };
-  // Expose utility functions to the template
+  
+  samitiGroups: groupDetailsModel[] = [];
+  private allGroups: groupDetailsModel[] = [];
+  allEvents: eventDetailsModel[] = [];
+
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
   locationName = this.locationService.locationName$;
   location = this.locationService.location$;
+  groupsWidthPercent = 65;
+  private readonly minGroupsWidthPercent = 35;
+  private readonly maxGroupsWidthPercent = 75;
+  isResizingPanels = false;
+
+  get homeGridTemplateColumns(): string {
+    return `${this.groupsWidthPercent}% 10px 1fr`;
+  }
 
 
   accordion = viewChild.required(MatAccordion);
@@ -106,10 +118,22 @@ export class HomeComponent implements OnInit {
       // enrichGroupData(this.samitiGroups);
       // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
+        this.allEvents.push(...group.events);
+        // this.allEvents.forEach(event => {
+        //   event.locationName = 'Fetching location...';
+        //   this.locationService.reverseGeocode(event.location).subscribe({
+        //     next: (readableLocation: string) => {
+        //       event.locationName = readableLocation;
+        //     },
+        //     error: (error) => {
+        //       event.locationName = 'Unknown Location';
+        //     }
+        //   });
+        // });
         group.locationName = 'Fetching location...';
         this.locationService.reverseGeocode(group.location).subscribe({
           next: (readableLocation: string) => {
-            group.locationName = readableLocation; // Add a new property for display
+            group.locationName = readableLocation;
           },
           error: (error) => {
             group.locationName = 'Unknown Location';
@@ -277,5 +301,42 @@ export class HomeComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     });
+  }
+
+  onResizeStart(event: MouseEvent) {
+    event.preventDefault();
+    this.isResizingPanels = true;
+    document.body.classList.add('is-resizing-panels');
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onPanelResize(event: MouseEvent) {
+    if (!this.isResizingPanels) {
+      return;
+    }
+
+    const container = document.querySelector('.home-container') as HTMLElement | null;
+    if (!container) {
+      return;
+    }
+
+    const bounds = container.getBoundingClientRect();
+    const pointerX = event.clientX - bounds.left;
+    const nextWidthPercent = (pointerX / bounds.width) * 100;
+
+    this.groupsWidthPercent = Math.min(
+      this.maxGroupsWidthPercent,
+      Math.max(this.minGroupsWidthPercent, nextWidthPercent)
+    );
+  }
+
+  @HostListener('document:mouseup')
+  onResizeEnd() {
+    if (!this.isResizingPanels) {
+      return;
+    }
+
+    this.isResizingPanels = false;
+    document.body.classList.remove('is-resizing-panels');
   }
 }
