@@ -203,10 +203,27 @@
   <div class="events-container">
     <div class="event-header">
       <h2>Events Near You</h2>
-      <button mat-raised-button color="primary" (click)="onCreateSamiti()" class="create-group-btn">
-        <mat-icon>add</mat-icon>
-        <span>Create</span>
-      </button>
+      <div class="event-search-wrapper">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          #eventSearchInput
+          type="text"
+          class="event-search-input"
+          placeholder="Search events..."
+          [value]="eventSearchTerm"
+          (input)="onSearchEvents($event)"
+        />
+        <button
+          *ngIf="eventSearchTerm"
+          mat-icon-button
+          class="clear-btn"
+          (click)="clearEventSearch(eventSearchInput)"
+          type="button"
+          aria-label="Clear event search"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
     <div class="event-list">
       <mat-tab-group mat-align-tabs="start">
@@ -215,7 +232,7 @@
             <mat-icon>done_all</mat-icon> All
           </ng-template>
           <div class="events-grid">
-            <div class="event-grid" *ngFor="let event of allEvents">
+            <div class="event-grid" *ngFor="let event of filteredAllEvents">
               <div class="event-photos">
                 <swiper-container *ngIf="event?.images?.length" class="event-carousel" [slidesPerView]="1"
                   [spaceBetween]="8" [navigation]="true" [pagination]="carouselPagination" [autoplay]="carouselAutoplay"

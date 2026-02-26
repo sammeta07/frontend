@@ -19,6 +19,7 @@
     align-items: center;
     background-color:   #f1f1ee00;
     border-radius: 50px;
+    border: 1px solid #9d9a9a;
     padding: 2px 16px;
     height: 42px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);

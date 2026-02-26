@@ -15,6 +15,7 @@
     </div>
     <div class="divider"></div>
     <mat-form-field appearance="outline" class="borderless-field custom-select-field">
+      <mat-icon matPrefix>near_me</mat-icon>
       <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)"
         aria-label="Select distance radius" disableRipple>
         <mat-option *ngFor="let km of distanceOptions" [value]="km">

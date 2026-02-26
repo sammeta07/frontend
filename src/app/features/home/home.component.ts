@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit {
   
   selectedYearIndex: number = 0;
   searchTerm: string = '';
+  eventSearchTerm: string = '';
   carouselPagination = { clickable: true };
   carouselAutoplay = { delay: 3500, disableOnInteraction: false };
   
@@ -224,6 +225,28 @@ export class HomeComponent implements OnInit {
     this.searchTerm = '';
     this.samitiGroups = [...this.allGroups];
     this.filterGroupsByDistance();
+  }
+
+  get filteredAllEvents(): eventDetailsModel[] {
+    const term = this.eventSearchTerm.trim().toLowerCase();
+    if (!term) {
+      return this.allEvents;
+    }
+
+    return this.allEvents.filter((event) =>
+      (event.title || '').toLowerCase().includes(term)
+    );
+  }
+
+  onSearchEvents(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.eventSearchTerm = target.value;
+  }
+
+  clearEventSearch(searchInput: HTMLInputElement) {
+    this.eventSearchTerm = '';
+    searchInput.value = '';
+    searchInput.focus();
   }
 
   onCreateSamiti() {
