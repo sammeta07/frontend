@@ -88,10 +88,9 @@ body.is-resizing-panels {
       .event-search-wrapper {
         display: flex;
         align-items: center;
-        min-width: 260px;
-        max-width: 360px;
+        min-width: 160px;
+        max-width: 260px;
         height: 42px;
-        width: 100%;
         border-radius: 50px;
         padding: 2px 12px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
