@@ -118,29 +118,60 @@ export class LocationService {
   }
 
   /**
-   * Get location from IP address using ipapi.co free API
-   * Returns location coordinates (lat, long)
+   * Calculate distance between two coordinates using Haversine formula
+   * Returns distance in kilometers
    */
-  // getIpLocation(): Observable<LocationCoordinates> {
-  //   return this.http.get<IpLocationData>(this.IP_LOCATION_API_URL).pipe(
-  //     map(data => ({
-  //       lat: data.latitude,
-  //       long: data.longitude
-  //     })),
-  //     catchError(error => {
-  //       console.error('Error fetching IP location:', error);
-  //       // Fallback to default coordinates (India center)
-  //       return of({ lat: 20.5937, long: 78.9629 });
-  //     })
-  //   );
-  // }
+  calculateDistance(coord1: LocationModel, coord2: LocationModel): number {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = this.toRadians(coord2.lat - coord1.lat);
+    const dLon = this.toRadians(coord2.long - coord1.long);
+    
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRadians(coord1.lat)) * 
+      Math.cos(this.toRadians(coord2.lat)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+    
+    return distance;
+  }
 
   /**
-   * Get full IP location details
+   * Convert degrees to radians
    */
-  // getIpLocationDetails(): Observable<IpLocationData> {
-  //   return this.http.get<IpLocationData>(this.IP_LOCATION_API_URL).pipe(
-  //     catchError(error => {
+  private toRadians(degrees: number): number {
+    return degrees * (Math.PI / 180);
+  }
+
+  /**
+   * Format distance for display
+   * If distance >= 1km: show as "x km from you"
+   * If distance < 1km: show in meters
+   */
+  formatDistance(distanceInKm: number): string {
+    if (distanceInKm >= 1) {
+      return `${distanceInKm.toFixed(1)} km from you`;
+    } else {
+      const meters = Math.round(distanceInKm * 1000);
+      return `${meters} m from you`;
+    }
+  }
+
+  /**
+   * Calculate and format distance from user's current location to a target location
+   * Returns formatted distance string or null if user location is not available
+   */
+  getDistanceFromUser(targetLocation: LocationModel): string | null {
+    const userLocation = this.location$();
+    if (!userLocation) {
+      return 'Calculating...';
+    }
+    
+    const distance = this.calculateDistance(userLocation, targetLocation);
+    return this.formatDistance(distance);
+  }
   //       console.error('Error fetching IP location details:', error);
   //       // Return default country data
   //       return of({

@@ -12,7 +12,7 @@ import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group
 import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
-import { groupDetailsModel, eventDetailsModel } from './models/home.model';
+import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
@@ -93,6 +93,13 @@ export class HomeComponent implements OnInit {
     const loc = this.location();
     const locName = this.locationName();
     if (loc) {
+      // Recalculate distances for all groups and events when user's location is updated
+      this.allGroups.forEach(group => {
+        group.locationName = this.locationService.getDistanceFromUser(group.location) || 'Calculating...';
+        group.events.forEach(event => {
+          event.locationName = this.locationService.getDistanceFromUser(event.location) || 'Calculating...';
+        });
+      });
       this.filterGroupsByDistance();
     }
   });
@@ -119,27 +126,13 @@ export class HomeComponent implements OnInit {
       // enrichGroupData(this.samitiGroups);
       // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
-        this.allEvents.push(...group.events);
-        // this.allEvents.forEach(event => {
-        //   event.locationName = 'Fetching location...';
-        //   this.locationService.reverseGeocode(event.location).subscribe({
-        //     next: (readableLocation: string) => {
-        //       event.locationName = readableLocation;
-        //     },
-        //     error: (error) => {
-        //       event.locationName = 'Unknown Location';
-        //     }
-        //   });
-        // });
-        group.locationName = 'Fetching location...';
-        this.locationService.reverseGeocode(group.location).subscribe({
-          next: (readableLocation: string) => {
-            group.locationName = readableLocation;
-          },
-          error: (error) => {
-            group.locationName = 'Unknown Location';
-          }
+        // Calculate distance for each event in the group
+        group.events.forEach(event => {
+          event.locationName = this.locationService.getDistanceFromUser(event.location) || 'Calculating...';
         });
+        this.allEvents.push(...group.events);
+        // Calculate and set distance from user's location for the group
+        group.locationName = this.locationService.getDistanceFromUser(group.location) || 'Calculating...';
       })
       this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
       this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
@@ -289,9 +282,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  openMap(location: string) {
-    if (location) {
-      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`, '_blank');
+  openMap(location: any) {
+    // openMap(location: LocationModel) {
+    if (location && location.lat && location.long) {
+      window.open(`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.long}`, '_blank');
     }
   }
 

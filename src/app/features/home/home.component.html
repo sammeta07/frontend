@@ -173,7 +173,7 @@
 <div class="home-container" [style.gridTemplateColumns]="homeGridTemplateColumns">
   <div class="groups-container">
     <div class="group-header">
-      <h2>Groups Near You</h2>
+      <h2>Groups Near You <span class="count-badge" *ngIf="samitiGroups.length > 0">({{ samitiGroups.length }})</span></h2>
       <button mat-raised-button color="primary" (click)="onCreateSamiti()">
         <mat-icon>add</mat-icon>
         <span>Create</span>
@@ -202,7 +202,7 @@
 
   <div class="events-container">
     <div class="event-header">
-      <h2>Events Near You</h2>
+      <h2>Events Near You <span class="count-badge" *ngIf="filteredAllEvents.length > 0">({{ filteredAllEvents.length }})</span></h2>
       <div class="event-search-wrapper">
         <mat-icon class="search-icon">search</mat-icon>
         <input

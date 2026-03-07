@@ -30,6 +30,19 @@ body.is-resizing-panels {
       border: 1px solid #151414;
       border-radius: 10px;
       padding: 0 10px 0 10px;
+
+      .count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #1976d2;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 12px;
+        margin-left: 8px;
+      }
     }
     .group-list {
       grid-column: 1 / 9;
@@ -84,6 +97,19 @@ body.is-resizing-panels {
       justify-content: space-between;
       align-items: center;
       padding: 0 10px 0 10px;
+
+      .count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #1976d2;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 2px 10px;
+        border-radius: 12px;
+        margin-left: 8px;
+      }
 
       .event-search-wrapper {
         display: flex;
@@ -202,6 +228,31 @@ body.is-resizing-panels {
         display: flex;
         align-items: center;
         gap: 6px;
+
+        &.clickable {
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover {
+            color: #1976d2;
+            background-color: rgba(25, 118, 210, 0.08);
+            border-radius: 4px;
+            padding: 2px 4px;
+            margin: -2px -4px;
+          }
+
+          .map-link-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+          }
+
+          &:hover .map-link-icon {
+            opacity: 1;
+          }
+        }
       }
     }
   }

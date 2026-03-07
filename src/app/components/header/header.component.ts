@@ -34,8 +34,8 @@ export class HeaderComponent {
   locationName = this.locationService.locationName$;
   location = this.locationService.location$;
   searchTerm: string = '';
-  distanceOptions: number[] = [50, 100, 200, 500];
-  selectedDistance: number = 50;
+  distanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
+  selectedDistance: number = 1;
 
   constructor( public dialog: MatDialog ) {
     console.log('HeaderComponent initialized. Current location:', this.location(), 'Location name:', this.locationName());
