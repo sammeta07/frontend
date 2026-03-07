@@ -33,6 +33,7 @@ export class HomeService {
           "year_count": 5,
           "start_date": "2026-02-01",
           "end_date": "2026-02-11",
+          "currentStatus": "started",
           "location": { "lat": 21.2312, "long": 81.4510 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/ganesh-utsav/800/500",
@@ -46,6 +47,7 @@ export class HomeService {
           "year_count": 2,
           "start_date": "2026-03-10",
           "end_date": "2026-03-15",
+          "currentStatus": "started",
           "location": { "lat": 21.2308, "long": 81.4506 },  // ~120m from group
           "images": [
             "https://picsum.photos/seed/blood-donation/800/500",
@@ -59,6 +61,7 @@ export class HomeService {
           "year_count": 10,
           "start_date": "2026-11-01",
           "end_date": "2026-11-12",
+          "currentStatus": "started",
           "location": { "lat": 21.2311, "long": 81.4512 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/cricket-league/800/500",
@@ -85,6 +88,7 @@ export class HomeService {
           "year_count": 51,
           "start_date": "2026-01-10",
           "end_date": "2026-01-20",
+          "currentStatus": "",
           "location": { "lat": 21.2347, "long": 81.4522 },  // ~160m from group
           "images": [
             "https://picsum.photos/seed/durga-puja/800/500",
@@ -98,6 +102,7 @@ export class HomeService {
           "year_count": 5,
           "start_date": "2025-12-15",
           "end_date": "2025-12-25",
+          "currentStatus": "",
           "location": { "lat": 21.2343, "long": 81.4518 },  // ~140m from group
           "images": [
             "https://picsum.photos/seed/garba-night/800/500",
@@ -124,6 +129,7 @@ export class HomeService {
           "year_count": 8,
           "start_date": "2026-03-20",
           "end_date": "2026-03-21",
+          "currentStatus": "",
           "location": { "lat": 21.2422, "long": 81.4578 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/holi/800/500",
@@ -137,6 +143,7 @@ export class HomeService {
           "year_count": 3,
           "start_date": "2026-04-10",
           "end_date": "2026-04-15",
+          "currentStatus": "",
           "location": { "lat": 21.2418, "long": 81.4582 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/sports/800/500",
@@ -163,6 +170,7 @@ export class HomeService {
           "year_count": 4,
           "start_date": "2026-05-15",
           "end_date": "2026-05-25",
+          "currentStatus": "",
           "location": { "lat": 21.2512, "long": 81.4618 },  // ~170m from group
           "images": [
             "https://picsum.photos/seed/dance-competition/800/500",
@@ -189,6 +197,7 @@ export class HomeService {
           "year_count": 11,
           "start_date": "2026-06-01",
           "end_date": "2026-06-05",
+          "currentStatus": "",
           "location": { "lat": 21.2638, "long": 81.4708 },  // ~140m from group
           "images": [
             "https://picsum.photos/seed/health-camp/800/500",
@@ -202,6 +211,7 @@ export class HomeService {
           "year_count": 6,
           "start_date": "2026-07-10",
           "end_date": "2026-07-12",
+          "currentStatus": "",
           "location": { "lat": 21.2642, "long": 81.4712 },  // ~160m from group
           "images": [
             "https://picsum.photos/seed/workshop/800/500",
@@ -228,6 +238,7 @@ export class HomeService {
           "year_count": 1,
           "start_date": "2026-02-20",
           "end_date": "2026-02-21",
+          "currentStatus": "started",
           "location": { "lat": 21.2302, "long": 81.4503 },  // ~80m from group
           "images": ["https://picsum.photos/seed/test-event/800/500"],
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."

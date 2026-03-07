@@ -14,6 +14,7 @@ export interface eventDetailsModel {
   year_count: number;
   description: string;
   images: string[];
+  currentStatus: string; // Optional property to store current status of the event
 }
 
 export interface GroupAdminModel {
