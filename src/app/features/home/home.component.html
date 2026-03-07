@@ -121,11 +121,10 @@
                         </span>
                       </div>
 
-                      <div class="meta-row clickable" (click)="$event.stopPropagation(); openMap('event.locationName')"
+                      <div class="meta-row clickable" (click)="$event.stopPropagation(); openMap(event.location)"
                         title="Open in Maps">
                         <mat-icon>location_on</mat-icon>
-                        <span class="meta-text">{{ event.location.lat | number:'1.4-4' }}, {{ event.location.long |
-                          number:'1.4-4' }}</span>
+                        <span class="meta-text">{{ event.locationName || 'Calculating distance...' }}</span>
                         <mat-icon class="map-link-icon">open_in_new</mat-icon>
                       </div>
                     </div>
@@ -259,7 +258,7 @@
 
                 <div class="event-meta-row">
                   <mat-icon>location_on</mat-icon>
-                  <span>{{ event.location.lat | number:'1.2-2' }}, {{ event.location.long | number:'1.2-2' }}</span>
+                  <span>{{ event.locationName || 'Calculating distance...' }}</span>
                 </div>
               </div>
             </div>

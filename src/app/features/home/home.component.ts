@@ -282,8 +282,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  openMap(location: any) {
-    // openMap(location: LocationModel) {
+  openMap(location: LocationModel) {
     if (location && location.lat && location.long) {
       window.open(`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.long}`, '_blank');
     }
