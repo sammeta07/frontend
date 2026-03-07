@@ -239,7 +239,7 @@ export class HomeService {
           "start_date": "2026-02-20",
           "end_date": "2026-02-21",
           "currentStatus": "started",
-          "location": { "lat": 21.2302, "long": 81.4503 },  // ~80m from group
+          "location": { "lat": 21.2301, "long": 81.4501 },  // Same as group location
           "images": ["https://picsum.photos/seed/test-event/800/500"],
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."
         }

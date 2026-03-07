@@ -150,17 +150,11 @@ export class HomeComponent implements OnInit {
       this.samitiGroups = [...this.allGroups];
       return;
     }
-    const userLat = this.location()!.lat;
-    const userLong = this.location()!.long;
+    const userLocation = this.location()!;
     // Attach distance to each group for sorting and display
     this.samitiGroups = this.allGroups
       .map(group => {
-        const dist = this.calculateDistance(
-          userLat,
-          userLong,
-          group.location.lat,
-          group.location.long
-        );
+        const dist = this.locationService.calculateDistance(userLocation, group.location);
         // Type assertion to allow extra property
         return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
       })
@@ -168,36 +162,16 @@ export class HomeComponent implements OnInit {
       .sort((a, b) => a.distanceFromUser - b.distanceFromUser);
   }
 
-  // Haversine formula to calculate distance between two lat/long points in km
-  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const toRad = (value: number) => (value * Math.PI) / 180;
-    const R = 6371; // Radius of the Earth in km
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
   onSearchGroups() {
     if (!this.location()) {
       this.samitiGroups = [...this.allGroups];
       return;
     }
-    const userLat = this.location()!.lat;
-    const userLong = this.location()!.long;
+    const userLocation = this.location()!;
     // First filter by distance
     let filtered = this.allGroups
       .map(group => {
-        const dist = this.calculateDistance(
-          userLat,
-          userLong,
-          group.location.lat,
-          group.location.long
-        );
+        const dist = this.locationService.calculateDistance(userLocation, group.location);
         return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
       })
       .filter(group => group.distanceFromUser <= this.selectedDistance);
@@ -222,13 +196,33 @@ export class HomeComponent implements OnInit {
 
   get filteredAllEvents(): eventDetailsModel[] {
     const term = this.eventSearchTerm.trim().toLowerCase();
-    if (!term) {
-      return this.allEvents;
+    
+    // First filter by currentStatus === 'started'
+    let filtered = this.allEvents.filter((event) => 
+      event.currentStatus?.toLowerCase() === 'started'
+    );
+
+    // Then filter by distance if location is available
+    if (this.location()) {
+      const userLocation = this.location()!;
+      
+      filtered = filtered.filter((event) => {
+        if (event.location && event.location.lat && event.location.long) {
+          const dist = this.locationService.calculateDistance(userLocation, event.location);
+          return dist <= this.selectedDistance;
+        }
+        return false;
+      });
     }
 
-    return this.allEvents.filter((event) =>
-      (event.title || '').toLowerCase().includes(term)
-    );
+    // Finally filter by search term if present
+    if (term) {
+      filtered = filtered.filter((event) =>
+        (event.title || '').toLowerCase().includes(term)
+      );
+    }
+
+    return filtered;
   }
 
   onSearchEvents(event: Event) {
