@@ -62,6 +62,8 @@
           </ng-template>
           <div class="events-grid">
             <div class="event-grid" *ngFor="let event of filteredAllEvents">
+              <h3 class="event-title">{{ event.title }}</h3>
+              
               <div class="event-photos">
                 <span class="event-year-badge" [attr.data-status]="event.status">⭐ {{ getYearLabel(event.year_count) }}</span>
                 <swiper-container *ngIf="event?.images?.length" class="event-carousel" [slidesPerView]="1"
@@ -77,10 +79,6 @@
               </div>
 
               <div class="event-details">
-                <div class="event-title-row">
-                  <h3 class="event-title">{{ event.title }}</h3>
-                </div>
-
                 <div class="event-meta-row">
                   <mat-icon>calendar_today</mat-icon>
                   <span>{{ event.start_date | date:'MMM d' }} - {{ event.end_date | date:'MMM d, yyyy' }}</span>
@@ -98,8 +96,6 @@
                   </button>
                 </div>
               </div>
-
-
             </div>
           </div>
         </mat-tab>
