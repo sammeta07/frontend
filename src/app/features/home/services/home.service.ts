@@ -20,7 +20,7 @@ export class HomeService {
       "id": 1,
       "groupId": "ANM_1",
       "name": "Azad Navyuvak Mandal",
-      "location": { "lat": 21.2310, "long": 81.4508 },  // ~150m from user
+      "locationCords": { "lat": 21.2310, "long": 81.4508 },  // ~150m from user
       "since": 2018,
       "description": "Azad Navyuvak Mandal is a vibrant youth organization based in Raipur, Chhattisgarh. Founded in 2018, the group has quickly become a hub for young people passionate about community service, cultural activities, and social change. With a focus on empowering youth and fostering a sense of unity, Azad Navyuvak Mandal organizes a wide range of events throughout the year, including festivals, charity drives, educational workshops, and sports tournaments. The group is known for its inclusive and energetic approach, attracting members from diverse backgrounds who share a common goal of making a positive impact in their community.",
       "contactNumbers": ["9876543210", "9123456780"],
@@ -34,7 +34,7 @@ export class HomeService {
           "start_date": "2026-02-01",
           "end_date": "2026-02-11",
           "currentStatus": "started",
-          "location": { "lat": 21.2312, "long": 81.4510 },  // ~180m from group
+          "locationCords": { "lat": 21.2312, "long": 81.4510 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/ganesh-utsav/800/500",
             "https://picsum.photos/seed/ganesh-utsav-2/800/500"
@@ -48,7 +48,7 @@ export class HomeService {
           "start_date": "2026-03-10",
           "end_date": "2026-03-15",
           "currentStatus": "started",
-          "location": { "lat": 21.2308, "long": 81.4506 },  // ~120m from group
+          "locationCords": { "lat": 21.2308, "long": 81.4506 },  // ~120m from group
           "images": [
             "https://picsum.photos/seed/blood-donation/800/500",
             "https://picsum.photos/seed/blood-donation-2/800/500"
@@ -62,7 +62,7 @@ export class HomeService {
           "start_date": "2026-11-01",
           "end_date": "2026-11-12",
           "currentStatus": "started",
-          "location": { "lat": 21.2311, "long": 81.4512 },  // ~150m from group
+          "locationCords": { "lat": 21.2311, "long": 81.4512 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/cricket-league/800/500",
             "https://picsum.photos/seed/cricket-league-2/800/500"
@@ -75,7 +75,7 @@ export class HomeService {
       "id": 2,
       "groupId": "ESB_2",
       "name": "Ekta Samiti Bhilai",
-      "location": { "lat": 21.2345, "long": 81.4520 },  // ~550m from user
+      "locationCords": { "lat": 21.2345, "long": 81.4520 },  // ~550m from user
       "since": 2010,
       "description": "Ekta Samiti Bhilai promotes community harmony and organizes cultural events that bring people together in celebration and solidarity.",
       "contactNumbers": ["9876123456", "9123456781"],
@@ -89,7 +89,7 @@ export class HomeService {
           "start_date": "2026-01-10",
           "end_date": "2026-01-20",
           "currentStatus": "",
-          "location": { "lat": 21.2347, "long": 81.4522 },  // ~160m from group
+          "locationCords": { "lat": 21.2347, "long": 81.4522 },  // ~160m from group
           "images": [
             "https://picsum.photos/seed/durga-puja/800/500",
             "https://picsum.photos/seed/durga-puja-2/800/500"
@@ -103,7 +103,7 @@ export class HomeService {
           "start_date": "2025-12-15",
           "end_date": "2025-12-25",
           "currentStatus": "",
-          "location": { "lat": 21.2343, "long": 81.4518 },  // ~140m from group
+          "locationCords": { "lat": 21.2343, "long": 81.4518 },  // ~140m from group
           "images": [
             "https://picsum.photos/seed/garba-night/800/500",
             "https://picsum.photos/seed/garba-night-2/800/500"
@@ -116,7 +116,7 @@ export class HomeService {
       "id": 3,
       "groupId": "NSM_3",
       "name": "Navjivan Samaj Mandal",
-      "location": { "lat": 21.2420, "long": 81.4580 },  // ~1.5km from user
+      "locationCords": { "lat": 21.2420, "long": 81.4580 },  // ~1.5km from user
       "since": 2015,
       "description": "Navjivan Samaj Mandal works towards social welfare and youth empowerment through various educational and cultural programs.",
       "contactNumbers": ["9876543211", "9123456782"],
@@ -130,7 +130,7 @@ export class HomeService {
           "start_date": "2026-03-20",
           "end_date": "2026-03-21",
           "currentStatus": "",
-          "location": { "lat": 21.2422, "long": 81.4578 },  // ~180m from group
+          "locationCords": { "lat": 21.2422, "long": 81.4578 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/holi/800/500",
             "https://picsum.photos/seed/holi-2/800/500"
@@ -144,7 +144,7 @@ export class HomeService {
           "start_date": "2026-04-10",
           "end_date": "2026-04-15",
           "currentStatus": "",
-          "location": { "lat": 21.2418, "long": 81.4582 },  // ~150m from group
+          "locationCords": { "lat": 21.2418, "long": 81.4582 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/sports/800/500",
             "https://picsum.photos/seed/sports-2/800/500"
@@ -157,7 +157,7 @@ export class HomeService {
       "id": 4,
       "groupId": "RSYC_4",
       "name": "Rising Star Youth Club",
-      "location": { "lat": 21.2510, "long": 81.4620 },  // ~2.8km from user
+      "locationCords": { "lat": 21.2510, "long": 81.4620 },  // ~2.8km from user
       "since": 2021,
       "description": "Rising Star Youth Club nurtures young talent through sports, education, and personality development programs.",
       "contactNumbers": ["9876456789", "9123456784"],
@@ -171,7 +171,7 @@ export class HomeService {
           "start_date": "2026-05-15",
           "end_date": "2026-05-25",
           "currentStatus": "",
-          "location": { "lat": 21.2512, "long": 81.4618 },  // ~170m from group
+          "locationCords": { "lat": 21.2512, "long": 81.4618 },  // ~170m from group
           "images": [
             "https://picsum.photos/seed/dance-competition/800/500",
             "https://picsum.photos/seed/dance-competition-2/800/500"
@@ -184,7 +184,7 @@ export class HomeService {
       "id": 5,
       "groupId": "USM_5",
       "name": "Unity Seva Mandal",
-      "location": { "lat": 21.2640, "long": 81.4710 },  // ~4.5km from user
+      "locationCords": { "lat": 21.2640, "long": 81.4710 },  // ~4.5km from user
       "since": 2012,
       "description": "Unity Seva Mandal is dedicated to community service, organizing health camps, educational programs, and social welfare activities.",
       "contactNumbers": ["9876789012", "9123456785"],
@@ -198,7 +198,7 @@ export class HomeService {
           "start_date": "2026-06-01",
           "end_date": "2026-06-05",
           "currentStatus": "",
-          "location": { "lat": 21.2638, "long": 81.4708 },  // ~140m from group
+          "locationCords": { "lat": 21.2638, "long": 81.4708 },  // ~140m from group
           "images": [
             "https://picsum.photos/seed/health-camp/800/500",
             "https://picsum.photos/seed/health-camp-2/800/500"
@@ -212,7 +212,7 @@ export class HomeService {
           "start_date": "2026-07-10",
           "end_date": "2026-07-12",
           "currentStatus": "",
-          "location": { "lat": 21.2642, "long": 81.4712 },  // ~160m from group
+          "locationCords": { "lat": 21.2642, "long": 81.4712 },  // ~160m from group
           "images": [
             "https://picsum.photos/seed/workshop/800/500",
             "https://picsum.photos/seed/workshop-2/800/500"
@@ -225,7 +225,7 @@ export class HomeService {
       "id": 10,
       "groupId": "VNC_10",
       "name": "Very Nearby Club",
-      "location": { "lat": 21.2301, "long": 81.4501 },  // ~120m from user (very close)
+      "locationCords": { "lat": 21.2301, "long": 81.4501 },  // ~120m from user (very close)
       "since": 2025,
       "description": "A community club located very close to you, perfect for quick meetups and local events.",
       "contactNumbers": ["9000000000"],
@@ -239,7 +239,7 @@ export class HomeService {
           "start_date": "2026-02-20",
           "end_date": "2026-02-21",
           "currentStatus": "started",
-          "location": { "lat": 21.2301, "long": 81.4501 },  // Same as group location
+          "locationCords": { "lat": 21.2301, "long": 81.4501 },  // Same as group location
           "images": ["https://picsum.photos/seed/test-event/800/500"],
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."
         }

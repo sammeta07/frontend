@@ -13,6 +13,7 @@
           <mat-expansion-panel-header>
             <mat-panel-title> {{ group.name }} </mat-panel-title>
             <mat-panel-description>
+              {{ getDistanceInMetersFromYou(group.distanceFromUser) }}
               {{ group.locationName }}
               <mat-icon>location_on</mat-icon>
             </mat-panel-description>
@@ -84,9 +85,11 @@
                   <span>{{ event.start_date | date:'MMM d' }} - {{ event.end_date | date:'MMM d, yyyy' }}</span>
                 </div>
 
-                <div class="event-meta-row">
+                <div class="event-meta-row clickable" (click)="openMap(event.locationCords)">
                   <mat-icon>location_on</mat-icon>
-                  <span>{{ event.locationName || 'Calculating distance...' }}</span>
+                  <button type="button" class="distance-link" (click)="$event.stopPropagation(); openMap(event.locationCords)">
+                    {{ getDistanceInMetersFromYou(event.distanceFromUser) }}
+                  </button>
                 </div>
 
                 <div class="event-footer">

@@ -32,13 +32,13 @@ export class HeaderComponent {
   private locationService = inject(LocationService);
   private homeService = inject(HomeService);
   locationName = this.locationService.locationName$;
-  location = this.locationService.location$;
+  locationCords = this.locationService.locationCords$;
   searchTerm: string = '';
   distanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
   selectedDistance: number = 1;
 
   constructor( public dialog: MatDialog ) {
-    console.log('HeaderComponent initialized. Current location:', this.location(), 'Location name:', this.locationName());
+    console.log('HeaderComponent initialized. Current location:', this.locationCords(), 'Location name:', this.locationName());
   }
   onDistanceChange(distance: number) {
     this.selectedDistance = distance;

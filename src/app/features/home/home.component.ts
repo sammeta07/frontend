@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
   getYearLabel = getYearLabel;
 
   locationName = this.locationService.locationName$;
-  location = this.locationService.location$;
+  locationCords = this.locationService.locationCords$;
   groupsWidthPercent = 65;
   private readonly minGroupsWidthPercent = 35;
   private readonly maxGroupsWidthPercent = 75;
@@ -90,20 +90,25 @@ export class HomeComponent implements OnInit {
   });
 
   locationEffect = effect(() => {
-    const loc = this.location();
+    const loc = this.locationCords();
     const locName = this.locationName();
     if (loc) {
       // Recalculate distances for all groups and events when user's location is updated
-      this.allGroups.forEach(group => {
-        group.locationName = this.locationService.getDistanceFromUser(group.location) || 'Calculating...';
-        group.events.forEach(event => {
-          event.locationName = this.locationService.getDistanceFromUser(event.location) || 'Calculating...';
+      this.allGroups.forEach((group: groupDetailsModel) => {
+        group.distanceFromUser = this.locationService.calculateDistance(loc, group.locationCords);
+        this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
+          group.locationName = name;
         });
+        group.events.forEach((event: eventDetailsModel) => {
+          event.distanceFromUser = this.locationService.calculateDistance(loc, event.locationCords);
+          // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
+          //   event.locationName = name;
+          // });
+         });
       });
       this.filterGroupsByDistance();
     }
   });
-
   ngOnInit() {
     this.searchTerm = '';
     // if (this.location()) {
@@ -127,12 +132,18 @@ export class HomeComponent implements OnInit {
       // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
         // Calculate distance for each event in the group
-        group.events.forEach(event => {
-          event.locationName = this.locationService.getDistanceFromUser(event.location) || 'Calculating...';
+        group.events.forEach((event: eventDetailsModel) => {
+          event.distanceFromUser = Number(this.locationService.getDistanceFromUser(event.locationCords)) || 0;
+          // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
+          //   event.locationName = name;
+          // });
         });
         this.allEvents.push(...group.events);
         // Calculate and set distance from user's location for the group
-        group.locationName = this.locationService.getDistanceFromUser(group.location) || 'Calculating...';
+        group.distanceFromUser = Number(this.locationService.getDistanceFromUser(group.locationCords)) || 0;
+        this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
+          group.locationName = name;
+        });
       })
       this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
       this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
@@ -146,15 +157,15 @@ export class HomeComponent implements OnInit {
   }
 
   filterGroupsByDistance() {
-    if (!this.location()) {
+    if (!this.locationCords()) {
       this.samitiGroups = [...this.allGroups];
       return;
     }
-    const userLocation = this.location()!;
+    const userLocation = this.locationCords()!;
     // Attach distance to each group for sorting and display
     this.samitiGroups = this.allGroups
-      .map(group => {
-        const dist = this.locationService.calculateDistance(userLocation, group.location);
+      .map((group: groupDetailsModel) => {
+        const dist = this.locationService.calculateDistance(userLocation, group.locationCords);
         // Type assertion to allow extra property
         return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
       })
@@ -163,22 +174,22 @@ export class HomeComponent implements OnInit {
   }
 
   onSearchGroups() {
-    if (!this.location()) {
+    if (!this.locationCords()) {
       this.samitiGroups = [...this.allGroups];
       return;
     }
-    const userLocation = this.location()!;
+    const userLocation = this.locationCords()!;
     // First filter by distance
     let filtered = this.allGroups
-      .map(group => {
-        const dist = this.locationService.calculateDistance(userLocation, group.location);
+      .map((group: groupDetailsModel) => {
+        const dist = this.locationService.calculateDistance(userLocation, group.locationCords);
         return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
       })
-      .filter(group => group.distanceFromUser <= this.selectedDistance);
+      .filter((group: groupDetailsModel & { distanceFromUser: number }) => group.distanceFromUser <= this.selectedDistance);
 
     // Then filter by search term if present
     if (this.searchTerm) {
-      filtered = filtered.filter(group =>
+      filtered = filtered.filter((group: groupDetailsModel) =>
         group.name.toLowerCase().includes(this.searchTerm) ||
         (group.groupId && group.groupId.toLowerCase().includes(this.searchTerm)) ||
         (group.locationName && group.locationName.toLowerCase().includes(this.searchTerm))
@@ -203,12 +214,12 @@ export class HomeComponent implements OnInit {
     );
 
     // Then filter by distance if location is available
-    if (this.location()) {
-      const userLocation = this.location()!;
+    if (this.locationCords()) {
+      const userLocation = this.locationCords()!;
       
       filtered = filtered.filter((event) => {
-        if (event.location && event.location.lat && event.location.long) {
-          const dist = this.locationService.calculateDistance(userLocation, event.location);
+        if (event.locationCords && event.locationCords.lat && event.locationCords.long) {
+          const dist = this.locationService.calculateDistance(userLocation, event.locationCords);
           return dist <= this.selectedDistance;
         }
         return false;
@@ -311,6 +322,41 @@ export class HomeComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     });
+  }
+
+  getDistanceInMetersFromYou(distanceFromUser: number | string | undefined | null): string {
+    if (distanceFromUser === null || distanceFromUser === undefined || distanceFromUser === '') {
+      return 'Calculating distance...';
+    }
+
+    if (typeof distanceFromUser === 'number' && Number.isFinite(distanceFromUser)) {
+      return distanceFromUser < 1
+        ? `${Math.round(distanceFromUser * 1000)} m from you`
+        : `${distanceFromUser.toFixed(1)} km from you`;
+    }
+
+    if (typeof distanceFromUser === 'string') {
+      const normalized = distanceFromUser.trim().toLowerCase();
+      if (normalized.includes('m from you')) {
+        return distanceFromUser;
+      }
+      if (normalized.includes('km from you')) {
+        const kmValue = parseFloat(normalized);
+        if (!Number.isNaN(kmValue)) {
+          return kmValue < 1
+            ? `${Math.round(kmValue * 1000)} m from you`
+            : `${kmValue.toFixed(1)} km from you`;
+        }
+      }
+      const rawValue = parseFloat(normalized);
+      if (!Number.isNaN(rawValue)) {
+        return rawValue < 1
+          ? `${Math.round(rawValue * 1000)} m from you`
+          : `${rawValue.toFixed(1)} km from you`;
+      }
+    }
+
+    return 'Calculating distance...';
   }
 
   onResizeStart(event: MouseEvent) {

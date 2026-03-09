@@ -225,7 +225,7 @@ body.is-resizing-panels {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 0px 20px;
       transition: box-shadow 0.3s ease;
       height: 72px;
       &:hover {
@@ -518,6 +518,20 @@ body.is-resizing-panels {
 
         span {
           font-weight: 500;
+        }
+
+        .distance-link {
+          border: none;
+          background: transparent;
+          padding: 0;
+          margin: 0;
+          color: inherit;
+          font: inherit;
+          font-weight: 500;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+          cursor: pointer;
+          text-align: left;
         }
       }
 

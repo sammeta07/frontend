@@ -26,7 +26,7 @@ export class LocationService {
   private readonly IP_LOCATION_API_URL = 'https://ipapi.co/json/';
   private readonly REVERSE_GEOCODING_API = 'https://nominatim.openstreetmap.org/reverse';
   private dialog = inject(MatDialog);
-  location$ = signal<{ lat: number; long: number } | null>(null);
+  locationCords$ = signal<{ lat: number; long: number } | null>(null);
   locationName$ = signal<string>('Fetching location...');
   private destroyRef = inject(DestroyRef);
   
@@ -51,7 +51,7 @@ export class LocationService {
       // If not denied, this line will trigger browser's default permission popup
       const pos = await this.getGeolocation();
       console.log('pos',pos);
-      this.location$.set(pos);
+      this.locationCords$.set(pos);
       
       // Convert coordinates to readable location name
       this.reverseGeocode(pos)
@@ -164,7 +164,7 @@ export class LocationService {
    * Returns formatted distance string or null if user location is not available
    */
   getDistanceFromUser(targetLocation: LocationModel): string | null {
-    const userLocation = this.location$();
+    const userLocation = this.locationCords$();
     if (!userLocation) {
       return 'Calculating...';
     }

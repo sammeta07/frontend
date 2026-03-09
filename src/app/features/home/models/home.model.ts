@@ -9,12 +9,13 @@ export interface eventDetailsModel {
   start_date: string; // or Date
   end_date: string;   // or Date
   status?: 'started' | 'upcoming' | 'completed'; // Optional, can be calculated
-  location: LocationModel;
+  locationCords: LocationModel;
   locationName?: string; // Optional human-readable location name
   year_count: number;
   description: string;
   images: string[];
   currentStatus: string; // Optional property to store current status of the event
+  distanceFromUser?: number; // Optional property to store distance from user's location
 }
 
 export interface GroupAdminModel {
@@ -28,7 +29,7 @@ export interface groupDetailsModel {
   id: number;
   groupId: string; // Combination of first letters of group name words and id
   name: string;
-  location: LocationModel;
+  locationCords: LocationModel;
   locationName?: string; // Optional human-readable location name
   since: number;
   admins: GroupAdminModel[];
