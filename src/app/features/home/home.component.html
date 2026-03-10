@@ -9,7 +9,7 @@
     </div>
     <div class="group-list  ">
       <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel *ngFor="let group of samitiGroups" #panel hideToggle>
+        <mat-expansion-panel *ngFor="let group of samitiGroups" #panel>
           <mat-expansion-panel-header tabindex="-1">
             <div class="group-details-container" (click)="$event.stopPropagation()">
               <div class="one">
@@ -38,15 +38,6 @@
                 >
                   <mat-icon>group_add</mat-icon>
                   <span>JOIN GROUP</span>
-                </button>
-                <button
-                  mat-icon-button
-                  type="button"
-                  class="panel-toggle-btn"
-                  (click)="$event.stopPropagation(); panel.toggle()"
-                  [attr.aria-label]="panel.expanded ? 'Collapse group' : 'Expand group'"
-                >
-                  <mat-icon>{{ panel.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
                 </button>
               </div>
               <div class="four">
@@ -81,7 +72,8 @@
                   [matTooltipDisabled]="!group.description || group.description.length <= 100"
                   matTooltipClass="group-description-tooltip"
                 >
-                  {{ group.description && group.description.length > 100 ? (group.description | slice: 0 : 100) + '...' : group.description }}
+                {{group.description}}
+                  <!-- {{ group.description && group.description.length > 200 ? (group.description | slice: 0 : 200) + '...' : group.description }} -->
                 </span>
               </div>
               <div class="nine">
@@ -95,9 +87,6 @@
                     {{ getDistanceInMetersFromYou(group.distanceFromUser) }}
                   </button>
                 </div>
-              </div>
-              <div class="twelve">
-                
               </div>
             </div>
           </mat-expansion-panel-header>
@@ -132,7 +121,7 @@
                       </div>
 
                       <!-- Event Description -->
-                      <p class="event-card-description">{{ event.description }}</p>
+                      <div class="event-card-description">{{ event.description }}</div>
 
                       <!-- Event Meta Information -->
                       <div class="event-card-meta">

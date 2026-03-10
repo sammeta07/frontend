@@ -731,7 +731,7 @@ body.is-resizing-panels {
 }
       .group-details-container{
         display: grid;
-        width: 100%;
+        width: 97%;
         grid-template-columns: repeat(12, 1fr);
         grid-template-rows: repeat(6, 1fr);
         align-items: center;
@@ -751,6 +751,16 @@ body.is-resizing-panels {
           border-color: rgba(var(--theme-primary-rgb), 0.35);
           box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
           transform: translateY(-1px);
+        }
+
+        .one,
+        .three,
+        .five,
+        .eight,
+        .nine {
+          align-self: stretch;
+          height: 100%;
+          box-sizing: border-box;
         }
 
         .one{
@@ -840,7 +850,7 @@ body.is-resizing-panels {
           display: flex;
           justify-content: flex-end;
           align-items: center;
-          gap: 6px;
+          gap: 0;
           padding: 0 6px;
 
           .join-btn {
@@ -852,12 +862,14 @@ body.is-resizing-panels {
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.02em;
-            box-shadow: 0 2px 6px rgba(var(--theme-primary-rgb), 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 2px 6px rgba(var(--theme-primary-rgb), 0.25) !important;
+            transition: none !important;
 
-            &:hover {
-              transform: translateY(-1px);
-              box-shadow: 0 4px 10px rgba(var(--theme-primary-rgb), 0.35);
+            &:hover,
+            &:focus,
+            &:active {
+              transform: none !important;
+              box-shadow: 0 2px 6px rgba(var(--theme-primary-rgb), 0.25) !important;
             }
           }
 
@@ -865,33 +877,8 @@ body.is-resizing-panels {
             width: 16px;
             height: 16px;
             font-size: 16px;
+            margin-left: 4px;
             margin-right: 4px;
-          }
-
-          .panel-toggle-btn {
-            flex-shrink: 0;
-            width: 28px;
-            height: 28px;
-            background: var(--theme-surface);
-            border: 1px solid var(--theme-border);
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-
-            &:hover {
-              background: rgba(var(--theme-primary-rgb), 0.1);
-              border-color: rgba(var(--theme-primary-rgb), 0.35);
-            }
-          }
-
-          .panel-toggle-btn mat-icon {
-            color: var(--theme-text-secondary);
-            margin: 0;
-            line-height: 24px;
-            transition: transform 0.2s ease;
           }
         }
         .four{
@@ -920,6 +907,7 @@ body.is-resizing-panels {
           border: 1px solid var(--theme-border);
           border-radius: 8px;
           padding: 3px 8px;
+
 
           .description-text {
             display: block;
@@ -1015,10 +1003,10 @@ body.is-resizing-panels {
             color: var(--theme-text-secondary);
             font-size: 0.76rem;
             padding: 5px 7px;
-            border-radius: 8px;
-            background: var(--theme-surface);
-            border: 1px solid var(--theme-border);
-            transition: all 0.2s ease;
+            /* border-radius: 8px; */
+            /* background: var(--theme-surface); */
+            /* border: 1px solid var(--theme-border); */
+            /* transition: all 0.2s ease; */
             cursor: pointer;
             justify-content: flex-end;
 
@@ -1043,28 +1031,13 @@ body.is-resizing-panels {
               text-align: left;
               white-space: nowrap;
             }
-
-            &:hover {
-              background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.04) 100%);
-              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-              color: var(--theme-text);
-            }
           }
-        }
-        .twelve{
-          grid-column: 9 / 13;
-          grid-row: 3 / 5;
-          display: none;
         }
       }
 
       :host ::ng-deep .mat-expansion-panel-header.mat-expanded .group-details-container {
         border-color: rgba(var(--theme-primary-rgb), 0.45);
         box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
-      }
-
-      :host ::ng-deep .mat-expansion-panel-header.mat-expanded .group-details-container .panel-toggle-btn mat-icon {
-        transform: rotate(180deg);
       }
 
       mat-expansion-panel-header{
