@@ -54,14 +54,6 @@
               </div>
               <div class="five">
                 <!-- <div class="header-info"> -->
-                  <div
-                    class="info-item location-clickable"
-                    (click)="$event.stopPropagation(); openMap(group.locationCords)"
-                    title="Open in Maps"
-                  >
-                    <mat-icon>location_on</mat-icon>
-                    <span>{{ group.locationName }}</span>
-                  </div>
                   <div class="info-divider"></div>
                   <div class="info-item">
                     <mat-icon>calendar_today</mat-icon>
@@ -252,7 +244,7 @@
                 </div>
 
                 <div class="event-footer">
-                  <span class="event-status" [attr.data-status]="event.status">{{ event.currentStatus }}</span>
+                  <!-- <span class="event-status" [attr.data-status]="event.status">{{ event.currentStatus }}</span> -->
                   <button mat-raised-button color="primary" (click)="openEventDetails(event)">
                     View Details
                   </button>

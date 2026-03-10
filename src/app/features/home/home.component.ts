@@ -209,11 +209,8 @@ export class HomeComponent implements OnInit {
 
   get filteredAllEvents(): eventDetailsModel[] {
     const term = this.eventSearchTerm.trim().toLowerCase();
-    
-    // First filter by currentStatus === 'started'
-    let filtered = this.allEvents.filter((event) => 
-      event.currentStatus?.toLowerCase() === 'started'
-    );
+
+    let filtered = [...this.allEvents];
 
     // Then filter by distance if location is available
     if (this.locationCords()) {
@@ -234,6 +231,26 @@ export class HomeComponent implements OnInit {
         (event.title || '').toLowerCase().includes(term)
       );
     }
+
+    filtered.sort((a, b) => {
+      const aStatus = (a.currentStatus || '').toLowerCase();
+      const bStatus = (b.currentStatus || '').toLowerCase(); 
+      const aIsLive = aStatus === 'live' || aStatus === 'started' || a.status === 'started';
+      const bIsLive = bStatus === 'live' || bStatus === 'started' || b.status === 'started';
+
+      if (aIsLive !== bIsLive) {
+        return aIsLive ? -1 : 1;
+      }
+
+      const aDistance = typeof a.distanceFromUser === 'number' ? a.distanceFromUser : Number.POSITIVE_INFINITY;
+      const bDistance = typeof b.distanceFromUser === 'number' ? b.distanceFromUser : Number.POSITIVE_INFINITY;
+
+      if (aDistance !== bDistance) {
+        return aDistance - bDistance;
+      }
+
+      return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+    });
 
     return filtered;
   }

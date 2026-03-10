@@ -28,12 +28,14 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 101,
           "title": "Ganesh Utsav 2026",
           "year_count": 5,
           "start_date": "2026-02-01",
           "end_date": "2026-02-11",
-          "currentStatus": "started",
+          "currentStatus": "live",
           "locationCords": { "lat": 21.2312, "long": 81.4510 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/ganesh-utsav/800/500",
@@ -42,12 +44,14 @@ export class HomeService {
           "description": "Celebrate the vibrant festival of Ganesh Utsav with us! Join us for 10 days of cultural performances, community feasts, and spiritual activities as we honor Lord Ganesha. The event will feature traditional music and dance, delicious food stalls, and a grand procession on the final day. Don't miss this opportunity to experience the rich cultural heritage of Raipur and connect with fellow community members in a joyous celebration!"
         },
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 102,
           "title": "Blood Donation Camp",
           "year_count": 2,
           "start_date": "2026-03-10",
           "end_date": "2026-03-15",
-          "currentStatus": "started",
+          "currentStatus": "live",
           "locationCords": { "lat": 21.2308, "long": 81.4506 },  // ~120m from group
           "images": [
             "https://picsum.photos/seed/blood-donation/800/500",
@@ -56,12 +60,14 @@ export class HomeService {
           "description": "Save lives by donating blood! Our community blood donation camp provides a safe and hygienic environment for blood donors. Every donation can save up to three lives. Medical professionals will conduct health checks, and all donors will receive refreshments and certificates of appreciation. Join us in this noble cause!"
         },
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 103,
           "title": "Cricket League",
           "year_count": 10,
           "start_date": "2026-11-01",
           "end_date": "2026-11-12",
-          "currentStatus": "started",
+          "currentStatus": "live",
           "locationCords": { "lat": 21.2311, "long": 81.4512 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/cricket-league/800/500",
@@ -83,6 +89,8 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 201,
           "title": "Durga Puja 2025",
           "year_count": 51,
@@ -97,6 +105,8 @@ export class HomeService {
           "description": "Join us for the most revered festival celebration! This 51-year-old tradition brings together thousands of devotees for cultural performances, traditional feasts, and spiritual ceremonies to honor Goddess Durga. Experience intricate decorations, elaborate pujas, and community bonding at its finest!"
         },
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 202,
           "title": "Garba Night",
           "year_count": 5,
@@ -124,6 +134,8 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 301,
           "title": "Holi Celebration",
           "year_count": 8,
@@ -138,6 +150,8 @@ export class HomeService {
           "description": "Celebrate the festival of colors with our grand Holi event! Join us for music, dance, and colorful fun as we welcome spring with joy and enthusiasm."
         },
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 302,
           "title": "Youth Sports Meet",
           "year_count": 3,
@@ -165,6 +179,8 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 401,
           "title": "Dance Competition",
           "year_count": 4,
@@ -192,6 +208,9 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
+
           "id": 501,
           "title": "Free Health Camp",
           "year_count": 11,
@@ -206,6 +225,8 @@ export class HomeService {
           "description": "Free health checkup camp providing medical consultations, blood tests, and health awareness sessions for the community."
         },
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 502,
           "title": "Educational Workshop",
           "year_count": 6,
@@ -233,12 +254,14 @@ export class HomeService {
       "admins": [],
       "events": [
         {
+          // "from_time": "00:00",
+          // "to_time": "24:00",
           "id": 1001,
           "title": "Weekend Meetup",
           "year_count": 1,
           "start_date": "2026-02-20",
           "end_date": "2026-02-21",
-          "currentStatus": "started",
+          "currentStatus": "live",
           "locationCords": { "lat": 21.2301, "long": 81.4501 },  // Same as group location
           "images": ["https://picsum.photos/seed/test-event/800/500"],
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."

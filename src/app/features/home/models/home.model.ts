@@ -14,6 +14,8 @@ export interface eventDetailsModel {
   year_count: number;
   description: string;
   images: string[];
+  // from_time: string; // Optional, can be used for display
+  // to_time: string;   // Optional, can be used for display
   currentStatus: string; // Optional property to store current status of the event
   distanceFromUser?: number; // Optional property to store distance from user's location
 }
