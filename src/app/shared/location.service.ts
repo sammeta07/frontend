@@ -103,6 +103,7 @@ export class LocationService {
     };
     return this.http.get<any>(this.REVERSE_GEOCODING_API, { params }).pipe(
       map(data => {
+        // console.log('Reverse geocoding data:', data);
         const address = data.address || {};
         const city = address.state_district || 'Unknown';
         const state = address.state || 'Unknown';

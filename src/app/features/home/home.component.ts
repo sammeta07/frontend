@@ -96,9 +96,9 @@ export class HomeComponent implements OnInit {
       // Recalculate distances for all groups and events when user's location is updated
       this.allGroups.forEach((group: groupDetailsModel) => {
         group.distanceFromUser = this.locationService.calculateDistance(loc, group.locationCords);
-        this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
-          group.locationName = name;
-        });
+        // this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
+        //   group.locationName = name;
+        // });
         group.events.forEach((event: eventDetailsModel) => {
           event.distanceFromUser = this.locationService.calculateDistance(loc, event.locationCords);
           // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
