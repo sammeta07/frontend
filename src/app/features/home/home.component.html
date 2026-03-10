@@ -9,28 +9,45 @@
     </div>
     <div class="group-list  ">
       <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel *ngFor="let group of samitiGroups">
-          <mat-expansion-panel-header >
-            <div class="group-details-container">
+        <mat-expansion-panel *ngFor="let group of samitiGroups" #panel hideToggle>
+          <mat-expansion-panel-header tabindex="-1">
+            <div class="group-details-container" (click)="$event.stopPropagation()">
               <div class="one">
-                <div (click)="openGroupProfile(group)">{{ group.name }}</div>
-                <!-- <h6 class="group-name clickable-title" (click)="openGroupProfile(group)">{{ group.name }}</h6> -->
+                <div class="group-name" (click)="openGroupProfile(group)">{{ group.name }}</div>
+                <div class="group-id-info" *ngIf="group.groupId">
+                  <span class="group-id-label">Group Id:</span>
+                  <span class="group-id-value">{{ group.groupId }}</span>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="copy-icon"
+                    (click)="copyToClipboard(group.groupId)"
+                    aria-label="Copy Group ID"
+                    title="Copy Group ID"
+                  >
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                </div>
               </div>
               <div class="three">
-                <div class="group-id-info" *ngIf="group.groupId">
-                <span class="group-id-label">Group Id:</span>
-                <span class="group-id-value">{{ group.groupId }}</span>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
+                  class="join-btn"
+                >
+                  <mat-icon>group_add</mat-icon>
+                  <span>JOIN GROUP</span>
+                </button>
                 <button
                   mat-icon-button
                   type="button"
-                  class="copy-icon"
-                  (click)="copyToClipboard(group.groupId)"
-                  aria-label="Copy Group ID"
-                  title="Copy Group ID"
+                  class="panel-toggle-btn"
+                  (click)="$event.stopPropagation(); panel.toggle()"
+                  [attr.aria-label]="panel.expanded ? 'Collapse group' : 'Expand group'"
                 >
-                  <mat-icon>content_copy</mat-icon>
+                  <mat-icon>{{ panel.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
                 </button>
-              </div>
               </div>
               <div class="four">
                 <img [src]="getGroupLogoUrl(group.name)" class="group-avatar" alt="{{group.name}}" />
@@ -56,26 +73,30 @@
                     <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
                   </div>
                   <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
-                  <div class="info-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
+                  <div class="info-item phone-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
                     <mat-icon>phone</mat-icon>
                     <span>{{ group.contactNumbers.join(', ') }}</span>
                   </div>
+                  <div class="info-divider"></div>
+                  
+                  
                 <!-- </div> -->
               </div>
               <div class="eight">
-                {{ group.description }}
+                <span
+                  class="description-text"
+                  [matTooltip]="group.description"
+                  [matTooltipDisabled]="!group.description || group.description.length <= 100"
+                  matTooltipClass="group-description-tooltip"
+                >
+                  {{ group.description && group.description.length > 100 ? (group.description | slice: 0 : 100) + '...' : group.description }}
+                </span>
               </div>
-              <div class="nine">9</div>
+              <div class="nine">
+                <div class="distance-pill">{{ getDistanceInMetersFromYou(group.distanceFromUser) }}</div>
+              </div>
               <div class="twelve">
-                <button
-                mat-raised-button
-                color="primary"
-                (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
-                class="join-btn"
-              >
-                <mat-icon>group_add</mat-icon>
-                <span>JOIN GROUP</span>
-              </button>
+                
               </div>
             </div>
           </mat-expansion-panel-header>
@@ -218,12 +239,12 @@
               </div>
 
               <div class="event-details">
-                <div class="event-meta-row">
+                <div class="event-meta-row meta-date">
                   <mat-icon>calendar_today</mat-icon>
                   <span>{{ event.start_date | date:'MMM d' }} - {{ event.end_date | date:'MMM d, yyyy' }}</span>
                 </div>
 
-                <div class="event-meta-row clickable" (click)="openMap(event.locationCords)">
+                <div class="event-meta-row meta-location clickable" (click)="openMap(event.locationCords)">
                   <mat-icon>location_on</mat-icon>
                   <button type="button" class="distance-link" (click)="$event.stopPropagation(); openMap(event.locationCords)">
                     {{ getDistanceInMetersFromYou(event.distanceFromUser) }}
@@ -231,7 +252,7 @@
                 </div>
 
                 <div class="event-footer">
-                  <span class="event-status">{{ event.currentStatus }}</span>
+                  <span class="event-status" [attr.data-status]="event.status">{{ event.currentStatus }}</span>
                   <button mat-raised-button color="primary" (click)="openEventDetails(event)">
                     View Details
                   </button>

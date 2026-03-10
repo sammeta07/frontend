@@ -14,6 +14,7 @@ import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
@@ -32,6 +33,7 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
     // SkeletonComponent,
     MatSelectModule,
     MatExpansionModule,
+    MatTooltipModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home.component.html',
