@@ -35,7 +35,7 @@ export class HomeService {
           "year_count": 5,
           "start_date": "2026-02-01",
           "end_date": "2026-02-11",
-          "currentStatus": "live",
+          "currentStatus": "started",
           "locationCords": { "lat": 21.2312, "long": 81.4510 },  // ~180m from group
           "images": [
             "https://picsum.photos/seed/ganesh-utsav/800/500",
@@ -51,7 +51,7 @@ export class HomeService {
           "year_count": 2,
           "start_date": "2026-03-10",
           "end_date": "2026-03-15",
-          "currentStatus": "live",
+          "currentStatus": "started",
           "locationCords": { "lat": 21.2308, "long": 81.4506 },  // ~120m from group
           "images": [
             "https://picsum.photos/seed/blood-donation/800/500",
@@ -67,7 +67,7 @@ export class HomeService {
           "year_count": 10,
           "start_date": "2026-11-01",
           "end_date": "2026-11-12",
-          "currentStatus": "live",
+          "currentStatus": "started",
           "locationCords": { "lat": 21.2311, "long": 81.4512 },  // ~150m from group
           "images": [
             "https://picsum.photos/seed/cricket-league/800/500",
@@ -261,7 +261,7 @@ export class HomeService {
           "year_count": 1,
           "start_date": "2026-02-20",
           "end_date": "2026-02-21",
-          "currentStatus": "live",
+          "currentStatus": "started",
           "locationCords": { "lat": 21.2301, "long": 81.4501 },  // Same as group location
           "images": ["https://picsum.photos/seed/test-event/800/500"],
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."

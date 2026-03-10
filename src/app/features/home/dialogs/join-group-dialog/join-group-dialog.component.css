@@ -1,7 +1,7 @@
 /* Join Group Dialog Styles */
 .join-dialog-content {
   padding: 28px;
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-surface-light) 0%, var(--theme-surface) 100%);
   border-radius: 16px;
   min-width: 450px;
 }
@@ -10,7 +10,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 24px;
-  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  background: var(--theme-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -23,7 +23,7 @@
     width: 100%;
 
     ::ng-deep .mat-mdc-text-field-wrapper {
-      background: #ffffff;
+      background: var(--theme-surface);
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
       transition: all 0.3s ease;
@@ -34,7 +34,7 @@
     }
 
     ::ng-deep .mdc-text-field--focused .mat-mdc-text-field-wrapper {
-      box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     }
   }
 }
@@ -55,17 +55,17 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+    background: var(--theme-gradient);
     border-radius: 10px;
 
     &:hover {
-      background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+      background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary) 100%);
     }
   }
 }
 
 .group-card {
-  background: #ffffff;
+  background: var(--theme-surface);
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 16px;
@@ -91,7 +91,7 @@ mat-dialog-actions {
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     &:active {

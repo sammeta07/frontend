@@ -2,8 +2,23 @@
 
 /* ===== GLOBAL DESIGN SYSTEM ===== */
 :root {
-  --primary-gradient: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
-  --background-gradient: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  /* Theme Colors (defaults - will be overridden by ThemeService) */
+  --theme-primary: #1976d2;
+  --theme-secondary: #2196f3;
+  --theme-accent: #42a5f5;
+  --theme-primary-light: #64b5f6;
+  --theme-primary-dark: #1565c0;
+  --theme-background: #f5f7fa;
+  --theme-surface: #ffffff;
+  --theme-surface-light: #f8f9fa;
+  --theme-text: #2c3e50;
+  --theme-text-secondary: #546e7a;
+  --theme-border: #e0e0e0;
+  --theme-gradient: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  
+  /* Using theme variables */
+  --primary-gradient: var(--theme-gradient);
+  --background-gradient: linear-gradient(135deg, var(--theme-background) 0%, #e9ecef 100%);
   --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
   --border-radius-sm: 8px;
@@ -16,7 +31,7 @@
 /* Global Scrollbar Styling */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1976d2 rgba(0, 0, 0, 0.05);
+  scrollbar-color: var(--theme-primary) rgba(0, 0, 0, 0.05);
 }
 
 *::-webkit-scrollbar {
@@ -30,13 +45,69 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%);
+  background: var(--theme-gradient);
   border-radius: 10px;
   transition: background 0.3s ease;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
+  background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary) 100%);
+}
+
+/* Dark Mode Specific Styles */
+body.theme-dark-mode {
+  background: var(--theme-background);
+  color: var(--theme-text);
+  
+  /* Scrollbar for dark mode - lighter colors */
+  * {
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.05);
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  /* Material components in dark mode */
+  .mat-mdc-raised-button,
+  .mat-mdc-unelevated-button {
+    &:not([color="primary"]) {
+      background-color: var(--theme-surface-light) !important;
+      color: var(--theme-text) !important;
+    }
+  }
+  
+  .mat-mdc-button {
+    color: var(--theme-text) !important;
+  }
+  
+  .mat-mdc-icon-button {
+    color: var(--theme-text) !important;
+  }
+  
+  /* Material Menu/Select Panels */
+  .mat-mdc-menu-panel,
+  .mat-mdc-select-panel {
+    background-color: var(--theme-surface) !important;
+  }
+  
+  /* Dividers in dark mode */
+  .mat-divider {
+    border-color: var(--theme-border) !important;
+  }
+  
+  /* Ensure count badges and special text use theme colors */
+  .count-badge {
+    background: var(--theme-gradient) !important;
+  }
 }
 
 /* Material Button Overrides */
@@ -51,22 +122,25 @@
 .mat-mdc-raised-button:hover,
 .mat-mdc-unelevated-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Material Dialog Overrides */
 .mat-mdc-dialog-surface {
   border-radius: 16px !important;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15) !important;
+  background: var(--theme-surface) !important;
 }
 
 .mat-mdc-dialog-title {
   font-weight: 700 !important;
   font-size: 1.4rem !important;
-  background: var(--primary-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--theme-text) !important;
+  -webkit-text-fill-color: var(--theme-text) !important;
+}
+
+.mat-mdc-dialog-content {
+  color: var(--theme-text) !important;
 }
 
 /* Material Form Field Overrides */
@@ -131,4 +205,250 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ===== COMPREHENSIVE THEME APPLICATION ===== */
+
+/* Material Button Coloring */
+.mat-mdc-button {
+  color: var(--theme-text) !important;
+}
+
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-unelevated-button {
+  &:not([color]) {
+    background-color: var(--theme-surface-light) !important;
+    color: var(--theme-text) !important;
+  }
+}
+
+.mat-mdc-button[color="primary"],
+.mat-mdc-raised-button[color="primary"],
+.mat-mdc-flat-button[color="primary"],
+.mat-mdc-unelevated-button[color="primary"] {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--theme-primary-dark) !important;
+  }
+}
+
+.mat-mdc-button[color="accent"],
+.mat-mdc-raised-button[color="accent"] {
+  background-color: var(--theme-accent) !important;
+  color: white !important;
+}
+
+/* Icon Button Theming */
+.mat-mdc-icon-button {
+  color: var(--theme-text) !important;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+body.theme-dark-mode .mat-mdc-icon-button:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Stroked Button Theming */
+.mat-mdc-button.mat-stroked-button[color="primary"],
+.mat-mdc-outlined-button[color="primary"] {
+  border-color: var(--theme-primary) !important;
+  color: var(--theme-primary) !important;
+  
+  &:hover:not(:disabled) {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    border-color: var(--theme-primary-dark) !important;
+    color: var(--theme-primary-dark) !important;
+  }
+}
+
+/* Form Field & Input Theming */
+.mat-mdc-form-field {
+  color: var(--theme-text) !important;
+  
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--theme-surface-light);
+    border-radius: 8px;
+  }
+  
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--theme-border) !important;
+  }
+  
+  input, textarea {
+    color: var(--theme-text) !important;
+  }
+  
+  .mat-mdc-form-field-label, 
+  .mat-mdc-floating-label {
+    color: var(--theme-text-secondary) !important;
+  }
+}
+
+.mat-mdc-form-field.mat-focused {
+  .mdc-notched-outline__leading,
+  .mdc-notched-outline__notch,
+  .mdc-notched-outline__trailing {
+    border-color: var(--theme-primary) !important;
+  }
+}
+
+/* Expansion Panel Theming */
+.mat-expansion-panel {
+  background-color: var(--theme-surface) !important;
+  border-color: var(--theme-border) !important;
+}
+
+.mat-expansion-panel-header {
+  background-color: var(--theme-surface-light) !important;
+  color: var(--theme-text) !important;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  background-color: var(--theme-surface) !important;
+}
+
+/* Tabs Theming */
+.mat-mdc-tab-group {
+  --mdc-tab-indicator-active-indicator-color: var(--theme-primary);
+}
+
+.mat-mdc-tab-label-content {
+  color: var(--theme-text-secondary) !important;
+  transition: color 0.3s ease;
+}
+
+.mat-mdc-tab:hover .mat-mdc-tab-label-content {
+  color: var(--theme-primary) !important;
+}
+
+.mdc-tab--active .mat-mdc-tab-label-content {
+  color: var(--theme-primary) !important;
+  font-weight: 600 !important;
+}
+
+.mdc-tab-indicator__content--underline {
+  border-bottom-color: var(--theme-primary) !important;
+}
+
+.mat-ink-bar {
+  background-color: var(--theme-primary) !important;
+  height: 3px !important;
+}
+
+/* Select/Menu Theming */
+.mat-mdc-select-value {
+  color: var(--theme-text) !important;
+}
+
+.mat-mdc-option {
+  color: var(--theme-text) !important;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  
+  &.mat-mdc-option-active {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    color: var(--theme-primary) !important;
+  }
+}
+
+body.theme-dark-mode .mat-mdc-option {
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+  
+  &.mat-mdc-option-active {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+  }
+}
+
+.mat-mdc-option-selected {
+  color: var(--theme-primary) !important;
+}
+
+/* Dialog Content Theming */
+.mat-mdc-dialog-container {
+  .mat-mdc-dialog-surface {
+    background-color: var(--theme-surface) !important;
+    color: var(--theme-text) !important;
+  }
+}
+
+/* Tooltip Theming */
+.mat-tooltip {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+/* Snackbar Theming */
+.mat-mdc-snack-bar-container {
+  background-color: var(--theme-primary) !important;
+  color: white !important;
+}
+
+/* Ripple Effect Theming */
+.mat-ripple-element {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Links and Text */
+a {
+  color: var(--theme-primary);
+  
+  &:hover {
+    color: var(--theme-primary-dark);
+  }
+}
+
+/* Borders */
+hr,
+.divider {
+  border-color: var(--theme-border) !important;
+}
+
+/* Body Background */
+body {
+  background-color: var(--theme-background);
+  color: var(--theme-text);
+}
+
+/* Global Text Styling */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--theme-text) !important;
+}
+
+p, span, div {
+  color: inherit;
+}
+
+/* Material Icons */
+mat-icon {
+  color: inherit;
+}
+
+/* Override gradient text only when explicitly using the class */
+.gradient-text {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Dialog title specific override */
+.mat-mdc-dialog-title {
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+  color: var(--theme-text) !important;
+  -webkit-text-fill-color: var(--theme-text) !important;
+  background: none !important;
 }

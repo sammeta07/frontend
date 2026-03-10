@@ -6,9 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { LocationService } from '../../shared/location.service';
 import { HomeService } from '../../features/home/services/home.service';
+import { ThemeService } from '../../shared/theme.service';
 import { MatSelectModule } from '@angular/material/select';
 
 
@@ -23,7 +25,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -31,6 +34,10 @@ import { MatSelectModule } from '@angular/material/select';
 export class HeaderComponent {
   private locationService = inject(LocationService);
   private homeService = inject(HomeService);
+  public themeService = inject(ThemeService);
+  
+  isPaletteOpen = false;
+  
   locationName = this.locationService.locationName$;
   locationCords = this.locationService.locationCords$;
   searchTerm: string = '';
@@ -60,5 +67,13 @@ export class HeaderComponent {
       width: '400px',
       autoFocus: false
     });
+  }
+
+  selectTheme(themeId: string) {
+    this.themeService.setTheme(themeId);
+  }
+  
+  toggleThemePalette() {
+    this.isPaletteOpen = !this.isPaletteOpen;
   }
 }

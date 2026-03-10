@@ -1,23 +1,54 @@
-<mat-toolbar color="secondary" class="header-toolbar">
-  <div class="brand-section">
-    <mat-icon>group</mat-icon>
-    <span class="brand-name">SAMITI</span>
+<mat-toolbar color="secondary" class="header-toolbar" role="banner">
+  <div class="brand-section" role="img" aria-label="Samiti Logo">
+    <mat-icon aria-hidden="true">groups</mat-icon>
+    <h1 class="brand-name">SAMITI</h1>
   </div>
   <span class="spacer"></span>
-  <div class="controls-container">
+  <div class="controls-container" role="search" aria-label="Search groups">
     <div class="search-bar-wrapper">
-      <mat-icon class="search-icon">search</mat-icon>
-      <input #searchInput type="text" class="search-input" placeholder="Search groups..." [value]="searchTerm"
-        (input)="onSearchGroups($event)" [disabled]="!locationName()" />
-      <button *ngIf="searchTerm" mat-icon-button class="clear-btn" (click)="clearSearch(searchInput)" type="button">
+      <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
+      <input 
+        #searchInput 
+        type="search"
+        class="search-input" 
+        placeholder="Search groups..." 
+        [value]="searchTerm"
+        (input)="onSearchGroups($event)" 
+        [disabled]="!locationName()"
+        [attr.aria-label]="locationName() ? 'Search for groups' : 'Search disabled until location is detected'"
+        [matTooltip]="!locationName() ? 'Waiting for location...' : ''"
+        matTooltipPosition="below"
+        autocomplete="off"
+      />
+      <button 
+        *ngIf="searchTerm" 
+        mat-icon-button 
+        class="clear-btn" 
+        (click)="clearSearch(searchInput)" 
+        type="button"
+        aria-label="Clear search"
+        matTooltip="Clear search"
+      >
         <mat-icon>close</mat-icon>
       </button>
+      <mat-icon 
+        *ngIf="!locationName() && !searchTerm" 
+        class="loading-indicator"
+        aria-hidden="true"
+      >
+        hourglass_empty
+      </mat-icon>
     </div>
-    <div class="divider"></div>
+    <div class="divider" role="separator" aria-hidden="true"></div>
     <mat-form-field appearance="outline" class="borderless-field custom-select-field">
-      <mat-icon matPrefix>near_me</mat-icon>
-      <mat-select [(value)]="selectedDistance" (selectionChange)="onDistanceChange($event.value)"
-        aria-label="Select distance radius" disableRipple>
+      <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
+      <mat-select 
+        [(value)]="selectedDistance" 
+        (selectionChange)="onDistanceChange($event.value)"
+        aria-label="Select search distance radius"
+        [disabled]="!locationName()"
+        disableRipple
+      >
         <mat-option *ngFor="let km of distanceOptions" [value]="km">
           <span>Within <strong>{{ km }}</strong> km</span>
         </mat-option>
@@ -26,13 +57,66 @@
   </div>
   <span class="spacer"></span>
   <div class="action-section">
-    <button mat-button>
-      <mat-icon>location_on</mat-icon>
-      <span>{{ locationName() || 'Locating...' }}</span>
+    <button 
+      mat-button 
+      class="location-btn"
+      [class.location-loading]="!locationName()"
+      [disabled]="!locationName()"
+      [matTooltip]="locationName() ? 'Your current location' : 'Detecting location...'"
+      matTooltipPosition="below"
+      aria-live="polite"
+      [attr.aria-label]="locationName() ? 'Current location: ' + locationName() : 'Detecting your location'"
+    >
+      <mat-icon [class.pulse]="!locationName()">
+        {{ locationName() ? 'location_on' : 'my_location' }}
+      </mat-icon>
+      <span class="location-text">
+        {{ locationName() || 'Locating...' }}
+      </span>
     </button>
-    <button mat-flat-button (click)="openLoginDialog()">
-      <mat-icon>login</mat-icon>
-      LOGIN
+    
+    <!-- Theme Selector Color Palette -->
+    <div class="theme-palette-container">
+      <button 
+        mat-icon-button
+        (click)="toggleThemePalette()"
+        class="theme-selector-btn"
+        [matTooltip]="'Current: ' + themeService.currentTheme().displayName"
+        matTooltipPosition="below"
+        aria-label="Open theme selector"
+        [class.palette-open]="isPaletteOpen"
+      >
+        <mat-icon>format_color_fill</mat-icon>
+      </button>
+      
+      <div class="theme-palette" *ngIf="isPaletteOpen">
+        <button
+          *ngFor="let theme of themeService.themes"
+          (click)="selectTheme(theme.id); isPaletteOpen = false"
+          class="theme-palette-cell"
+          [style.background]="theme.id === 'dark-mode' ? theme.background : theme.primary"
+          [class.selected]="themeService.currentTheme().id === theme.id"
+          [class.dark-theme-cell]="theme.id === 'dark-mode'"
+          [attr.aria-label]="'Select ' + theme.displayName + ' theme'"
+          [attr.aria-pressed]="themeService.currentTheme().id === theme.id"
+          [matTooltip]="theme.displayName"
+          matTooltipPosition="above"
+          type="button"
+        >
+          <mat-icon *ngIf="themeService.currentTheme().id === theme.id" class="theme-check-mark">check_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <button 
+      mat-flat-button 
+      color="primary"
+      (click)="openLoginDialog()"
+      class="login-btn"
+      aria-label="Open login dialog"
+    >
+      <mat-icon aria-hidden="true">login</mat-icon>
+      <span>LOGIN</span>
     </button>
   </div>
 </mat-toolbar>

@@ -52,16 +52,16 @@ import { CommonModule } from '@angular/common';
     .status-badge[data-status="completed"] { background: #e8f5e9; color: #2e7d32; }
     
     .date-range {
-      color: #757575;
+        color: var(--theme-text-secondary);
       font-size: 0.9rem;
     }
     .details-section h3 {
       margin-bottom: 8px;
-      color: #424242;
+        color: var(--theme-text);
     }
     .details-section p {
         line-height: 1.6;
-        color: #616161;
+          color: var(--theme-text-secondary);
     }
   `]
 })

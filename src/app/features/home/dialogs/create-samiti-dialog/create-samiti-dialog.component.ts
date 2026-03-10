@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,8 @@ import { GroupAdminModel } from '../../models/home.model';
     MatTabsModule
   ],
   templateUrl: './create-samiti-dialog.component.html',
-  styleUrl: './create-samiti-dialog.component.css'
+  styleUrl: './create-samiti-dialog.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class CreateSamitiDialogComponent implements OnInit {
   samitiForm!: FormGroup;

@@ -85,7 +85,16 @@
                 </span>
               </div>
               <div class="nine">
-                <div class="distance-pill">{{ getDistanceInMetersFromYou(group.distanceFromUser) }}</div>
+                <div class="group-distance-row" (click)="$event.stopPropagation(); openMap(group.locationCords)">
+                  <mat-icon>location_on</mat-icon>
+                  <button
+                    type="button"
+                    class="distance-link"
+                    (click)="$event.stopPropagation(); openMap(group.locationCords)"
+                  >
+                    {{ getDistanceInMetersFromYou(group.distanceFromUser) }}
+                  </button>
+                </div>
               </div>
               <div class="twelve">
                 
