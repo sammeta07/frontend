@@ -812,7 +812,7 @@ body.is-resizing-panels {
           .panel-toggle-btn mat-icon {
             color: #2162c6;
             margin: 0;
-            line-height: 20px;
+            line-height: 24px;
           }
         }
         .four{
