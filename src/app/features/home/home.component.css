@@ -10,7 +10,6 @@ body.is-resizing-panels {
   height: 100%;
   grid-gap: 0px;
   overflow: hidden;
-  padding: 8px;
   
   .groups-container{
     grid-column: 1 / 2;
@@ -21,7 +20,6 @@ body.is-resizing-panels {
     grid-gap: 5px;
     overflow: hidden;
     background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface-light) 100%);
-    border-radius: 16px;
     padding: 8px;
 
     .group-header {
@@ -383,7 +381,7 @@ body.is-resizing-panels {
     grid-gap: 5px;
     overflow: hidden;
     background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface-light) 100%);
-    border-radius: 16px;
+    /* border-radius: 16px; */
     padding: 8px;
     
     .event-header {

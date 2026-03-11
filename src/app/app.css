@@ -1,43 +1,22 @@
-/* .container {
-  display: grid;
-  height: 100vh; 
-  grid-template-rows: auto 1fr 40px;
-
-  app-header {
-    grid-column: 1 / 13;
-    border: 1px solid #d45050;
-  }
-
-  main {
-    grid-column: 1 / 13;
-    border: 1px solid #1e14dd;
-    overflow: scroll; 
-  }
-
-  app-footer {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-column: 1 / 13;
-    border: 1px solid #40c219;
-    font-size: 16px;
-    align-items: center;
-  }
-} */
-
 .container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  gap: 8px;
   overflow: hidden;
   background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
-  /* padding: 8px; */
+
+  app-header {
+    display: block;
+    margin: 0;
+  }
 
   main {
     flex: 1;
+    display: block;
+    margin: 0;
+    padding: 5px;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
-    border-radius: 16px;
     background: transparent;
 
     /* Custom scrollbar */
@@ -59,5 +38,9 @@
         background: linear-gradient(135deg, #1565c0 0%, #1976d2 100%);
       }
     }
+  }
+
+  app-footer {
+    display: block;
   }
 }
