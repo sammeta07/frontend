@@ -50,11 +50,166 @@ body.is-resizing-panels {
         align-items: center;
       }
 
+      .group-controls-container {
+        display: flex;
+        align-items: center;
+        background: var(--theme-surface);
+        border-radius: 28px;
+        border: 2px solid transparent;
+        height: 48px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:focus-within {
+          border-color: var(--theme-primary);
+          box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
+          transform: translateY(-1px);
+        }
+      }
+
+      .group-search-wrapper {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        position: relative;
+
+        .search-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #64748b;
+          margin-right: 10px;
+          margin-left: 16px;
+          font-size: 22px;
+          width: 22px;
+          height: 22px;
+        }
+
+        .group-search-input {
+          border: none;
+          background: transparent;
+          color: #2c3e50;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 500;
+          outline: none;
+          line-height: normal;
+
+          &::placeholder {
+            color: #95a5a6;
+          }
+
+          &::-webkit-search-cancel-button,
+          &::-webkit-search-decoration,
+          &::-webkit-search-results-button,
+          &::-webkit-search-results-decoration {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
+          }
+        }
+
+        .clear-btn {
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #95a5a6;
+          transition: all 0.2s ease;
+          border-radius: 50%;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+
+          &:hover {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            transform: rotate(90deg);
+          }
+        }
+
+        .loading-indicator {
+          color: #95a5a6;
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          animation: pulse 1.5s ease-in-out infinite;
+          margin-right: 12px;
+        }
+      }
+
+      .divider {
+        width: 2px;
+        height: 28px;
+        background: linear-gradient(180deg, transparent, #d1d5db, transparent);
+        margin: 0 16px;
+      }
+
+      .borderless-field ::ng-deep .mdc-notched-outline__leading,
+      .borderless-field ::ng-deep .mdc-notched-outline__notch,
+      .borderless-field ::ng-deep .mdc-notched-outline__trailing {
+        border: none;
+      }
+
+      .custom-select-field {
+        margin: 0;
+        display: flex;
+        align-items: center;
+
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          height: 44px;
+          min-height: 44px;
+          width: 132px;
+          margin-top: 0;
+          padding-left: 0;
+          display: flex;
+          align-items: center;
+          background: transparent !important;
+        }
+
+        ::ng-deep .mdc-text-field,
+        ::ng-deep .mdc-text-field--outlined,
+        ::ng-deep .mat-mdc-form-field-focus-overlay {
+          background: transparent !important;
+        }
+
+        ::ng-deep .mat-mdc-form-field-flex {
+          align-items: center;
+        }
+
+        ::ng-deep .mat-mdc-form-field-infix {
+          min-height: auto;
+          padding-top: 0;
+          padding-bottom: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        ::ng-deep .mat-mdc-select-trigger {
+          display: flex;
+          align-items: center;
+          min-height: 44px;
+        }
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+        ::ng-deep .mat-mdc-form-field-bottom-align::before {
+          display: none;
+        }
+
+        ::ng-deep .mat-mdc-select {
+          font-weight: 600;
+        }
+      }
+
       .count-badge {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        /* background: linear-gradient(135deg, #1976d2 0%, #2196f3 100%); */
+        background: var(--theme-gradient);
         color: white;
         font-size: 0.9rem;
         font-weight: 700;
@@ -241,6 +396,7 @@ body.is-resizing-panels {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
       padding: 0 12px;
       transition: box-shadow 0.3s ease;
       height: 64px;
@@ -255,6 +411,23 @@ body.is-resizing-panels {
         margin: 0;
         display: flex;
         align-items: center;
+      }
+
+      .event-controls-container {
+        display: flex;
+        align-items: center;
+        background: var(--theme-surface);
+        border-radius: 28px;
+        border: 2px solid transparent;
+        height: 44px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:focus-within {
+          border-color: var(--theme-primary);
+          box-shadow: 0 4px 16px rgba(25, 118, 210, 0.2);
+          transform: translateY(-1px);
+        }
       }
 
       .count-badge {
@@ -280,42 +453,43 @@ body.is-resizing-panels {
       .event-search-wrapper {
         display: flex;
         align-items: center;
-        min-width: 138px;
-        max-width: 196px;
-        height: 38px;
-        border-radius: 18px;
+        min-width: 180px;
+        max-width: 230px;
         padding: 2px 10px;
-        background: var(--theme-surface);
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        border: 2px solid transparent;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &:focus-within {
-          border-color: var(--theme-primary);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-          transform: translateY(-1px);
-        }
 
         .search-icon {
-          color: var(--theme-text-secondary);
-          margin-right: 6px;
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #64748b;
+          margin-right: 10px;
+          margin-left: 16px;
+          font-size: 22px;
+          width: 22px;
+          height: 22px;
         }
 
         .event-search-input {
           border: none;
           background: transparent;
-          color: var(--theme-text);
+          color: #2c3e50;
           width: 100%;
-          font-size: 13px;
+          font-size: 15px;
           outline: none;
           line-height: normal;
           font-weight: 500;
 
           &::placeholder {
-            color: var(--theme-text-secondary);
+            color: #95a5a6;
+          }
+
+          &::-webkit-search-cancel-button,
+          &::-webkit-search-decoration,
+          &::-webkit-search-results-button,
+          &::-webkit-search-results-decoration {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
           }
         }
 
@@ -334,6 +508,69 @@ body.is-resizing-panels {
             background: rgba(231, 76, 60, 0.1);
             transform: rotate(90deg);
           }
+        }
+      }
+
+      .divider {
+        width: 2px;
+        height: 24px;
+        background: linear-gradient(180deg, transparent, #d1d5db, transparent);
+        margin: 0 12px;
+      }
+
+      .borderless-field ::ng-deep .mdc-notched-outline__leading,
+      .borderless-field ::ng-deep .mdc-notched-outline__notch,
+      .borderless-field ::ng-deep .mdc-notched-outline__trailing {
+        border: none;
+      }
+
+      .custom-select-field {
+        margin: 0;
+        display: flex;
+        align-items: center;
+
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          height: 40px;
+          min-height: 40px;
+          width: 158px;
+          margin-top: 0;
+          padding-left: 0;
+          display: flex;
+          align-items: center;
+          background: transparent !important;
+        }
+
+        ::ng-deep .mdc-text-field,
+        ::ng-deep .mdc-text-field--outlined,
+        ::ng-deep .mat-mdc-form-field-focus-overlay {
+          background: transparent !important;
+        }
+
+        ::ng-deep .mat-mdc-form-field-flex {
+          align-items: center;
+        }
+
+        ::ng-deep .mat-mdc-form-field-infix {
+          min-height: auto;
+          padding-top: 0;
+          padding-bottom: 0;
+          display: flex;
+          align-items: center;
+        }
+
+        ::ng-deep .mat-mdc-select-trigger {
+          display: flex;
+          align-items: center;
+          min-height: 40px;
+        }
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+        ::ng-deep .mat-mdc-form-field-bottom-align::before {
+          display: none;
+        }
+
+        ::ng-deep .mat-mdc-select {
+          font-weight: 600;
         }
       }
     }
@@ -1106,10 +1343,24 @@ body.is-resizing-panels {
   }
 
   .events-container .event-header .event-search-wrapper {
-    min-width: 120px;
-    max-width: 160px;
-    height: 32px;
+    min-width: 140px;
+    max-width: 180px;
     padding: 2px 8px;
+  }
+
+  .events-container .event-header .event-controls-container {
+    width: auto;
+    height: 40px;
+  }
+
+  .events-container .event-header .divider {
+    margin: 0 8px;
+  }
+
+  .events-container .event-header .custom-select-field ::ng-deep .mat-mdc-text-field-wrapper {
+    width: 130px;
+    height: 36px;
+    min-height: 36px;
   }
 
   .events-container .event-list .events-grid {

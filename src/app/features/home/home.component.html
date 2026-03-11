@@ -1,11 +1,58 @@
 <div class="home-container" [style.gridTemplateColumns]="homeGridTemplateColumns">
   <div class="groups-container">
     <div class="group-header">
-      <h2>Groups Near You <span class="count-badge" *ngIf="samitiGroups.length > 0">{{ samitiGroups.length }}</span></h2>
-      <button mat-raised-button color="primary" (click)="onCreateSamiti()">
-        <mat-icon>add</mat-icon>
-        <span>Create</span>
-      </button>
+      <h2>Groups<span class="count-badge" *ngIf="samitiGroups.length > 0">{{ samitiGroups.length }}</span></h2>
+      <div class="group-controls-container" role="search" aria-label="Search groups">
+        <div class="group-search-wrapper">
+          <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
+          <input
+            #groupSearchInput
+            type="search"
+            class="group-search-input"
+            placeholder="Search groups with in..."
+            [value]="searchTerm"
+            (input)="onGroupSearchInput($event)"
+            [disabled]="!locationName()"
+            [attr.aria-label]="locationName() ? 'Search for groups' : 'Search disabled until location is detected'"
+            [matTooltip]="!locationName() ? 'Waiting for location...' : ''"
+            matTooltipPosition="below"
+            autocomplete="off"
+          />
+          <button
+            *ngIf="searchTerm"
+            mat-icon-button
+            class="clear-btn"
+            (click)="clearSearch()"
+            type="button"
+            aria-label="Clear search"
+            matTooltip="Clear search"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-icon
+            *ngIf="!locationName() && !searchTerm"
+            class="loading-indicator"
+            aria-hidden="true"
+          >
+            hourglass_empty
+          </mat-icon>
+        </div>
+        <div class="divider" role="separator" aria-hidden="true"></div>
+        <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
+          <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
+          <mat-select
+            [(value)]="selectedDistance"
+            (selectionChange)="onDistanceChange($event.value)"
+            aria-label="Select search distance radius"
+            [disabled]="!locationName()"
+            disableRipple
+          >
+            <mat-option *ngFor="let km of groupDistanceOptions" [value]="km">
+              <span><strong>{{ km }}</strong> km</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <div class="group-list  ">
       <mat-accordion class="example-headers-align" multi>
@@ -180,34 +227,54 @@
 
   <div class="events-container">
     <div class="event-header">
-      <h2>Events Near You</h2>
-      <div class="event-search-wrapper">
-        <mat-icon class="search-icon">search</mat-icon>
-        <input
-          #eventSearchInput
-          type="text"
-          class="event-search-input"
-          placeholder="Search events..."
-          [value]="eventSearchTerm"
-          (input)="onSearchEvents($event)"
-        />
-        <button
-          *ngIf="eventSearchTerm"
-          mat-icon-button
-          class="clear-btn"
-          (click)="clearEventSearch(eventSearchInput)"
-          type="button"
-          aria-label="Clear event search"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
+      <h2>Events</h2>
+      <div class="event-controls-container" role="search" aria-label="Search events">
+        <div class="event-search-wrapper">
+          <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
+          <input
+            #eventSearchInput
+            type="search"
+            class="event-search-input"
+            placeholder="Search events with in..."
+            [value]="eventSearchTerm"
+            (input)="onSearchEvents($event)"
+            [disabled]="!locationName()"
+            [attr.aria-label]="locationName() ? 'Search for events' : 'Search disabled until location is detected'"
+            autocomplete="off"
+          />
+          <button
+            *ngIf="eventSearchTerm"
+            mat-icon-button
+            class="clear-btn"
+            (click)="clearEventSearch(eventSearchInput)"
+            type="button"
+            aria-label="Clear event search"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="divider" role="separator" aria-hidden="true"></div>
+        <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
+          <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
+          <mat-select
+            [(value)]="eventSelectedDistance"
+            (selectionChange)="onEventDistanceChange($event.value)"
+            aria-label="Select event distance radius"
+            [disabled]="!locationName()"
+            disableRipple
+          >
+            <mat-option *ngFor="let km of eventDistanceOptions" [value]="km">
+              <span><strong>{{ km }}</strong> km</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
     <div class="event-list">
       <mat-tab-group mat-align-tabs="start">
         <mat-tab>
           <ng-template mat-tab-label>
-            <mat-icon>done_all</mat-icon> All
+            <mat-icon>done_all</mat-icon> Live
             <span class="count-badge" *ngIf="filteredAllEvents.length > 0">({{ filteredAllEvents.length }})</span>
           </ng-template>
           <div class="events-grid">
@@ -253,12 +320,12 @@
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
-            <mat-icon>favorite</mat-icon> Favorites
+            <mat-icon>favorite</mat-icon> Upcomming
           </ng-template>
         </mat-tab>
         <mat-tab>
           <ng-template mat-tab-label>
-            <mat-icon>schedule</mat-icon> Upcoming
+            <mat-icon>schedule</mat-icon> completed
           </ng-template>
         </mat-tab>
       </mat-tab-group>

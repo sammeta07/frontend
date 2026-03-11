@@ -5,11 +5,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
-import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
 import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
@@ -31,6 +31,7 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
     MatSnackBarModule,
     MatTabsModule,
     // SkeletonComponent,
+    MatFormFieldModule,
     MatSelectModule,
     MatExpansionModule,
     MatTooltipModule,
@@ -46,6 +47,9 @@ export class HomeComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   selectedDistance: number = 50;
+  groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
+  eventSelectedDistance: number = 50;
+  eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
   years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
 
   
@@ -201,6 +205,12 @@ export class HomeComponent implements OnInit {
     this.samitiGroups = filtered.sort((a, b) => a.distanceFromUser - b.distanceFromUser);
   }
 
+  onGroupSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerm = input.value.toLowerCase().trim();
+    this.onSearchGroups();
+  }
+
   clearSearch() {
     this.searchTerm = '';
     this.samitiGroups = [...this.allGroups];
@@ -219,7 +229,7 @@ export class HomeComponent implements OnInit {
       filtered = filtered.filter((event) => {
         if (event.locationCords && event.locationCords.lat && event.locationCords.long) {
           const dist = this.locationService.calculateDistance(userLocation, event.locationCords);
-          return dist <= this.selectedDistance;
+          return dist <= this.eventSelectedDistance;
         }
         return false;
       });
@@ -260,34 +270,14 @@ export class HomeComponent implements OnInit {
     this.eventSearchTerm = target.value;
   }
 
+  onEventDistanceChange(distance: number) {
+    this.eventSelectedDistance = distance;
+  }
+
   clearEventSearch(searchInput: HTMLInputElement) {
     this.eventSearchTerm = '';
     searchInput.value = '';
     searchInput.focus();
-  }
-
-  onCreateSamiti() {
-    const dialogRef = this.dialog.open(CreateSamitiDialogComponent, {
-      position: { right: '0', top: '0' },
-      height: '100%',
-      width: '50%',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      panelClass: 'slide-in-dialog',
-      autoFocus: false,
-      enterAnimationDuration: '300ms',
-      exitAnimationDuration: '300ms'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (0) {
-        // logic to add new samiti to the list
-        const newGroup = result as groupDetailsModel;
-        newGroup.id = this.samitiGroups.length + 1; // simple id generation
-        this.samitiGroups.unshift(newGroup);
-        // enrichGroupData([newGroup]); // Create placeholder members etc
-      }
-    });
   }
 
   openEventDetails(event: eventDetailsModel) {
