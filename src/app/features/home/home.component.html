@@ -275,7 +275,7 @@
         <mat-tab>
           <ng-template mat-tab-label>
             <mat-icon>done_all</mat-icon> Live
-            <span class="count-badge" *ngIf="filteredAllEvents.length > 0">({{ filteredAllEvents.length }})</span>
+            <span class="count-badge" *ngIf="filteredAllEvents.length > 0">{{ filteredAllEvents.length }}</span>
           </ng-template>
           <div class="events-grid">
             <div class="event-grid" *ngFor="let event of filteredAllEvents">
