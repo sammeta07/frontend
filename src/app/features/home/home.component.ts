@@ -63,10 +63,6 @@ export class HomeComponent implements OnInit {
   groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
   eventSelectedDistance: number = 50;
   eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
-  years: number[] = [2027, 2026, 2025, 2024, 2023, 2022];
-
-  
-  selectedYearIndex: number = 0;
   searchTerm: string = '';
   eventSearchTerm: string = '';
   carouselPagination = { clickable: true };
@@ -133,11 +129,6 @@ export class HomeComponent implements OnInit {
     // if (this.location()) {
     //   this.filterGroupsByDistance();
     // }
-    // Set current year as default selected tab
-    const currentYear = new Date().getFullYear();
-    const currentYearIndex = this.years.indexOf(currentYear);
-    this.selectedYearIndex = currentYearIndex >= 0 ? currentYearIndex : 0;
-    
     this.getGroupsAndEventsData();
   }
 
