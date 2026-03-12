@@ -44,9 +44,9 @@ export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  groupSelectedDistance: number = 50;
+  groupSelectedDistance: number = 5;
   groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
-  eventSelectedDistance: number = 50;
+  eventSelectedDistance: number = 5;
   eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
   groupSearchTerm: string = '';
   eventSearchTerm: string = '';
