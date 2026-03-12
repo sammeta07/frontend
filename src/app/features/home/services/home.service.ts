@@ -20,7 +20,7 @@ export class HomeService {
     {
       "id": 1,
       "groupId": "ANM_1",
-      "name": "Azad Navyuvak Mandal",
+      "title": "Azad Navyuvak Mandal",
       "locationCords": { "lat": 21.2310, "long": 81.4508 },  // ~150m from user
       "since": 2018,
       "description": "Azad Navyuvak Mandal is a vibrant youth organization based in Raipur, Chhattisgarh. Founded in 2018, the group has quickly become a hub for young people passionate about community service, cultural activities, and social change. With a focus on empowering youth and fostering a sense of unity, Azad Navyuvak Mandal organizes a wide range of events throughout the year, including festivals, charity drives, educational workshops, and sports tournaments. The group is known for its inclusive and energetic approach, attracting members from diverse backgrounds who share a common goal of making a positive impact in their community.",
@@ -94,7 +94,7 @@ export class HomeService {
     {
       "id": 2,
       "groupId": "ESB_2",
-      "name": "Ekta Samiti Bhilai",
+      "title": "Ekta Samiti Bhilai",
       "locationCords": { "lat": 21.2345, "long": 81.4520 },  // ~550m from user
       "since": 2010,
       "description": "Ekta Samiti Bhilai promotes community harmony and organizes cultural events that bring people together in celebration and solidarity.",
@@ -147,7 +147,7 @@ export class HomeService {
     {
       "id": 3,
       "groupId": "NSM_3",
-      "name": "Navjivan Samaj Mandal",
+      "title": "Navjivan Samaj Mandal",
       "locationCords": { "lat": 21.2420, "long": 81.4580 },  // ~1.5km from user
       "since": 2015,
       "description": "Navjivan Samaj Mandal works towards social welfare and youth empowerment through various educational and cultural programs.",
@@ -199,7 +199,7 @@ export class HomeService {
     {
       "id": 4,
       "groupId": "RSYC_4",
-      "name": "Rising Star Youth Club",
+      "title": "Rising Star Youth Club",
       "locationCords": { "lat": 21.2510, "long": 81.4620 },  // ~2.8km from user
       "since": 2021,
       "description": "Rising Star Youth Club nurtures young talent through sports, education, and personality development programs.",
@@ -232,7 +232,7 @@ export class HomeService {
     {
       "id": 5,
       "groupId": "USM_5",
-      "name": "Unity Seva Mandal",
+      "title": "Unity Seva Mandal",
       "locationCords": { "lat": 21.2640, "long": 81.4710 },  // ~4.5km from user
       "since": 2012,
       "description": "Unity Seva Mandal is dedicated to community service, organizing health camps, educational programs, and social welfare activities.",
@@ -286,7 +286,7 @@ export class HomeService {
     {
       "id": 10,
       "groupId": "VNC_10",
-      "name": "Very Nearby Club",
+      "title": "Very Nearby Club",
       "locationCords": { "lat": 21.2301, "long": 81.4501 },  // ~120m from user (very close)
       "since": 2025,
       "description": "A community club located very close to you, perfect for quick meetups and local events.",
@@ -312,10 +312,10 @@ export class HomeService {
     }
   ];
 
-  searchTerm = signal<string>('');
-  selectedDistance = signal<number>(1); // Default distance in kilometers
+  groupSearchTerm = signal<string>('');
+  groupSelectedDistance = signal<number>(1); // Default distance in kilometers
 
-  getGroupsAndEvents(): Observable<groupDetailsModel[]> {
+  getGroupsEventsPrograms(): Observable<groupDetailsModel[]> {
     // return this.http.get<any>(this.apiUrl);
     return new Observable(observer => {
       observer.next(this.samitiGroups);

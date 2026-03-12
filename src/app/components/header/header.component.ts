@@ -31,11 +31,10 @@ export class HeaderComponent {
   
   isPaletteOpen = false;
   
-  locationName = this.locationService.locationName$;
-  locationCords = this.locationService.locationCords$;
+  userLocationName = this.locationService.userLocationName$;
+  userLocationCords = this.locationService.userLocationCords$;
 
   constructor( public dialog: MatDialog ) {
-    console.log('HeaderComponent initialized. Current location:', this.locationCords(), 'Location name:', this.locationName());
   }
   openLoginDialog() {
     this.dialog.open(LoginDialogComponent, {

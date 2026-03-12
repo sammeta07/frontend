@@ -12,25 +12,11 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
-import { groupDetailsModel, eventDetailsModel, LocationModel, ProgramScheduleModel } from './models/home.model';
-import { MatTabsModule } from '@angular/material/tabs';
+import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-
-type ProgramStatus = 'live' | 'upcoming' | 'completed';
-
-interface ProgramFeedItem {
-  id: number;
-  eventId: number;
-  eventTitle: string;
-  eventYearCount: number;
-  locationCords: LocationModel;
-  distanceFromUser?: number;
-  status: ProgramStatus;
-  program: ProgramScheduleModel;
-}
 
 
 @Component({
@@ -42,7 +28,6 @@ interface ProgramFeedItem {
     MatButtonModule,
     MatIcon,
     MatSnackBarModule,
-    MatTabsModule,
     // SkeletonComponent,
     MatFormFieldModule,
     MatSelectModule,
@@ -59,24 +44,22 @@ export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  selectedDistance: number = 50;
-  groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
+  groupSelectedDistance: number = 50;
+  groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
   eventSelectedDistance: number = 50;
-  eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20, 50];
-  searchTerm: string = '';
+  eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
+  groupSearchTerm: string = '';
   eventSearchTerm: string = '';
-  carouselPagination = { clickable: true };
-  carouselAutoplay = { delay: 3500, disableOnInteraction: false };
   
   samitiGroups: groupDetailsModel[] = [];
-  private allGroups: groupDetailsModel[] = [];
+  allGroups: groupDetailsModel[] = [];
   allEvents: eventDetailsModel[] = [];
 
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
-  locationName = this.locationService.locationName$;
-  locationCords = this.locationService.locationCords$;
+  locationName = this.locationService.userLocationName$;
+  locationCords = this.locationService.userLocationCords$;
   groupsWidthPercent = 65;
   private readonly minGroupsWidthPercent = 35;
   private readonly maxGroupsWidthPercent = 75;
@@ -86,252 +69,39 @@ export class HomeComponent implements OnInit {
     return `${this.groupsWidthPercent}% 10px 1fr`;
   }
 
-
   accordion = viewChild.required(MatAccordion);
 
-
-  searchTermEffect = effect(() => {
-    this.searchTerm = this.homeService.searchTerm();
-    if(this.searchTerm === ''){
-      this.clearSearch();
-    }else if(this.searchTerm){
-      this.onSearchGroups();
-    }
-  });
-
-  selectedDistanceEffect = effect(() => {
-    this.selectedDistance = this.homeService.selectedDistance();
-    this.filterGroupsByDistance();
-  });
-
-  locationEffect = effect(() => {
-    const loc = this.locationCords();
-    const locName = this.locationName();
-    if (loc) {
-      // Recalculate distances for all groups and events when user's location is updated
-      this.allGroups.forEach((group: groupDetailsModel) => {
-        group.distanceFromUser = this.locationService.calculateDistance(loc, group.locationCords);
-        // this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
-        //   group.locationName = name;
-        // });
-        group.events.forEach((event: eventDetailsModel) => {
-          event.distanceFromUser = this.locationService.calculateDistance(loc, event.locationCords);
-          // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
-          //   event.locationName = name;
-          // });
-         });
-      });
-      this.filterGroupsByDistance();
-    }
-  });
   ngOnInit() {
-    this.searchTerm = '';
-    // if (this.location()) {
-    //   this.filterGroupsByDistance();
-    // }
-    this.getGroupsAndEventsData();
+    this.fetchGroupsEventsPrograms();
   }
 
-  getGroupsAndEventsData() {
-    this.homeService.getGroupsAndEvents().subscribe((data: any[]) => {
-      this.samitiGroups = data as groupDetailsModel[];
-      this.allGroups = [...this.samitiGroups]; // Store original list
-      calculateStatus(this.samitiGroups);
+  fetchGroupsEventsPrograms() {
+    this.homeService.getGroupsEventsPrograms().subscribe((data: groupDetailsModel[]) => {
+      this.samitiGroups = data;
+      this.allGroups = data;
       sortEvents(this.samitiGroups);
-      // enrichGroupData(this.samitiGroups);
-      // Sort groups alphabetically by name
       this.samitiGroups.forEach(group => {
-        // Calculate distance for each event in the group
         group.events.forEach((event: eventDetailsModel) => {
-          event.distanceFromUser = Number(this.locationService.getDistanceFromUser(event.locationCords)) || 0;
+          event.distanceFromUser = this.locationService.getDistanceFromUser(event.locationCords) || '';
           // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
           //   event.locationName = name;
           // });
         });
         this.allEvents.push(...group.events);
         // Calculate and set distance from user's location for the group
-        group.distanceFromUser = Number(this.locationService.getDistanceFromUser(group.locationCords)) || 0;
+        group.distanceFromUser = this.locationService.getDistanceFromUser(group.locationCords) || '';
         this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
           group.locationName = name;
         });
       })
-      this.samitiGroups.sort((a, b) => a.name.localeCompare(b.name));
-      this.allGroups.sort((a, b) => a.name.localeCompare(b.name));
-      this.filterGroupsByDistance();
+      this.samitiGroups.sort((a, b) => a.title.localeCompare(b.title));
+      this.allGroups.sort((a, b) => a.title.localeCompare(b.title));
     });
   }
 
-  onDistanceChange(distance: number) {
-    this.selectedDistance = distance;
-    this.filterGroupsByDistance();
-  }
-
-  filterGroupsByDistance() {
-    if (!this.locationCords()) {
-      this.samitiGroups = [...this.allGroups];
-      return;
-    }
-    const userLocation = this.locationCords()!;
-    // Attach distance to each group for sorting and display
-    this.samitiGroups = this.allGroups
-      .map((group: groupDetailsModel) => {
-        const dist = this.locationService.calculateDistance(userLocation, group.locationCords);
-        // Type assertion to allow extra property
-        return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
-      })
-      .filter(group => group.distanceFromUser <= this.selectedDistance)
-      .sort((a, b) => a.distanceFromUser - b.distanceFromUser);
-  }
-
-  onSearchGroups() {
-    if (!this.locationCords()) {
-      this.samitiGroups = [...this.allGroups];
-      return;
-    }
-    const userLocation = this.locationCords()!;
-    // First filter by distance
-    let filtered = this.allGroups
-      .map((group: groupDetailsModel) => {
-        const dist = this.locationService.calculateDistance(userLocation, group.locationCords);
-        return { ...group, distanceFromUser: dist } as groupDetailsModel & { distanceFromUser: number };
-      })
-      .filter((group: groupDetailsModel & { distanceFromUser: number }) => group.distanceFromUser <= this.selectedDistance);
-
-    // Then filter by search term if present
-    if (this.searchTerm) {
-      filtered = filtered.filter((group: groupDetailsModel) =>
-        group.name.toLowerCase().includes(this.searchTerm) ||
-        (group.groupId && group.groupId.toLowerCase().includes(this.searchTerm)) ||
-        (group.locationName && group.locationName.toLowerCase().includes(this.searchTerm))
-      );
-    }
-    // Sort by distance
-    this.samitiGroups = filtered.sort((a, b) => a.distanceFromUser - b.distanceFromUser);
-  }
-
-  onGroupSearchInput(event: Event) {
+  onSearchGroups(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.searchTerm = input.value.toLowerCase().trim();
-    this.onSearchGroups();
-  }
-
-  clearSearch() {
-    this.searchTerm = '';
-    this.samitiGroups = [...this.allGroups];
-    this.filterGroupsByDistance();
-  }
-
-  private get programFeedItems(): ProgramFeedItem[] {
-    const term = this.eventSearchTerm.trim().toLowerCase();
-    let allPrograms: ProgramFeedItem[] = [];
-
-    this.allEvents.forEach((event) => {
-      (event.programs || []).forEach((program) => {
-        if (!this.isProgramWithinEventRange(program, event)) {
-          return;
-        }
-
-        allPrograms.push({
-          id: program.id,
-          eventId: event.id,
-          eventTitle: event.title,
-          eventYearCount: event.year_count,
-          locationCords: event.locationCords,
-          distanceFromUser: event.distanceFromUser,
-          status: this.getProgramStatus(program),
-          program,
-        });
-      });
-    });
-
-    if (this.locationCords()) {
-      const userLocation = this.locationCords()!;
-      allPrograms = allPrograms.filter((item) => {
-        const dist = this.locationService.calculateDistance(userLocation, item.locationCords);
-        item.distanceFromUser = dist;
-        return dist <= this.eventSelectedDistance;
-      });
-    }
-
-    if (term) {
-      allPrograms = allPrograms.filter((item) =>
-        item.program.title.toLowerCase().includes(term) ||
-        item.program.type.toLowerCase().includes(term) ||
-        item.eventTitle.toLowerCase().includes(term)
-      );
-    }
-
-    return this.sortProgramFeed(allPrograms);
-  }
-
-  private isProgramWithinEventRange(program: ProgramScheduleModel, event: eventDetailsModel): boolean {
-    const eventStart = new Date(`${event.start_date}T00:00:00`);
-    const eventEnd = new Date(`${event.end_date}T23:59:59`);
-    const programStart = new Date(`${program.date}T${program.from_time}:00`);
-
-    if (Number.isNaN(eventStart.getTime()) || Number.isNaN(eventEnd.getTime()) || Number.isNaN(programStart.getTime())) {
-      return false;
-    }
-
-    return programStart >= eventStart && programStart <= eventEnd;
-  }
-
-  get livePrograms(): ProgramFeedItem[] {
-    return this.programFeedItems.filter((item) => item.status === 'live');
-  }
-
-  get upcomingPrograms(): ProgramFeedItem[] {
-    return this.programFeedItems.filter((item) => item.status === 'upcoming');
-  }
-
-  get completedPrograms(): ProgramFeedItem[] {
-    return this.programFeedItems.filter((item) => item.status === 'completed');
-  }
-
-  private getProgramStatus(program: ProgramScheduleModel): ProgramStatus {
-    const now = new Date();
-    const start = new Date(`${program.date}T${program.from_time}:00`);
-    const end = new Date(`${program.date}T${program.to_time}:00`);
-
-    if (now < start) {
-      return 'upcoming';
-    }
-    if (now > end) {
-      return 'completed';
-    }
-    return 'live';
-  }
-
-  private sortProgramFeed(items: ProgramFeedItem[]): ProgramFeedItem[] {
-    return items.sort((a, b) => {
-      const aDate = new Date(`${a.program.date}T${a.program.from_time}:00`).getTime();
-      const bDate = new Date(`${b.program.date}T${b.program.from_time}:00`).getTime();
-
-      if (a.status === 'live' && b.status === 'live') {
-        return aDate - bDate;
-      }
-
-      const aDistance = typeof a.distanceFromUser === 'number' ? a.distanceFromUser : Number.POSITIVE_INFINITY;
-      const bDistance = typeof b.distanceFromUser === 'number' ? b.distanceFromUser : Number.POSITIVE_INFINITY;
-
-      if (aDistance !== bDistance) {
-        return aDistance - bDistance;
-      }
-
-      return aDate - bDate;
-    });
-  }
-
-  getProgramTimeLabel(program: ProgramScheduleModel): string {
-    return `${program.from_time} - ${program.to_time}`;
-  }
-
-  getProgramDateLabel(program: ProgramScheduleModel): string {
-    return new Date(program.date).toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
+    this.groupSearchTerm = input.value.toLowerCase().trim();
   }
 
   onSearchEvents(event: Event) {
@@ -339,17 +109,23 @@ export class HomeComponent implements OnInit {
     this.eventSearchTerm = target.value;
   }
 
+  onGroupDistanceChange(distance: number) {
+    this.groupSelectedDistance = distance;
+  }
+
   onEventDistanceChange(distance: number) {
     this.eventSelectedDistance = distance;
   }
 
-  clearEventSearch(searchInput: HTMLInputElement) {
-    this.eventSearchTerm = '';
-    searchInput.value = '';
-    searchInput.focus();
+  clearGroupSearch() {
+    this.groupSearchTerm = '';
   }
 
-  openEventDetails(event: eventDetailsModel | ProgramFeedItem) {
+  clearEventSearch() {
+    this.eventSearchTerm = ''
+  }
+
+  openEventDetails(event: eventDetailsModel) {
     this.dialog.open(EventDetailsDialogComponent, {
       width: '800px',
       data: event,
@@ -369,11 +145,6 @@ export class HomeComponent implements OnInit {
     if (location && location.lat && location.long) {
       window.open(`https://www.google.com/maps/search/?api=1&query=${location.lat},${location.long}`, '_blank');
     }
-  }
-
-  scrollToGroups() {
-    const el = document.querySelector('.near-you-section');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   openJoinGroupDialog(group: groupDetailsModel) {

@@ -23,7 +23,7 @@ export class JoinGroupDialogComponent {
 
   onSubmit(): void {
     // TODO: Implement join logic
-    console.log('Join request for:', this.data.name);
+    console.log('Join request for:', this.data.title);
     this.dialogRef.close(true);
   }
 }

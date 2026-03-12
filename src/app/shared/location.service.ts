@@ -8,38 +8,26 @@ import { MatDialog } from '@angular/material/dialog';
 import { PermissionInstructionsDialogComponent } from '../components/permission-instructions-dialog/permission-instructions-dialog.component';
 import { LocationModel } from '../features/home/models/home.model';
 
-// export interface IpLocationData {
-//   ip: string;
-//   city: string;
-//   region: string;
-//   country: string;
-//   latitude: number;
-//   longitude: number;
-//   postal: string;
-//   timezone: string;
-// }
-
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private readonly IP_LOCATION_API_URL = 'https://ipapi.co/json/';
   private readonly REVERSE_GEOCODING_API = 'https://nominatim.openstreetmap.org/reverse';
   private dialog = inject(MatDialog);
-  locationCords$ = signal<{ lat: number; long: number } | null>(null);
-  locationName$ = signal<string>('Fetching location...');
   private destroyRef = inject(DestroyRef);
   
+  userLocationCords$ = signal<{ lat: number; long: number } | null>(null);
+  userLocationName$ = signal<string>('Fetching location...');
 
   constructor(private http: HttpClient) {
     this.detectLocation();
   }
 
+  // ************************************************************
   async detectLocation() {
     try {
       // First check what the permission status is
       const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
-
       if (permissionStatus.state === 'denied') {
         this.dialog.open(PermissionInstructionsDialogComponent, {
           autoFocus: false,
@@ -47,27 +35,24 @@ export class LocationService {
         });
         return;
       }
-
-      // If not denied, this line will trigger browser's default permission popup
       const pos = await this.getGeolocation();
       console.log('pos',pos);
-      this.locationCords$.set(pos);
+      this.userLocationCords$.set(pos);
       
       // Convert coordinates to readable location name
       this.reverseGeocode(pos)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (readableLocation: string) => {
-            this.locationName$.set(readableLocation);
+            this.userLocationName$.set(readableLocation);
           },
           error: (error) => {
-            this.locationName$.set('error');
+            this.userLocationName$.set('error');
           }
         });
 
     } catch (error) {
       console.error("Location error:", error);
-      // Show instructions dialog on error
       this.dialog.open(PermissionInstructionsDialogComponent, {
         width: '700px',
         maxWidth: '90vw',
@@ -76,10 +61,6 @@ export class LocationService {
       });
     }
   }
-
-  /**
-  * Browser se coordinates lene ka promise function
-  */
   getGeolocation(): Promise<any> {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resp => {
@@ -90,10 +71,6 @@ export class LocationService {
         });
     });
   }
-
-  /**
-  * Convert coordinates to readable location name using reverse geocoding
-  */
   reverseGeocode(coord: LocationModel): Observable<string> {
     const params = {
       format: 'json',
@@ -117,11 +94,15 @@ export class LocationService {
       })
     );
   }
-
-  /**
-   * Calculate distance between two coordinates using Haversine formula
-   * Returns distance in kilometers
-   */
+  // ************************************************************
+  getDistanceFromUser(targetLocation: LocationModel): string | null {
+    const userLocationCords = this.userLocationCords$();
+    if (!userLocationCords) {
+      return 'Calculating...';
+    }
+    const distance = this.calculateDistance(userLocationCords, targetLocation);
+    return this.formatDistance(distance);
+  }
   calculateDistance(coord1: LocationModel, coord2: LocationModel): number {
     const R = 6371; // Earth's radius in kilometers
     const dLat = this.toRadians(coord2.lat - coord1.lat);
@@ -138,19 +119,9 @@ export class LocationService {
     
     return distance;
   }
-
-  /**
-   * Convert degrees to radians
-   */
   private toRadians(degrees: number): number {
     return degrees * (Math.PI / 180);
   }
-
-  /**
-   * Format distance for display
-   * If distance >= 1km: show as "x km from you"
-   * If distance < 1km: show in meters
-   */
   formatDistance(distanceInKm: number): string {
     if (distanceInKm >= 1) {
       return `${distanceInKm.toFixed(1)} km from you`;
@@ -159,74 +130,6 @@ export class LocationService {
       return `${meters} m from you`;
     }
   }
-
-  /**
-   * Calculate and format distance from user's current location to a target location
-   * Returns formatted distance string or null if user location is not available
-   */
-  getDistanceFromUser(targetLocation: LocationModel): string | null {
-    const userLocation = this.locationCords$();
-    if (!userLocation) {
-      return 'Calculating...';
-    }
-    
-    const distance = this.calculateDistance(userLocation, targetLocation);
-    return this.formatDistance(distance);
-  }
-  //       console.error('Error fetching IP location details:', error);
-  //       // Return default country data
-  //       return of({
-  //         ip: 'unknown',
-  //         city: 'Unknown',
-  //         region: 'Unknown',
-  //         country: 'India',
-  //         latitude: 20.5937,
-  //         longitude: 78.9629,
-  //         postal: 'Unknown',
-  //         timezone: 'UTC'
-  //       });
-  //     })
-  //   );
-  // }
-
-  /**
-   * Format coordinates as string
-   */
-  // formatCoordinates(location: LocationCoordinates): string {
-  //   return `${location.lat.toFixed(4)}, ${location.long.toFixed(4)}`;
-  // }
-
-  /**
-   * Get location info as formatted string
-   */
-  // getLocationInfo(): Observable<string> {
-  //   return this.getIpLocationDetails().pipe(
-  //     map(data => `${data.city}, ${data.region}, ${data.country}`)
-  //   );
-  // }
-
-  /**
-   * Get location with all details
-   */
-  // getFullLocationInfo(): Observable<{
-  //   coordinates: LocationCoordinates;
-  //   city: string;
-  //   region: string;
-  //   country: string;
-  //   timezone: string;
-  // }> {
-  //   return this.getIpLocationDetails().pipe(
-  //     map(data => ({
-  //       coordinates: {
-  //         lat: data.latitude,
-  //         long: data.longitude
-  //       },
-  //       city: data.city,
-  //       region: data.region,
-  //       country: data.country,
-  //       timezone: data.timezone
-  //     }))
-  //   );
-  // }
+  // ************************************************************
 
 }

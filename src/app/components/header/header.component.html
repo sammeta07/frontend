@@ -8,18 +8,18 @@
     <button 
       mat-button 
       class="location-btn"
-      [class.location-loading]="!locationName()"
-      [disabled]="!locationName()"
-      [matTooltip]="locationName() ? 'Your current location' : 'Detecting location...'"
+      [class.location-loading]="!userLocationName()"
+      [disabled]="!userLocationName()"
+      [matTooltip]="userLocationName() ? 'Your current location' : 'Detecting location...'"
       matTooltipPosition="below"
       aria-live="polite"
-      [attr.aria-label]="locationName() ? 'Current location: ' + locationName() : 'Detecting your location'"
+      [attr.aria-label]="userLocationName() ? 'Current location: ' + userLocationName() : 'Detecting your location'"
     >
-      <mat-icon [class.pulse]="!locationName()">
-        {{ locationName() ? 'location_on' : 'my_location' }}
+      <mat-icon [class.pulse]="!userLocationName()">
+        {{ userLocationName() ? 'location_on' : 'my_location' }}
       </mat-icon>
       <span class="location-text">
-        {{ locationName() || 'Locating...' }}
+        {{ userLocationName() || 'Locating...' }}
       </span>
     </button>
     

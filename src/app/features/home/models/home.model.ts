@@ -27,7 +27,7 @@ export interface eventDetailsModel {
   description: string;
   images: string[];
   programs?: ProgramScheduleModel[];
-  distanceFromUser?: number; // Optional property to store distance from user's location
+  distanceFromUser?: string; // Optional property to store distance from user's location
 }
 
 export interface GroupAdminModel {
@@ -40,7 +40,7 @@ export interface GroupAdminModel {
 export interface groupDetailsModel {
   id: number;
   groupId: string; // Combination of first letters of group name words and id
-  name: string;
+  title: string;
   locationCords: LocationModel;
   locationName?: string; // Optional human-readable location name
   since: number;
@@ -49,6 +49,6 @@ export interface groupDetailsModel {
   description: string;
   contactNumbers: string[];
   logo?: string; // Optional logo URL
-  distanceFromUser?: number; // Optional property to store distance from user's location
+  distanceFromUser?: string; // Optional property to store distance from user's location
 }
 
