@@ -12,12 +12,25 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
 import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
-import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
+import { groupDetailsModel, eventDetailsModel, LocationModel, ProgramScheduleModel } from './models/home.model';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
+
+type ProgramStatus = 'live' | 'upcoming' | 'completed';
+
+interface ProgramFeedItem {
+  id: number;
+  eventId: number;
+  eventTitle: string;
+  eventYearCount: number;
+  locationCords: LocationModel;
+  distanceFromUser?: number;
+  status: ProgramStatus;
+  program: ProgramScheduleModel;
+}
 
 
 @Component({
@@ -217,39 +230,94 @@ export class HomeComponent implements OnInit {
     this.filterGroupsByDistance();
   }
 
-  get filteredAllEvents(): eventDetailsModel[] {
+  private get programFeedItems(): ProgramFeedItem[] {
     const term = this.eventSearchTerm.trim().toLowerCase();
+    let allPrograms: ProgramFeedItem[] = [];
 
-    let filtered = [...this.allEvents];
+    this.allEvents.forEach((event) => {
+      (event.programs || []).forEach((program) => {
+        if (!this.isProgramWithinEventRange(program, event)) {
+          return;
+        }
 
-    // Then filter by distance if location is available
+        allPrograms.push({
+          id: program.id,
+          eventId: event.id,
+          eventTitle: event.title,
+          eventYearCount: event.year_count,
+          locationCords: event.locationCords,
+          distanceFromUser: event.distanceFromUser,
+          status: this.getProgramStatus(program),
+          program,
+        });
+      });
+    });
+
     if (this.locationCords()) {
       const userLocation = this.locationCords()!;
-      
-      filtered = filtered.filter((event) => {
-        if (event.locationCords && event.locationCords.lat && event.locationCords.long) {
-          const dist = this.locationService.calculateDistance(userLocation, event.locationCords);
-          return dist <= this.eventSelectedDistance;
-        }
-        return false;
+      allPrograms = allPrograms.filter((item) => {
+        const dist = this.locationService.calculateDistance(userLocation, item.locationCords);
+        item.distanceFromUser = dist;
+        return dist <= this.eventSelectedDistance;
       });
     }
 
-    // Finally filter by search term if present
     if (term) {
-      filtered = filtered.filter((event) =>
-        (event.title || '').toLowerCase().includes(term)
+      allPrograms = allPrograms.filter((item) =>
+        item.program.title.toLowerCase().includes(term) ||
+        item.program.type.toLowerCase().includes(term) ||
+        item.eventTitle.toLowerCase().includes(term)
       );
     }
 
-    filtered.sort((a, b) => {
-      const aStatus = (a.currentStatus || '').toLowerCase();
-      const bStatus = (b.currentStatus || '').toLowerCase(); 
-      const aIsLive = aStatus === 'live' || aStatus === 'started' || a.status === 'started';
-      const bIsLive = bStatus === 'live' || bStatus === 'started' || b.status === 'started';
+    return this.sortProgramFeed(allPrograms);
+  }
 
-      if (aIsLive !== bIsLive) {
-        return aIsLive ? -1 : 1;
+  private isProgramWithinEventRange(program: ProgramScheduleModel, event: eventDetailsModel): boolean {
+    const eventStart = new Date(`${event.start_date}T00:00:00`);
+    const eventEnd = new Date(`${event.end_date}T23:59:59`);
+    const programStart = new Date(`${program.date}T${program.from_time}:00`);
+
+    if (Number.isNaN(eventStart.getTime()) || Number.isNaN(eventEnd.getTime()) || Number.isNaN(programStart.getTime())) {
+      return false;
+    }
+
+    return programStart >= eventStart && programStart <= eventEnd;
+  }
+
+  get livePrograms(): ProgramFeedItem[] {
+    return this.programFeedItems.filter((item) => item.status === 'live');
+  }
+
+  get upcomingPrograms(): ProgramFeedItem[] {
+    return this.programFeedItems.filter((item) => item.status === 'upcoming');
+  }
+
+  get completedPrograms(): ProgramFeedItem[] {
+    return this.programFeedItems.filter((item) => item.status === 'completed');
+  }
+
+  private getProgramStatus(program: ProgramScheduleModel): ProgramStatus {
+    const now = new Date();
+    const start = new Date(`${program.date}T${program.from_time}:00`);
+    const end = new Date(`${program.date}T${program.to_time}:00`);
+
+    if (now < start) {
+      return 'upcoming';
+    }
+    if (now > end) {
+      return 'completed';
+    }
+    return 'live';
+  }
+
+  private sortProgramFeed(items: ProgramFeedItem[]): ProgramFeedItem[] {
+    return items.sort((a, b) => {
+      const aDate = new Date(`${a.program.date}T${a.program.from_time}:00`).getTime();
+      const bDate = new Date(`${b.program.date}T${b.program.from_time}:00`).getTime();
+
+      if (a.status === 'live' && b.status === 'live') {
+        return aDate - bDate;
       }
 
       const aDistance = typeof a.distanceFromUser === 'number' ? a.distanceFromUser : Number.POSITIVE_INFINITY;
@@ -259,10 +327,20 @@ export class HomeComponent implements OnInit {
         return aDistance - bDistance;
       }
 
-      return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+      return aDate - bDate;
     });
+  }
 
-    return filtered;
+  getProgramTimeLabel(program: ProgramScheduleModel): string {
+    return `${program.from_time} - ${program.to_time}`;
+  }
+
+  getProgramDateLabel(program: ProgramScheduleModel): string {
+    return new Date(program.date).toLocaleDateString('en-IN', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
   }
 
   onSearchEvents(event: Event) {
@@ -280,7 +358,7 @@ export class HomeComponent implements OnInit {
     searchInput.focus();
   }
 
-  openEventDetails(event: eventDetailsModel) {
+  openEventDetails(event: eventDetailsModel | ProgramFeedItem) {
     this.dialog.open(EventDetailsDialogComponent, {
       width: '800px',
       data: event,

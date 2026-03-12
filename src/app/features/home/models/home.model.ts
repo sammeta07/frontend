@@ -1,6 +1,18 @@
+import { ProgramType } from './program-type.enum';
+
 export interface LocationModel {
   lat: number;
   long: number;
+}
+
+export interface ProgramScheduleModel {
+  id: number;
+  title: string;
+  type: ProgramType;
+  date: string;
+  from_time: string;
+  to_time: string;
+  images: string[];
 }
 
 export interface eventDetailsModel {
@@ -14,9 +26,7 @@ export interface eventDetailsModel {
   year_count: number;
   description: string;
   images: string[];
-  // from_time: string; // Optional, can be used for display
-  // to_time: string;   // Optional, can be used for display
-  currentStatus: string; // Optional property to store current status of the event
+  programs?: ProgramScheduleModel[];
   distanceFromUser?: number; // Optional property to store distance from user's location
 }
 

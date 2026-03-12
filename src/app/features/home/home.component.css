@@ -922,34 +922,6 @@ body.is-resizing-panels {
           border-top: 1px solid var(--theme-border);
       }
 
-      .event-status {
-        font-size: 0.7rem;
-        font-weight: 600;
-        color: #1976d2;
-        padding: 4px 10px;
-        background: rgba(25, 118, 210, 0.1);
-        border-radius: 999px;
-        border: 1px solid rgba(25, 118, 210, 0.2);
-      }
-
-      .event-status[data-status="started"] {
-        color: #2e7d32;
-        background: #e8f5e9;
-        border-color: #b7ddb9;
-      }
-
-      .event-status[data-status="completed"] {
-        color: #455a64;
-        background: #edf2f5;
-        border-color: #cfd9df;
-      }
-
-      .event-status[data-status="upcoming"] {
-        color: #1565c0;
-        background: #e8f1ff;
-        border-color: #bfd4ff;
-      }
-
       .event-footer button {
         flex-shrink: 0;
         font-weight: 600;

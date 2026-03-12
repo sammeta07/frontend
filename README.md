@@ -57,3 +57,9 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+##
+abhi muje UI me ek bhi event nahi dikh raha hai live me,
+kuch groups k events and programs k date and time to aise update kar do ki UI me live me dikhne lage.
+without creating methods directly add dummy data to samitigroups
