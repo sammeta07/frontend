@@ -12,9 +12,9 @@
             placeholder="Search groups with in..."
             [value]="groupSearchTerm"
             (input)="onSearchGroups($event)"
-            [disabled]="!locationName()"
-            [attr.aria-label]="locationName() ? 'Search for groups' : 'Search disabled until location is detected'"
-            [matTooltip]="!locationName() ? 'Waiting for location...' : ''"
+            [disabled]="!userLocationName()"
+            [attr.aria-label]="userLocationName() ? 'Search for groups' : 'Search disabled until location is detected'"
+            [matTooltip]="!userLocationName() ? 'Waiting for location...' : ''"
             matTooltipPosition="below"
             autocomplete="off"
           />
@@ -30,7 +30,7 @@
             <mat-icon>close</mat-icon>
           </button>
           <mat-icon
-            *ngIf="!locationName() && !groupSearchTerm"
+            *ngIf="!userLocationName() && !groupSearchTerm"
             class="loading-indicator"
             aria-hidden="true"
           >
@@ -44,7 +44,7 @@
             [(value)]="groupSelectedDistance"
             (selectionChange)="onGroupDistanceChange($event.value)"
             aria-label="Select search distance radius"
-            [disabled]="!locationName()"
+            [disabled]="!userLocationName()"
             disableRipple
           >
             <mat-option *ngFor="let km of groupDistanceOptions" [value]="km">
@@ -151,27 +151,27 @@
   <div class="programs-container">
     <div class="program-header">
       <h2>Programs</h2>
-      <div class="program-controls-container" role="search" aria-label="Search events">
+      <div class="program-controls-container" role="search" aria-label="Search programs">
         <div class="program-search-wrapper">
           <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
           <input
-            #eventSearchInput
+            #programSearchInput
             type="text"
             class="program-search-input"
             placeholder="Search programs with in..."
-            [value]="eventSearchTerm"
-            (input)="onSearchEvents($event)"
-            [disabled]="!locationName()"
-            [attr.aria-label]="locationName() ? 'Search for events' : 'Search disabled until location is detected'"
+            [value]="programSearchTerm"
+            (input)="onSearchProgram($event)"
+            [disabled]="!userLocationName()"
+            [attr.aria-label]="userLocationName() ? 'Search for programs' : 'Search disabled until location is detected'"
             autocomplete="off"
           />
           <button
-            *ngIf="eventSearchTerm"
+            *ngIf="programSearchTerm"
             mat-icon-button
             class="clear-btn"
-            (click)="clearEventSearch()"
+            (click)="clearProgramSearch()"
             type="button"
-            aria-label="Clear event search"
+            aria-label="Clear program search"
           >
             <mat-icon>close</mat-icon>
           </button>
@@ -180,13 +180,13 @@
         <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
           <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
           <mat-select
-            [(value)]="eventSelectedDistance"
-            (selectionChange)="onEventDistanceChange($event.value)"
-            aria-label="Select event distance radius"
-            [disabled]="!locationName()"
+            [(value)]="programSelectedDistance"
+            (selectionChange)="onProgramDistanceChange($event.value)"
+            aria-label="Select program distance radius"
+            [disabled]="!userLocationName()"
             disableRipple
           >
-            <mat-option *ngFor="let km of eventDistanceOptions" [value]="km">
+            <mat-option *ngFor="let km of programDistanceOptions" [value]="km">
               <span><strong>{{ km }}</strong> km</span>
             </mat-option>
           </mat-select>

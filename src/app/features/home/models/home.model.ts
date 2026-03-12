@@ -12,22 +12,24 @@ export interface ProgramDetailModel {
   to_time: string;
   photos: string[];
   description: string;
+  locationCords: LocationModel;
+  locationName?: string; // Optional human-readable location name
   distanceFromUser?: string;
 }
 
-export interface eventDetailsModel {
+export interface EventDetailsModel {
   id: number;
   title: string;
   type: EventType;
   start_date: string; // or Date
   end_date: string;   // or Date
-  status?: 'started' | 'upcoming' | 'completed'; // Optional, can be calculated
   locationCords: LocationModel;
-  locationName?: string; // Optional human-readable location name
   year_count: number;
   description: string;
   photos: string[];
   programs: ProgramDetailModel[];
+  status?: 'started' | 'upcoming' | 'completed'; // Optional, can be calculated
+  locationName?: string; // Optional human-readable location name
   distanceFromUser?: string; // Optional property to store distance from user's location
 }
 
@@ -38,18 +40,18 @@ export interface GroupAdminModel {
   contactNumber: string;
 }
 
-export interface groupDetailsModel {
+export interface GroupDetailsModel {
   id: number;
   groupId: string; // Combination of first letters of group name words and id
   title: string;
   locationCords: LocationModel;
-  locationName?: string; // Optional human-readable location name
   since: number;
   admins: GroupAdminModel[];
-  events: eventDetailsModel[];
+  events: EventDetailsModel[];
   description: string;
   contactNumbers: string[];
   logo: string; // Optional logo URL
+  locationName?: string; // Optional human-readable location name
   distanceFromUser?: string; // Optional property to store distance from user's location
 }
 
@@ -66,4 +68,3 @@ export enum EventType {
   FESTIVAL = 'FESTIVAL',
   OTHER = 'OTHER'
 }
-

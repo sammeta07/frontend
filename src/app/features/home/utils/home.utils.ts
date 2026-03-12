@@ -1,46 +1,4 @@
-// export function calculateStatus(startDate: string, endDate: string): string {
-export function calculateStatus(groups: any[]) {
-    groups.forEach((group: any) => {
-      if (group.events) {
-          group.events.forEach((event: any) => {
-             const today = new Date();
-             const start = new Date(event.start_date);
-             const end = new Date(event.end_date);
-         
-             if (today < start) {
-                 event.status = 'upcoming';
-             } else if (today >= start && today <= end) {
-                 event.status = 'started';
-             } else {
-                 event.status = 'completed';
-             }
-          });
-      }
-    });
-
-}
-
-// export function enrichGroupData(groups: any[]) {
-//     const firstNames = ['Ramesh', 'Suresh', 'Mahesh', 'Dinesh', 'Vikram', 'Rahul', 'Amit', 'Priya', 'Neha', 'Anil', 'Sanjay', 'Viay', 'Rajesh'];
-//     const lastNames = ['Kumar', 'Patel', 'Verma', 'Singh', 'Yadav', 'Sharma', 'Gupta', 'Das', 'Mishra', 'Tiwari'];
-    
-//     const getName = () => `${firstNames[Math.floor(Math.random() * firstNames.length)]} ${lastNames[Math.floor(Math.random() * lastNames.length)]}`;
-
-//     groups.forEach((group: any) => {
-//       group.totalMembers = Math.floor(Math.random() * 50) + 15;
-//       group.president = getName();
-//       group.vicePresident = getName();
-//       group.treasurer = getName();
-    
-      
-//       // Generate unique members list
-//       const members = new Set<string>();
-//       while(members.size < group.totalMembers) {
-//         members.add(getName());
-//       }
-//       group.members = Array.from(members);
-//     });
-// }
+import { GroupDetailsModel, EventDetailsModel } from '../models/home.model';
 
 export function getGroupLogoUrl(name: string): string {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;
@@ -62,11 +20,44 @@ export function getYearLabel(year: number): string {
     return year + "th Year";
 }
 
-export function sortEvents(groups: any[]) {
-    // Priority: started (1) -> upcoming (2) -> completed (3)
-    // This ensures ongoing events appear first, followed by future events, then past events
-    const priority: { [key: string]: number } = { 'started': 1, 'upcoming': 2, 'completed': 3 };
-    groups.forEach((group: any) => {
-      group.events.sort((a: { status: string | number; }, b: { status: string | number; }) => (priority[a.status] || 99) - (priority[b.status] || 99));
+export function sortEventsByStatus(groups: GroupDetailsModel[]) {
+    groups.forEach((group: GroupDetailsModel) => {
+      if (group.events) {
+          group.events.forEach((event: EventDetailsModel) => {
+             const today = new Date();
+             const start = new Date(event.start_date);
+             const end = new Date(event.end_date);
+         
+             if (today < start) {
+                 event.status = 'upcoming';
+             } else if (today >= start && today <= end) {
+                 event.status = 'started';
+             } else {
+                 event.status = 'completed';
+             }
+          });
+      }
+    });
+}
+
+export function sortGroupsByDistance(groups: GroupDetailsModel[]) {
+    const toMeters = (value?: string): number => {
+        if (!value) return Number.POSITIVE_INFINITY;
+
+        const raw = value.trim().toLowerCase();
+        const parsed = Number.parseFloat(raw.replace(/[^0-9.-]/g, ''));
+        if (!Number.isFinite(parsed)) return Number.POSITIVE_INFINITY;
+
+        if (raw.includes('km')) return parsed * 1000; // km -> m
+        if (raw.includes('m')) return parsed;         // already meters
+
+        // fallback if unit missing
+        return parsed;
+    };
+
+    groups.sort((a: GroupDetailsModel, b: GroupDetailsModel) => {
+        const distA = toMeters(a.distanceFromUser);
+        const distB = toMeters(b.distanceFromUser);
+        return distA - distB; // nearest first
     });
 }

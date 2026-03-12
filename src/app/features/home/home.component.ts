@@ -11,13 +11,14 @@ import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/even
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
-import { calculateStatus, getGroupLogoUrl, getYearLabel, sortEvents } from './utils/home.utils';
-import { groupDetailsModel, eventDetailsModel, LocationModel } from './models/home.model';
+import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance} from './utils/home.utils';
+import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel,  } from './models/home.model';
+import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -44,22 +45,25 @@ export class HomeComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
+  groupSearchTerm: string = '';
   groupSelectedDistance: number = 5;
   groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
-  eventSelectedDistance: number = 5;
-  eventDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
-  groupSearchTerm: string = '';
-  eventSearchTerm: string = '';
   
-  samitiGroups: groupDetailsModel[] = [];
-  allGroups: groupDetailsModel[] = [];
-  allEvents: eventDetailsModel[] = [];
+  programSearchTerm: string = '';
+  programSelectedDistance: number = 5;
+  programDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
+  
+  samitiGroups: GroupDetailsModel[] = [];
+  samitiGroupsCopy: GroupDetailsModel[] = [];
+  programsData: ProgramDetailModel[] = [];
 
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
-  locationName = this.locationService.userLocationName$;
-  locationCords = this.locationService.userLocationCords$;
+  userLocationName = this.locationService.userLocationName$;
+  userLocationCords = this.locationService.userLocationCords$;
+  private hasFetchedGroupsEventsPrograms = false;
+
   groupsWidthPercent = 65;
   private readonly minGroupsWidthPercent = 35;
   private readonly maxGroupsWidthPercent = 75;
@@ -71,32 +75,49 @@ export class HomeComponent implements OnInit {
 
   accordion = viewChild.required(MatAccordion);
 
-  ngOnInit() {
-    this.fetchGroupsEventsPrograms();
+  constructor() {
+    effect(() => {
+      const cords = this.userLocationCords();
+      if (cords && !this.hasFetchedGroupsEventsPrograms) {
+        this.hasFetchedGroupsEventsPrograms = true;
+        void this.fetchGroupsEventsPrograms();
+      }
+    });
   }
 
-  fetchGroupsEventsPrograms() {
-    this.homeService.getGroupsEventsPrograms().subscribe((data: groupDetailsModel[]) => {
-      this.samitiGroups = data;
-      this.allGroups = data;
-      sortEvents(this.samitiGroups);
-      this.samitiGroups.forEach(group => {
-        group.events.forEach((event: eventDetailsModel) => {
-          event.distanceFromUser = this.locationService.getDistanceFromUser(event.locationCords) || '';
-          // this.locationService.reverseGeocode(event.locationCords).subscribe((name: string) => {
-          //   event.locationName = name;
-          // });
-        });
-        this.allEvents.push(...group.events);
-        // Calculate and set distance from user's location for the group
-        group.distanceFromUser = this.locationService.getDistanceFromUser(group.locationCords) || '';
-        this.locationService.reverseGeocode(group.locationCords).subscribe((name: string) => {
-          group.locationName = name;
-        });
-      })
-      this.samitiGroups.sort((a, b) => a.title.localeCompare(b.title));
-      this.allGroups.sort((a, b) => a.title.localeCompare(b.title));
-    });
+  ngOnInit() {
+  }
+
+  async fetchGroupsEventsPrograms(): Promise<void> {
+    try {
+      const data = await firstValueFrom(this.homeService.getGroupsEventsPrograms());
+
+      this.samitiGroups = data ?? [];
+      this.samitiGroupsCopy = [...this.samitiGroups];
+
+      await this.populateDistancesSequentially(this.samitiGroups);
+      await this.applyStatusAndSortingSequentially(this.samitiGroups);
+    } catch (error) {
+      this.hasFetchedGroupsEventsPrograms = false;
+      console.error('Failed to fetch groups/events/programs', error);
+    }
+  }
+
+  private async populateDistancesSequentially(groups: GroupDetailsModel[]): Promise<void> {
+    for (const group of groups) {
+      group.distanceFromUser =
+        (await Promise.resolve(this.locationService.getDistanceFromUser(group.locationCords))) || '';
+
+      for (const event of group.events ?? []) {
+        event.distanceFromUser =
+          (await Promise.resolve(this.locationService.getDistanceFromUser(event.locationCords))) || '';
+      }
+    }
+  }
+
+  private async applyStatusAndSortingSequentially(groups: GroupDetailsModel[]): Promise<void> {
+    await Promise.resolve(sortEventsByStatus(groups));
+    await Promise.resolve(sortGroupsByDistance(groups));
   }
 
   onSearchGroups(event: Event) {
@@ -104,28 +125,28 @@ export class HomeComponent implements OnInit {
     this.groupSearchTerm = input.value.toLowerCase().trim();
   }
 
-  onSearchEvents(event: Event) {
+  onSearchProgram(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.eventSearchTerm = target.value;
+    this.programSearchTerm = target.value;
   }
 
   onGroupDistanceChange(distance: number) {
     this.groupSelectedDistance = distance;
   }
 
-  onEventDistanceChange(distance: number) {
-    this.eventSelectedDistance = distance;
+  onProgramDistanceChange(distance: number) {
+    this.programSelectedDistance = distance;
   }
 
   clearGroupSearch() {
     this.groupSearchTerm = '';
   }
 
-  clearEventSearch() {
-    this.eventSearchTerm = ''
+  clearProgramSearch() {
+    this.programSearchTerm = ''
   }
 
-  openEventDetails(event: eventDetailsModel) {
+  openProgramDetails(event: EventDetailsModel) {
     this.dialog.open(EventDetailsDialogComponent, {
       width: '800px',
       data: event,
@@ -133,7 +154,15 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  openGroupProfile(group: groupDetailsModel) {
+  openEventDetails(event: EventDetailsModel) {
+    this.dialog.open(EventDetailsDialogComponent, {
+      width: '800px',
+      data: event,
+      autoFocus: false 
+    });
+  }
+
+  openGroupProfile(group: GroupDetailsModel) {
     this.dialog.open(GroupProfileDialogComponent, {
       width: '500px',
       data: group,
@@ -147,7 +176,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  openJoinGroupDialog(group: groupDetailsModel) {
+  openJoinGroupDialog(group: GroupDetailsModel) {
     this.dialog.open(JoinGroupDialogComponent, {
       width: '400px',
       data: group,

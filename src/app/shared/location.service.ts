@@ -36,10 +36,7 @@ export class LocationService {
         return;
       }
       const pos = await this.getGeolocation();
-      console.log('pos',pos);
       this.userLocationCords$.set(pos);
-      
-      // Convert coordinates to readable location name
       this.reverseGeocode(pos)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
@@ -90,7 +87,7 @@ export class LocationService {
       catchError(error => {
         console.error('Error reverse geocoding:', error);
         // return this.getLocationInfo(); // Fallback to IP-based location
-        return of('Unknown Location');
+        return of('Failed');
       })
     );
   }

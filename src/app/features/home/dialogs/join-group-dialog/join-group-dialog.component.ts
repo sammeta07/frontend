@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { groupDetailsModel } from '../../models/home.model';
+import { GroupDetailsModel } from '../../models/home.model';
 
 @Component({
   selector: 'app-join-group-dialog',
@@ -14,7 +14,7 @@ import { groupDetailsModel } from '../../models/home.model';
 export class JoinGroupDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<JoinGroupDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: groupDetailsModel
+    @Inject(MAT_DIALOG_DATA) public data: GroupDetailsModel
   ) {}
 
   onCancel(): void {
