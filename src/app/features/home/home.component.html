@@ -194,6 +194,69 @@
       </div>
     </div>
     <div class="program-list">
+      <mat-tab-group *ngIf="programTypes.length > 0; else noProgramsTemplate" class="program-tabs">
+        <mat-tab *ngFor="let type of programTypes" [label]="type">
+          <div class="program-cards">
+            <mat-card class="program-card" *ngFor="let program of getProgramsByType(type)">
+              <div class="program-group-title">{{ program.groupTitle }}</div>
+
+              <div class="program-card-header">
+                <h3>{{ program.title }}</h3>
+                <span class="program-type-chip">{{ program.type }}</span>
+              </div>
+
+              <div class="program-body-split">
+                <div class="program-photos-pane">
+                  <swiper-container
+                    class="program-photo-swiper"
+                    *ngIf="program.photos.length; else noPhotosTemplate"
+                    slides-per-view="1"
+                    space-between="8"
+                    pagination="true"
+                    navigation="true"
+                    loop="false"
+                  >
+                    <swiper-slide *ngFor="let photo of program.photos">
+                      <img
+                        [src]="photo"
+                        [alt]="program.title"
+                        class="program-photo"
+                      />
+                    </swiper-slide>
+                  </swiper-container>
+                </div>
+
+                <div class="program-details-pane">
+                  <p class="program-meta">
+                    <strong>Event:</strong> {{ program.eventTitle }}
+                  </p>
+                  <p class="program-meta" *ngIf="program.date">
+                    <strong>Date:</strong> {{ program.date }}
+                  </p>
+                  <p class="program-meta" *ngIf="program.from_time || program.to_time">
+                    <strong>Time:</strong> {{ program.from_time }} - {{ program.to_time }}
+                  </p>
+                  <p class="program-distance" *ngIf="program.distanceFromUser">
+                    {{ getDistanceInMetersFromYou(program.distanceFromUser) }}
+                  </p>
+
+                  <button mat-stroked-button type="button" (click)="openMap(program.locationCords)">
+                    Open in Map
+                  </button>
+                </div>
+              </div>
+            </mat-card>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+
+      <ng-template #noProgramsTemplate>
+        <div class="no-programs-state">No programs available.</div>
+      </ng-template>
+
+      <ng-template #noPhotosTemplate>
+        <div class="no-photos-state">No photos available.</div>
+      </ng-template>
     </div>
   </div>
 </div>

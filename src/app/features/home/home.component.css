@@ -620,6 +620,126 @@ body.is-resizing-panels {
           background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary) 100%);
         }
       }
+
+      .program-tabs {
+        height: 100%;
+      }
+
+      .program-cards {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px 6px;
+      }
+
+      .program-card {
+        border-radius: 12px;
+        border: 1px solid var(--theme-border);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        padding: 12px;
+      }
+
+      .program-group-title {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--theme-primary);
+        margin-bottom: 8px;
+      }
+
+      .program-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 10px;
+
+        h3 {
+          margin: 0;
+          font-size: 1rem;
+          color: var(--theme-text);
+        }
+      }
+
+      .program-body-split {
+        display: grid;
+        grid-template-columns: 65% 35%;
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .program-photos-pane {
+        min-width: 0;
+      }
+
+      .program-photo-swiper {
+        display: block;
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid var(--theme-border);
+        padding: 6px;
+        background: var(--theme-surface-light);
+      }
+
+      .program-photo-swiper swiper-slide {
+        display: block;
+      }
+
+      .program-photo {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .program-details-pane {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border-left: 1px dashed var(--theme-border);
+        padding-left: 10px;
+      }
+
+      .program-type-chip {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: var(--theme-surface-light);
+        color: var(--theme-primary);
+      }
+
+      .program-meta {
+        margin: 4px 0;
+        color: var(--theme-text-secondary);
+        font-size: 0.9rem;
+      }
+
+      .program-distance {
+        margin: 8px 0;
+        font-weight: 600;
+        color: var(--theme-text);
+      }
+
+      .no-programs-state {
+        height: 100%;
+        min-height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--theme-text-secondary);
+        font-weight: 600;
+      }
+
+      .no-photos-state {
+        height: 180px;
+        border-radius: 10px;
+        border: 1px dashed var(--theme-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--theme-text-secondary);
+        background: var(--theme-surface-light);
+      }
     }
   }
 }

@@ -61,3 +61,33 @@ export function sortGroupsByDistance(groups: GroupDetailsModel[]) {
         return distA - distB; // nearest first
     });
 }
+
+export function sortProgramsByDistance (groups: GroupDetailsModel[]) {
+    const toMeters = (value?: string): number => {
+        if (!value) return Number.POSITIVE_INFINITY;
+
+        const raw = value.trim().toLowerCase();
+        const parsed = Number.parseFloat(raw.replace(/[^0-9.-]/g, ''));
+        if (!Number.isFinite(parsed)) return Number.POSITIVE_INFINITY;
+
+        if (raw.includes('km')) return parsed * 1000; // km -> m
+        if (raw.includes('m')) return parsed;         // already meters
+
+        // fallback if unit missing
+        return parsed;
+    };
+
+    groups.forEach((group: GroupDetailsModel) => {
+        if (!group.events) return;
+
+        group.events.forEach((event: EventDetailsModel) => {
+            if (!event.programs) return;
+
+            event.programs.sort((a, b) => {
+                const distA = toMeters(a.distanceFromUser);
+                const distB = toMeters(b.distanceFromUser);
+                return distA - distB; // nearest first
+            });
+        });
+    });
+}

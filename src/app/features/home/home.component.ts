@@ -7,12 +7,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
-import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance} from './utils/home.utils';
-import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel,  } from './models/home.model';
+import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance } from './utils/home.utils';
+import { GroupDetailsModel, EventDetailsModel, ProgramDetailWithContextModel } from './models/home.model';
 import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
@@ -32,6 +33,7 @@ import { firstValueFrom } from 'rxjs';
     // SkeletonComponent,
     MatFormFieldModule,
     MatSelectModule,
+    MatTabsModule,
     MatExpansionModule,
     MatTooltipModule,
   ],
@@ -55,7 +57,7 @@ export class HomeComponent implements OnInit {
   
   samitiGroups: GroupDetailsModel[] = [];
   samitiGroupsCopy: GroupDetailsModel[] = [];
-  programsData: ProgramDetailModel[] = [];
+  programsData: ProgramDetailWithContextModel[] = [];
 
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
@@ -97,6 +99,7 @@ export class HomeComponent implements OnInit {
 
       await this.populateDistancesSequentially(this.samitiGroups);
       await this.applyStatusAndSortingSequentially(this.samitiGroups);
+      this.populateProgramsData(this.samitiGroups);
     } catch (error) {
       this.hasFetchedGroupsEventsPrograms = false;
       console.error('Failed to fetch groups/events/programs', error);
@@ -111,6 +114,11 @@ export class HomeComponent implements OnInit {
       for (const event of group.events ?? []) {
         event.distanceFromUser =
           (await Promise.resolve(this.locationService.getDistanceFromUser(event.locationCords))) || '';
+
+        for (const program of event.programs ?? []) {
+          program.distanceFromUser =
+            (await Promise.resolve(this.locationService.getDistanceFromUser(program.locationCords))) || '';
+        }
       }
     }
   }
@@ -118,6 +126,31 @@ export class HomeComponent implements OnInit {
   private async applyStatusAndSortingSequentially(groups: GroupDetailsModel[]): Promise<void> {
     await Promise.resolve(sortEventsByStatus(groups));
     await Promise.resolve(sortGroupsByDistance(groups));
+    await Promise.resolve(sortProgramsByDistance(groups));
+  }
+
+  private populateProgramsData(groups: GroupDetailsModel[]): void {
+    this.programsData = [];
+
+    for (const group of groups) {
+      for (const event of group.events ?? []) {
+        for (const program of event.programs ?? []) {
+          this.programsData.push({
+            ...program,
+            eventTitle: event.title,
+            groupTitle: group.title,
+          });
+        }
+      }
+    }
+  }
+
+  get programTypes(): string[] {
+    return [...new Set(this.programsData.map((program) => program.type))];
+  }
+
+  getProgramsByType(type: string): ProgramDetailWithContextModel[] {
+    return this.programsData.filter((program) => program.type === type);
   }
 
   onSearchGroups(event: Event) {

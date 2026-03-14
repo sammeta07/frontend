@@ -17,6 +17,11 @@ export interface ProgramDetailModel {
   distanceFromUser?: string;
 }
 
+export interface ProgramDetailWithContextModel extends ProgramDetailModel {
+  eventTitle: string;
+  groupTitle: string;
+}
+
 export interface EventDetailsModel {
   id: number;
   title: string;
