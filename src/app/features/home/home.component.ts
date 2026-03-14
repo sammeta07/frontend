@@ -12,7 +12,7 @@ import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/even
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
-import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance } from './utils/home.utils';
+import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance, programTypeSortOrder } from './utils/home.utils';
 import { GroupDetailsModel, EventDetailsModel, ProgramDetailWithContextModel } from './models/home.model';
 import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -146,11 +146,155 @@ export class HomeComponent implements OnInit {
   }
 
   get programTypes(): string[] {
-    return [...new Set(this.programsData.map((program) => program.type))];
+    return [...new Set(this.programsData.map((program) => program.type))].sort(
+      (a, b) =>
+        (programTypeSortOrder[a] ?? Number.MAX_SAFE_INTEGER) -
+        (programTypeSortOrder[b] ?? Number.MAX_SAFE_INTEGER)
+    );
   }
 
   getProgramsByType(type: string): ProgramDetailWithContextModel[] {
-    return this.programsData.filter((program) => program.type === type);
+    const statusOrder: Record<'live' | 'upcoming' | 'completed', number> = {
+      live: 0,
+      upcoming: 1,
+      completed: 2,
+    };
+
+    return this.programsData
+      .filter((program) => program.type === type)
+      .sort((a, b) => {
+        const statusA = statusOrder[this.getProgramStatus(a)];
+        const statusB = statusOrder[this.getProgramStatus(b)];
+        if (statusA !== statusB) {
+          return statusA - statusB;
+        }
+
+        const distanceA = this.parseDistanceToMeters(a.distanceFromUser);
+        const distanceB = this.parseDistanceToMeters(b.distanceFromUser);
+        if (distanceA !== distanceB) {
+          return distanceA - distanceB;
+        }
+
+        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+      });
+  }
+
+  getProgramStatus(program: ProgramDetailWithContextModel): 'live' | 'upcoming' | 'completed' {
+    const startDateTime = this.getProgramDateTime(program.date, program.from_time, false);
+    const endDateTime = this.getProgramDateTime(program.date, program.to_time, true);
+
+    if (!startDateTime || !endDateTime) {
+      return 'upcoming';
+    }
+
+    const now = new Date();
+    if (now >= startDateTime && now <= endDateTime) {
+      return 'live';
+    }
+
+    return now < startDateTime ? 'upcoming' : 'completed';
+  }
+
+  getProgramStatusLabel(program: ProgramDetailWithContextModel): string {
+    const status = this.getProgramStatus(program);
+    if (status === 'live') {
+      return 'Live';
+    }
+    if (status === 'upcoming') {
+      return 'Upcoming';
+    }
+    return 'Completed';
+  }
+
+  formatTime12Hour(time: string | undefined): string {
+    if (!time) {
+      return '';
+    }
+
+    const parsed = this.parseTimeToHoursMinutes(time);
+    if (!parsed) {
+      return time;
+    }
+
+    const [hours, minutes] = parsed;
+    const date = new Date();
+    date.setHours(hours, minutes, 0, 0);
+
+    return new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).format(date).toLowerCase();
+  }
+
+  private getProgramDateTime(
+    dateValue: string | undefined,
+    timeValue: string | undefined,
+    isEndTime: boolean
+  ): Date | null {
+    if (!dateValue) {
+      return null;
+    }
+
+    const [year, month, day] = dateValue.split('-').map(Number);
+    if (!year || !month || !day) {
+      return null;
+    }
+
+    const parsedTime = this.parseTimeToHoursMinutes(timeValue);
+    const hours = parsedTime ? parsedTime[0] : isEndTime ? 23 : 0;
+    const minutes = parsedTime ? parsedTime[1] : isEndTime ? 59 : 0;
+
+    const result = new Date(year, month - 1, day, hours, minutes, 0, 0);
+    return Number.isNaN(result.getTime()) ? null : result;
+  }
+
+  private parseTimeToHoursMinutes(time: string | undefined): [number, number] | null {
+    if (!time) {
+      return null;
+    }
+
+    const match = /^(\d{1,2}):(\d{2})$/.exec(time.trim());
+    if (!match) {
+      return null;
+    }
+
+    const hours = Number(match[1]);
+    const minutes = Number(match[2]);
+    if (!Number.isInteger(hours) || !Number.isInteger(minutes)) {
+      return null;
+    }
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+      return null;
+    }
+
+    return [hours, minutes];
+  }
+
+  private parseDistanceToMeters(distance: number | string | undefined | null): number {
+    if (distance === null || distance === undefined || distance === '') {
+      return Number.POSITIVE_INFINITY;
+    }
+
+    if (typeof distance === 'number') {
+      return Number.isFinite(distance) ? distance * 1000 : Number.POSITIVE_INFINITY;
+    }
+
+    const raw = distance.trim().toLowerCase();
+    const parsed = Number.parseFloat(raw.replace(/[^0-9.-]/g, ''));
+    if (!Number.isFinite(parsed)) {
+      return Number.POSITIVE_INFINITY;
+    }
+
+    if (raw.includes('km')) {
+      return parsed * 1000;
+    }
+
+    if (raw.includes('m')) {
+      return parsed;
+    }
+
+    return parsed;
   }
 
   onSearchGroups(event: Event) {

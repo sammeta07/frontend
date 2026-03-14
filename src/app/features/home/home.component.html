@@ -202,7 +202,12 @@
 
               <div class="program-card-header">
                 <h3>{{ program.title }}</h3>
-                <span class="program-type-chip">{{ program.type }}</span>
+                <span
+                  class="program-type-chip"
+                  [class.live-chip]="getProgramStatus(program) === 'live'"
+                  [class.upcoming-chip]="getProgramStatus(program) === 'upcoming'"
+                  [class.completed-chip]="getProgramStatus(program) === 'completed'"
+                >{{ getProgramStatusLabel(program) }}</span>
               </div>
 
               <div class="program-body-split">
@@ -228,20 +233,21 @@
 
                 <div class="program-details-pane">
                   <p class="program-meta">
-                    <strong>Event:</strong> {{ program.eventTitle }}
+                    {{ program.eventTitle }}
                   </p>
                   <p class="program-meta" *ngIf="program.date">
-                    <strong>Date:</strong> {{ program.date }}
+                    {{ program.date }}
                   </p>
                   <p class="program-meta" *ngIf="program.from_time || program.to_time">
-                    <strong>Time:</strong> {{ program.from_time }} - {{ program.to_time }}
+                    {{ formatTime12Hour(program.from_time) }} - {{ formatTime12Hour(program.to_time) }}
                   </p>
-                  <p class="program-distance" *ngIf="program.distanceFromUser">
+                  <button
+                    type="button"
+                    class="program-distance-link"
+                    *ngIf="program.distanceFromUser"
+                    (click)="openMap(program.locationCords)"
+                  >
                     {{ getDistanceInMetersFromYou(program.distanceFromUser) }}
-                  </p>
-
-                  <button mat-stroked-button type="button" (click)="openMap(program.locationCords)">
-                    Open in Map
                   </button>
                 </div>
               </div>

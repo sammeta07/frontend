@@ -1,5 +1,13 @@
 import { GroupDetailsModel, EventDetailsModel } from '../models/home.model';
 
+export const programTypeSortOrder: Record<string, number> = {
+  BHANDARA: 1,
+  CRICKET: 2,
+  SPIRITUAL: 3,
+  CULTURAL: 4,
+  OTHER: 5,
+};
+
 export function getGroupLogoUrl(name: string): string {
     return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff&size=128`;
 }

@@ -64,6 +64,7 @@ export enum ProgramType {
   BHANDARA = 'BHANDARA',      // Community meal / Food distribution / Prasad
   CULTURAL = 'CULTURAL',      // Music, Dance, Cultural performances / Nachna Gana
   SPIRITUAL = 'SPIRITUAL',     // Religious ceremonies / Aarati, Hawan, Visarjan
+  CRICKET = 'CRICKET',      // Cricket matches / Tournaments
   OTHER = 'OTHER'
 }
 
