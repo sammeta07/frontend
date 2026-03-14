@@ -126,6 +126,23 @@ export class ThemeService {
       text: '#e0e0e0',
       textSecondary: '#b0b0b0',
       border: '#424242'
+    },
+    {
+      id: 'light-mode',
+      name: 'light-mode',
+      displayName: 'Light',
+      icon: '☀️',
+      primary: '#9e9e9e',
+      secondary: '#bdbdbd',
+      accent: '#d6d6d6',
+      primaryLight: '#eeeeee',
+      primaryDark: '#757575',
+      background: '#f5f5f5',
+      surface: '#ffffff',
+      surfaceLight: '#f2f2f2',
+      text: '#1e1e1e',
+      textSecondary: '#4a4a4a',
+      border: '#d1d1d1'
     }
   ];
 

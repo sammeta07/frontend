@@ -20,6 +20,7 @@ export interface ProgramDetailModel {
 export interface ProgramDetailWithContextModel extends ProgramDetailModel {
   eventTitle: string;
   groupTitle: string;
+  year_count: number;
 }
 
 export interface EventDetailsModel {

@@ -139,6 +139,7 @@ export class HomeComponent implements OnInit {
             ...program,
             eventTitle: event.title,
             groupTitle: group.title,
+            year_count: event.year_count,
           });
         }
       }
@@ -179,6 +180,16 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getEventCountByType(type: string): number {
+    const uniqueEvents = new Set(
+      this.programsData
+        .filter((program) => program.type === type)
+        .map((program) => `${program.groupTitle}::${program.eventTitle}`)
+    );
+
+    return uniqueEvents.size;
+  }
+
   getProgramStatus(program: ProgramDetailWithContextModel): 'live' | 'upcoming' | 'completed' {
     const startDateTime = this.getProgramDateTime(program.date, program.from_time, false);
     const endDateTime = this.getProgramDateTime(program.date, program.to_time, true);
@@ -204,6 +215,17 @@ export class HomeComponent implements OnInit {
       return 'Upcoming';
     }
     return 'Completed';
+  }
+
+  formatDate(date: string | undefined): string {
+    if (!date) return '';
+    const [year, month, day] = date.split('-').map(Number);
+    if (!year || !month || !day) return date;
+    const d = new Date(year, month - 1, day);
+    if (Number.isNaN(d.getTime())) return date;
+    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      .format(d)
+      .replace(/ /g, '-');
   }
 
   formatTime12Hour(time: string | undefined): string {

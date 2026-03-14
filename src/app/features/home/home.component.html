@@ -195,23 +195,40 @@
     </div>
     <div class="program-list">
       <mat-tab-group *ngIf="programTypes.length > 0; else noProgramsTemplate" class="program-tabs">
-        <mat-tab *ngFor="let type of programTypes" [label]="type">
+        <mat-tab *ngFor="let type of programTypes">
+          <ng-template mat-tab-label>
+            <span class="program-tab-inline">
+              <span class="program-tab-label">{{ type }}</span>
+              <span class="program-tab-count">{{ getEventCountByType(type) }}</span>
+            </span>
+          </ng-template>
           <div class="program-cards">
-            <mat-card class="program-card" *ngFor="let program of getProgramsByType(type)">
-              <div class="program-group-title">{{ program.groupTitle }}</div>
-
+            <mat-card
+              class="program-card"
+              [class.live-card]="getProgramStatus(program) === 'live'"
+              [class.upcoming-card]="getProgramStatus(program) === 'upcoming'"
+              [class.completed-card]="getProgramStatus(program) === 'completed'"
+              *ngFor="let program of getProgramsByType(type)"
+            >
               <div class="program-card-header">
-                <h3>{{ program.title }}</h3>
-                <span
-                  class="program-type-chip"
-                  [class.live-chip]="getProgramStatus(program) === 'live'"
-                  [class.upcoming-chip]="getProgramStatus(program) === 'upcoming'"
-                  [class.completed-chip]="getProgramStatus(program) === 'completed'"
-                >{{ getProgramStatusLabel(program) }}</span>
+                <div class="program-heading-group">
+                  <h3 class="program-group-title">{{ program.groupTitle }}</h3>
+                  <p class="program-event-subtitle">{{ program.eventTitle }}</p>
+                </div>
+                <div class="program-title-right">
+                  <span class="program-title-badge">{{ program.title }}</span>
+                </div>
               </div>
 
               <div class="program-body-split">
                 <div class="program-photos-pane">
+                  <span
+                    class="program-type-chip program-status-overlay"
+                    [class.live-chip]="getProgramStatus(program) === 'live'"
+                    [class.upcoming-chip]="getProgramStatus(program) === 'upcoming'"
+                    [class.completed-chip]="getProgramStatus(program) === 'completed'"
+                  >{{ getProgramStatusLabel(program) }}</span>
+                  <span class="program-year-overlay" *ngIf="program.year_count">{{ getYearLabel(program.year_count) }}</span>
                   <swiper-container
                     class="program-photo-swiper"
                     *ngIf="program.photos.length; else noPhotosTemplate"
@@ -232,23 +249,26 @@
                 </div>
 
                 <div class="program-details-pane">
-                  <p class="program-meta">
-                    {{ program.eventTitle }}
-                  </p>
-                  <p class="program-meta" *ngIf="program.date">
-                    {{ program.date }}
-                  </p>
-                  <p class="program-meta" *ngIf="program.from_time || program.to_time">
-                    {{ formatTime12Hour(program.from_time) }} - {{ formatTime12Hour(program.to_time) }}
-                  </p>
-                  <button
-                    type="button"
-                    class="program-distance-link"
+                  <div class="program-meta-item" *ngIf="program.date">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span>{{ formatDate(program.date) }}</span>
+                  </div>
+                  <div class="program-meta-item" *ngIf="program.from_time || program.to_time">
+                    <mat-icon>schedule</mat-icon>
+                    <span>{{ formatTime12Hour(program.from_time) }} - {{ formatTime12Hour(program.to_time) }}</span>
+                  </div>
+                  <div
+                    class="program-meta-item program-distance-row"
                     *ngIf="program.distanceFromUser"
-                    (click)="openMap(program.locationCords)"
+                    (click)="$event.stopPropagation(); openMap(program.locationCords)"
                   >
-                    {{ getDistanceInMetersFromYou(program.distanceFromUser) }}
-                  </button>
+                    <mat-icon>location_on</mat-icon>
+                    <button
+                      type="button"
+                      class="program-distance-link"
+                      (click)="$event.stopPropagation(); openMap(program.locationCords)"
+                    >{{ getDistanceInMetersFromYou(program.distanceFromUser) }}</button>
+                  </div>
                 </div>
               </div>
             </mat-card>
