@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, effect, viewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, effect, viewChild, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -472,4 +472,37 @@ export class HomeComponent implements OnInit {
     this.isResizingPanels = false;
     document.body.classList.remove('is-resizing-panels');
   }
+
+
+  @ViewChild('tabGroup')
+  tabGroup: any;
+
+  scrollTabs(event: WheelEvent) {
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest('.mat-mdc-tab-header')) {
+      return;
+    }
+
+    const children = this.tabGroup?._tabHeader?._elementRef?.nativeElement?.children;
+    if (!children || children.length < 3) {
+      return;
+    }
+
+    const back = children[0] as HTMLElement;
+    const forward = children[2] as HTMLElement;
+
+    // Prefer horizontal touchpad swipe; keep vertical wheel as fallback.
+    const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+    if (!delta) {
+      return;
+    }
+
+    event.preventDefault();
+    if (delta > 0) {
+      forward.click();
+    } else {
+      back.click();
+    }
+  }
+
 }
