@@ -59,6 +59,17 @@ export class HomeComponent implements OnInit {
   samitiGroupsCopy: GroupDetailsModel[] = [];
   programsData: ProgramDetailWithContextModel[] = [];
 
+  readonly currentYear = new Date().getFullYear();
+  readonly groupYearTabs: number[] = [
+    this.currentYear + 1,
+    this.currentYear,
+    this.currentYear - 1,
+    this.currentYear - 2,
+    this.currentYear - 3,
+    this.currentYear - 4,
+  ];
+  private groupSelectedYear = new Map<number, number>();
+
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
 
@@ -95,15 +106,64 @@ export class HomeComponent implements OnInit {
       const data = await firstValueFrom(this.homeService.getGroupsEventsPrograms());
 
       this.samitiGroups = data ?? [];
-      this.samitiGroupsCopy = [...this.samitiGroups];
 
       await this.populateDistancesSequentially(this.samitiGroups);
       await this.applyStatusAndSortingSequentially(this.samitiGroups);
+      this.samitiGroupsCopy = [...this.samitiGroups];
       this.populateProgramsData(this.samitiGroups);
     } catch (error) {
       this.hasFetchedGroupsEventsPrograms = false;
       console.error('Failed to fetch groups/events/programs', error);
     }
+  }
+
+  onGroupYearTabChange(group: GroupDetailsModel, tabIndex: number): void {
+    const year = this.groupYearTabs[tabIndex];
+    if (!year) {
+      return;
+    }
+
+    this.groupSelectedYear.set(group.id, year);
+  }
+
+  getGroupYearTabIndex(group: GroupDetailsModel): number {
+    const selectedYear = this.getSelectedYearForGroup(group);
+    const index = this.groupYearTabs.indexOf(selectedYear);
+    return index >= 0 ? index : 1;
+  }
+
+  getFilteredEventsForGroup(group: GroupDetailsModel): EventDetailsModel[] {
+    const selectedYear = this.getSelectedYearForGroup(group);
+    return (group.events ?? []).filter((event) => this.eventFallsInYear(event, selectedYear));
+  }
+
+  private getSelectedYearForGroup(group: GroupDetailsModel): number {
+    return this.groupSelectedYear.get(group.id) ?? this.currentYear;
+  }
+
+  private eventFallsInYear(event: EventDetailsModel, year: number): boolean {
+    const startYear = this.extractYear(event.start_date);
+    const endYear = this.extractYear(event.end_date);
+
+    if (startYear !== null && endYear !== null) {
+      return year >= Math.min(startYear, endYear) && year <= Math.max(startYear, endYear);
+    }
+    if (startYear !== null) {
+      return startYear === year;
+    }
+    if (endYear !== null) {
+      return endYear === year;
+    }
+    return false;
+  }
+
+  private extractYear(dateValue: string | undefined): number | null {
+    if (!dateValue) {
+      return null;
+    }
+
+    const [year] = dateValue.split('-').map(Number);
+    return Number.isInteger(year) && year > 0 ? year : null;
   }
 
   private async populateDistancesSequentially(groups: GroupDetailsModel[]): Promise<void> {
@@ -215,6 +275,50 @@ export class HomeComponent implements OnInit {
       return 'Upcoming';
     }
     return 'Completed';
+  }
+
+  getEventStatus(event: EventDetailsModel): 'live' | 'upcoming' | 'completed' {
+    const startDate = this.getEventDateBoundary(event.start_date, false);
+    const endDate = this.getEventDateBoundary(event.end_date, true);
+
+    if (!startDate || !endDate) {
+      return 'upcoming';
+    }
+
+    const now = new Date();
+    if (now >= startDate && now <= endDate) {
+      return 'live';
+    }
+
+    return now < startDate ? 'upcoming' : 'completed';
+  }
+
+  getEventStatusLabel(event: EventDetailsModel): string {
+    const status = this.getEventStatus(event);
+    if (status === 'live') {
+      return 'Started';
+    }
+    if (status === 'upcoming') {
+      return 'Upcoming';
+    }
+    return 'Completed';
+  }
+
+  private getEventDateBoundary(dateValue: string | undefined, isEndDate: boolean): Date | null {
+    if (!dateValue) {
+      return null;
+    }
+
+    const [year, month, day] = dateValue.split('-').map(Number);
+    if (!year || !month || !day) {
+      return null;
+    }
+
+    const result = isEndDate
+      ? new Date(year, month - 1, day, 23, 59, 59, 999)
+      : new Date(year, month - 1, day, 0, 0, 0, 0);
+
+    return Number.isNaN(result.getTime()) ? null : result;
   }
 
   formatDate(date: string | undefined): string {
