@@ -16,7 +16,7 @@
       [attr.aria-label]="userLocationName() ? 'Current location: ' + userLocationName() : 'Detecting your location'"
     >
       <mat-icon [class.pulse]="!userLocationName()">
-        {{ userLocationName() ? 'location_on' : 'my_location' }}
+        {{ userLocationName() ? 'my_location' : 'autorenew' }}
       </mat-icon>
       <span class="location-text">
         {{ userLocationName() || 'Locating...' }}

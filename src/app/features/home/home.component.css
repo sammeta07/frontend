@@ -356,10 +356,6 @@ body.is-resizing-panels {
         color: var(--theme-primary);
       }
 
-      .group-year-tabs {
-        height: 48px;
-      }
-
       ::ng-deep .group-year-tabs .mat-mdc-tab-header {
         background: var(--theme-surface);
         border-bottom: 1px solid var(--theme-border);

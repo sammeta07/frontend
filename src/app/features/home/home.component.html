@@ -9,7 +9,7 @@
             #groupSearchInput
             type="text"
             class="group-search-input"
-            placeholder="Search groups with in..."
+            placeholder="Search groups in..."
             [value]="groupSearchTerm"
             (input)="onSearchGroups($event)"
             [disabled]="!userLocationName()"
@@ -29,17 +29,10 @@
           >
             <mat-icon>close</mat-icon>
           </button>
-          <mat-icon
-            *ngIf="!userLocationName() && !groupSearchTerm"
-            class="loading-indicator"
-            aria-hidden="true"
-          >
-            hourglass_empty
-          </mat-icon>
         </div>
         <div class="divider" role="separator" aria-hidden="true"></div>
         <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
-          <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
+          <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
           <mat-select
             [(value)]="groupSelectedDistance"
             (selectionChange)="onGroupDistanceChange($event.value)"
@@ -125,7 +118,7 @@
               </div>
               <div class="nine">
                 <div class="group-distance-row" (click)="$event.stopPropagation(); openMap(group.locationCords)">
-                  <mat-icon>location_on</mat-icon>
+                  <mat-icon>navigation</mat-icon>
                   <button
                     type="button"
                     class="distance-link"
@@ -162,11 +155,11 @@
                     [class.completed-chip]="getEventStatus(event) === 'completed'"
                   >{{ getEventStatusLabel(event) }}</span>
                   <span class="group-event-year-overlay" *ngIf="event.year_count">{{ getYearLabel(event.year_count) }}</span>
-                  <span class="group-event-photo-count" *ngIf="(event.photos?.length ?? 0) > 1">{{ event.photos.length }} Photos</span>
+                  <span class="group-event-photo-count" *ngIf="event.photos.length > 1">{{ event.photos.length }} Photos</span>
                   <div class="group-event-image-overlay" aria-hidden="true"></div>
                   <swiper-container
                     class="group-event-photo-swiper"
-                    *ngIf="event.photos?.length; else eventNoPhotosTemplate"
+                    *ngIf="event.photos.length; else eventNoPhotosTemplate"
                     slides-per-view="1"
                     space-between="8"
                     pagination="true"
@@ -199,7 +192,7 @@
                       <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
                     </div>
                     <div class="group-event-meta-item group-event-distance-action" *ngIf="event.distanceFromUser" (click)="openMap(event.locationCords)">
-                      <mat-icon>location_on</mat-icon>
+                      <mat-icon>navigation</mat-icon>
                       <span class="group-event-distance-link">{{ getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
                     </div>
                   </div>
@@ -243,7 +236,7 @@
             #programSearchInput
             type="text"
             class="program-search-input"
-            placeholder="Search programs with in..."
+            placeholder="Search programs in..."
             [value]="programSearchTerm"
             (input)="onSearchProgram($event)"
             [disabled]="!userLocationName()"
@@ -263,7 +256,7 @@
         </div>
         <div class="divider" role="separator" aria-hidden="true"></div>
         <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
-          <mat-icon matPrefix aria-hidden="true">near_me</mat-icon>
+          <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
           <mat-select
             [(value)]="programSelectedDistance"
             (selectionChange)="onProgramDistanceChange($event.value)"
@@ -347,7 +340,7 @@
                     *ngIf="program.distanceFromUser"
                     (click)="$event.stopPropagation(); openMap(program.locationCords)"
                   >
-                    <mat-icon>location_on</mat-icon>
+                    <mat-icon>navigation</mat-icon>
                     <button
                       type="button"
                       class="program-distance-link"
