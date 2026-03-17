@@ -60,14 +60,8 @@ export class HomeComponent implements OnInit {
   programsData: ProgramDetailWithContextModel[] = [];
 
   readonly currentYear = new Date().getFullYear();
-  readonly groupYearTabs: number[] = [
-    this.currentYear + 1,
-    this.currentYear,
-    this.currentYear - 1,
-    this.currentYear - 2,
-    this.currentYear - 3,
-    this.currentYear - 4,
-  ];
+  readonly groupEventYearOffsets: number[] = [1, 0, -1, -2, -3, -4];
+  readonly groupEventTabs: number[] = this.groupEventYearOffsets.map((offset) => this.currentYear + offset);
   private groupSelectedYear = new Map<number, number>();
 
   getGroupLogoUrl = getGroupLogoUrl;
@@ -107,6 +101,7 @@ export class HomeComponent implements OnInit {
 
       this.samitiGroups = data ?? [];
 
+      await this.populateGroupLocationNamesSequentially(this.samitiGroups);
       await this.populateDistancesSequentially(this.samitiGroups);
       await this.applyStatusAndSortingSequentially(this.samitiGroups);
       this.samitiGroupsCopy = [...this.samitiGroups];
@@ -117,8 +112,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onGroupYearTabChange(group: GroupDetailsModel, tabIndex: number): void {
-    const year = this.groupYearTabs[tabIndex];
+  onGroupEventTabChange(group: GroupDetailsModel, tabIndex: number): void {
+    const year = this.groupEventTabs[tabIndex];
     if (!year) {
       return;
     }
@@ -126,19 +121,19 @@ export class HomeComponent implements OnInit {
     this.groupSelectedYear.set(group.id, year);
   }
 
-  getGroupYearTabIndex(group: GroupDetailsModel): number {
-    const selectedYear = this.getSelectedYearForGroup(group);
-    const index = this.groupYearTabs.indexOf(selectedYear);
+  getGroupEventTabIndex(group: GroupDetailsModel): number {
+    const selectedYear = this.groupSelectedYear.get(group.id) ?? this.currentYear;
+    const index = this.groupEventTabs.indexOf(selectedYear);
     return index >= 0 ? index : 1;
   }
 
-  getFilteredEventsForGroup(group: GroupDetailsModel): EventDetailsModel[] {
-    const selectedYear = this.getSelectedYearForGroup(group);
-    return (group.events ?? []).filter((event) => this.eventFallsInYear(event, selectedYear));
+  getGroupEventTabLabel(tab: number): string {
+    return String(tab);
   }
 
-  private getSelectedYearForGroup(group: GroupDetailsModel): number {
-    return this.groupSelectedYear.get(group.id) ?? this.currentYear;
+  getGroupEventsByTab(group: GroupDetailsModel, tab: number): EventDetailsModel[] {
+    const events = group.events ?? [];
+    return events.filter((event) => this.eventFallsInYear(event, tab));
   }
 
   private eventFallsInYear(event: EventDetailsModel, year: number): boolean {
@@ -180,6 +175,16 @@ export class HomeComponent implements OnInit {
             (await Promise.resolve(this.locationService.getDistanceFromUser(program.locationCords))) || '';
         }
       }
+    }
+  }
+
+  private async populateGroupLocationNamesSequentially(groups: GroupDetailsModel[]): Promise<void> {
+    for (const group of groups) {
+      if (group.locationName?.trim()) {
+        continue;
+      }
+
+      group.locationName = await firstValueFrom(this.locationService.getAreaName(group.locationCords));
     }
   }
 
@@ -503,6 +508,15 @@ export class HomeComponent implements OnInit {
         panelClass: ['error-snackbar']
       });
     });
+  }
+
+  getGroupAreaName(group: GroupDetailsModel): string {
+    const areaName = group.locationName?.trim();
+    if (!areaName || areaName.toLowerCase() === 'failed') {
+      return 'Area unavailable';
+    }
+
+    return areaName;
   }
 
   getDistanceInMetersFromYou(distanceFromUser: number | string | undefined | null): string {

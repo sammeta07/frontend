@@ -69,26 +69,64 @@ export class LocationService {
     });
   }
   reverseGeocode(coord: LocationModel): Observable<string> {
-    const params = {
-      format: 'json',
-      lat: coord.lat.toString(),
-      lon: coord.long.toString(),
-      zoom: '10'
-    };
-    return this.http.get<any>(this.REVERSE_GEOCODING_API, { params }).pipe(
-      map(data => {
-        // console.log('Reverse geocoding data:', data);
-        const address = data.address || {};
-        const city = address.state_district || 'Unknown';
-        const state = address.state || 'Unknown';
-        const result = `${city}`;
-        return result;
-      }),
+    return this.reverseGeocodeRequest(coord, '10').pipe(
+      map((data) => this.extractReadableLocation(data, false)),
       catchError(error => {
         console.error('Error reverse geocoding:', error);
         // return this.getLocationInfo(); // Fallback to IP-based location
         return of('Failed');
       })
+    );
+  }
+
+  getAreaName(coord: LocationModel): Observable<string> {
+    return this.reverseGeocodeRequest(coord, '16').pipe(
+      map((data) => this.extractReadableLocation(data, true)),
+      catchError((error) => {
+        console.error('Error fetching area name:', error);
+        return of('Area unavailable');
+      })
+    );
+  }
+
+  private reverseGeocodeRequest(coord: LocationModel, zoom: string): Observable<any> {
+    const params = {
+      format: 'json',
+      lat: coord.lat.toString(),
+      lon: coord.long.toString(),
+      zoom,
+    };
+
+    return this.http.get<any>(this.REVERSE_GEOCODING_API, { params });
+  }
+
+  private extractReadableLocation(data: any, preferArea: boolean): string {
+    const address = data?.address || {};
+
+    if (preferArea) {
+      return (
+        address.suburb ||
+        address.neighbourhood ||
+        address.quarter ||
+        address.hamlet ||
+        address.village ||
+        address.town ||
+        address.city_district ||
+        address.state_district ||
+        address.city ||
+        address.state ||
+        'Area unavailable'
+      );
+    }
+
+    return (
+      address.state_district ||
+      address.city_district ||
+      address.city ||
+      address.town ||
+      address.village ||
+      address.state ||
+      'Unknown'
     );
   }
   // ************************************************************
