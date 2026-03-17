@@ -93,7 +93,7 @@ h3 {
 }
 
 .members-list {
-  max-height: 250px;
+  max-height: 150px;
   overflow-y: auto;
   border: 2px solid var(--theme-border);
   border-radius: 12px;
@@ -117,6 +117,21 @@ h3 {
       background: linear-gradient(135deg, var(--theme-primary-dark) 0%, var(--theme-primary) 100%);
     }
   }
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+}
+
+::ng-deep mat-dialog-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+::ng-deep mat-dialog-actions {
+  margin-top: auto;
 }
 
 .no-members {

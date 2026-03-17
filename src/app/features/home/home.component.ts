@@ -13,7 +13,7 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
 import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance, programTypeSortOrder } from './utils/home.utils';
-import { GroupDetailsModel, EventDetailsModel, ProgramDetailWithContextModel } from './models/home.model';
+import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel, ProgramDetailWithContextModel } from './models/home.model';
 import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
@@ -309,6 +309,86 @@ export class HomeComponent implements OnInit {
     return 'Completed';
   }
 
+  getEventDurationLabel(event: EventDetailsModel): string {
+    if (!event.start_date || !event.end_date) {
+      return '';
+    }
+
+    const start = this.getDateOnly(event.start_date);
+    const end = this.getDateOnly(event.end_date);
+    if (!start || !end) {
+      return '';
+    }
+
+    const millisecondsPerDay = 1000 * 60 * 60 * 24;
+    const dayCount = Math.max(1, Math.floor((end.getTime() - start.getTime()) / millisecondsPerDay) + 1);
+    return `${dayCount}-day event`;
+  }
+
+  getNextProgramInEvent(event: EventDetailsModel): ProgramDetailModel | null {
+    const programs = [...(event.programs ?? [])]
+      .filter((program) => !!program.date)
+      .sort((first, second) => {
+        const firstDate = this.getProgramDateTime(first.date, first.from_time, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+        const secondDate = this.getProgramDateTime(second.date, second.from_time, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+        return firstDate - secondDate;
+      });
+
+    if (!programs.length) {
+      return null;
+    }
+
+    const now = new Date();
+    const liveProgram = programs.find((program) => {
+      const startDate = this.getProgramDateTime(program.date, program.from_time, false);
+      const endDate = this.getProgramDateTime(program.date, program.to_time, true);
+
+      return !!startDate && !!endDate && now >= startDate && now <= endDate;
+    });
+
+    if (liveProgram) {
+      return liveProgram;
+    }
+
+    return programs.find((program) => {
+      const startDate = this.getProgramDateTime(program.date, program.from_time, false);
+      return !!startDate && startDate >= now;
+    }) ?? null;
+  }
+
+  getNextProgramSummary(event: EventDetailsModel): string {
+    const nextProgram = this.getNextProgramInEvent(event);
+    if (!nextProgram) {
+      return 'No upcoming programs scheduled';
+    }
+
+    const status = this.getProgramStatus({
+      ...nextProgram,
+      eventTitle: event.title,
+      groupTitle: '',
+      year_count: event.year_count,
+    });
+
+    const prefix = status === 'live' ? 'Live now' : 'Next program';
+    return `${prefix}: ${nextProgram.title} - ${this.getProgramScheduleSummary(nextProgram)}`;
+  }
+
+  getProgramScheduleSummary(program: ProgramDetailModel): string {
+    const dateLabel = this.formatDate(program.date);
+    const fromTime = this.formatTime12Hour(program.from_time);
+    const toTime = this.formatTime12Hour(program.to_time);
+
+    if (fromTime && toTime) {
+      return `${dateLabel}, ${fromTime} - ${toTime}`;
+    }
+
+    if (fromTime) {
+      return `${dateLabel}, ${fromTime}`;
+    }
+
+    return dateLabel;
+  }
+
   private getEventDateBoundary(dateValue: string | undefined, isEndDate: boolean): Date | null {
     if (!dateValue) {
       return null;
@@ -402,6 +482,20 @@ export class HomeComponent implements OnInit {
     return [hours, minutes];
   }
 
+  private getDateOnly(dateValue: string | undefined): Date | null {
+    if (!dateValue) {
+      return null;
+    }
+
+    const [year, month, day] = dateValue.split('-').map(Number);
+    if (!year || !month || !day) {
+      return null;
+    }
+
+    const result = new Date(year, month - 1, day, 0, 0, 0, 0);
+    return Number.isNaN(result.getTime()) ? null : result;
+  }
+
   private parseDistanceToMeters(distance: number | string | undefined | null): number {
     if (distance === null || distance === undefined || distance === '') {
       return Number.POSITIVE_INFINITY;
@@ -464,17 +558,27 @@ export class HomeComponent implements OnInit {
 
   openEventDetails(event: EventDetailsModel) {
     this.dialog.open(EventDetailsDialogComponent, {
-      width: '800px',
+      width: '70vw',
+      maxWidth: '90vw',
+      height: '100vh',
+      maxHeight: '100vh',
       data: event,
-      autoFocus: false 
+      autoFocus: false,
+      panelClass: ['event-details-slide-dialog'],
+      position: { top: '0', right: '0' }
     });
   }
 
   openGroupProfile(group: GroupDetailsModel) {
     this.dialog.open(GroupProfileDialogComponent, {
-      width: '500px',
+      width: '70vw',
+      maxWidth: '90vw',
+      height: 'auto',
+      maxHeight: '90vh',
       data: group,
-      autoFocus: false
+      autoFocus: false,
+      panelClass: ['event-details-slide-dialog'],
+      position: { top: '0', right: '0' }
     });
   }
 

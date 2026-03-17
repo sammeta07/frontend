@@ -1,0 +1,56 @@
+<h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
+<mat-dialog-content class="mat-typography dialog-content">
+  <div class="hero-row">
+    <span class="status-badge" [attr.data-status]="getEventStatus()">{{ getEventStatusLabel() }}</span>
+    <span class="program-count-badge" *ngIf="data.programs.length">
+      {{ data.programs.length }} Program{{ data.programs.length === 1 ? '' : 's' }}
+    </span>
+  </div>
+
+  <div class="meta-grid">
+    <div class="meta-card">
+      <span class="meta-label">Date range</span>
+      <span class="meta-value">{{ formatDate(data.start_date) }} - {{ formatDate(data.end_date) }}</span>
+    </div>
+    <div class="meta-card" *ngIf="getEventDurationLabel()">
+      <span class="meta-label">Duration</span>
+      <span class="meta-value">{{ getEventDurationLabel() }}</span>
+    </div>
+    <div class="meta-card" *ngIf="getNextProgramInEvent() as nextProgram">
+      <span class="meta-label">Next program</span>
+      <span class="meta-value">{{ nextProgram.title }}</span>
+      <span class="meta-subvalue">{{ getProgramScheduleSummary(nextProgram) }}</span>
+    </div>
+  </div>
+
+  <div class="details-section" *ngIf="data.description">
+    <h3>Description</h3>
+    <p>{{ data.description }}</p>
+  </div>
+
+  <div class="details-section">
+    <div class="section-header-row">
+      <h3>Programs</h3>
+      <span class="section-summary" *ngIf="!data.programs.length">No programs scheduled</span>
+    </div>
+
+    <div class="program-list" *ngIf="data.programs.length">
+      <article class="program-item" *ngFor="let program of getSortedPrograms()">
+        <div class="program-item-header">
+          <div>
+            <h4>{{ program.title }}</h4>
+            <p>{{ getProgramScheduleSummary(program) }}</p>
+          </div>
+          <span class="program-status-badge" [attr.data-status]="getProgramStatus(program)">
+            {{ getProgramStatusLabel(program) }}
+          </span>
+        </div>
+
+        <p class="program-description" *ngIf="program.description">{{ program.description }}</p>
+      </article>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+</mat-dialog-actions>

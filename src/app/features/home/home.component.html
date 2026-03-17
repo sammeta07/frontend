@@ -176,7 +176,13 @@
                         <div class="group-event-details-pane">
                           <div class="group-event-header">
                             <div class="group-event-title-block">
-                              <h4 class="group-event-title">{{ event.title }}</h4>
+                              <button
+                                type="button"
+                                class="group-event-title"
+                                (click)="openEventDetails(event)"
+                              >
+                                {{ event.title }}
+                              </button>
                             </div>
                             <span class="group-event-program-count" *ngIf="event.programs.length">
                               {{ event.programs.length }} Program{{ event.programs.length !== 1 ? 's' : '' }}
@@ -188,10 +194,19 @@
                               <mat-icon>event</mat-icon>
                               <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
                             </div>
+                            <div class="group-event-meta-item group-event-duration-item" *ngIf="getEventDurationLabel(event) as duration">
+                              <mat-icon>schedule</mat-icon>
+                              <span>{{ duration }}</span>
+                            </div>
                             <div class="group-event-meta-item group-event-distance-action" *ngIf="event.distanceFromUser" (click)="openMap(event.locationCords)">
                               <mat-icon>navigation</mat-icon>
                               <span class="group-event-distance-link">{{ getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
                             </div>
+                          </div>
+
+                          <div class="group-event-next-program-item" *ngIf="getNextProgramInEvent(event)">
+                            <mat-icon>playlist_play</mat-icon>
+                            <span>{{ getNextProgramSummary(event) }}</span>
                           </div>
 
                           <p

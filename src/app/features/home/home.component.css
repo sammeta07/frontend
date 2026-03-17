@@ -483,7 +483,7 @@ body.is-resizing-panels {
       .group-event-body-split {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 60% 40%;
+        grid-template-rows: minmax(0, 56%) minmax(0, 44%);
         gap: 10px;
         align-items: stretch;
         height: 100%;
@@ -587,12 +587,13 @@ body.is-resizing-panels {
       .group-event-details-pane {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
         min-width: 0;
         min-height: 0;
         border-top: 3px solid transparent;
         border-image: linear-gradient(90deg, var(--theme-primary), transparent) 1;
         padding-top: 10px;
+        overflow: hidden;
       }
 
       .group-event-header {
@@ -611,13 +612,24 @@ body.is-resizing-panels {
         margin: 0;
         font-size: 1rem;
         color: var(--theme-text);
+        border: none;
+        background: transparent;
+        padding: 0;
+        font: inherit;
+        font-weight: 700;
+        text-align: left;
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+          color: var(--theme-primary);
+        }
       }
 
       .group-event-meta {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 6px 12px;
-        margin-bottom: 6px;
+        gap: 4px 10px;
       }
 
       .group-event-meta-item {
@@ -646,28 +658,83 @@ body.is-resizing-panels {
         }
       }
 
+      .group-event-duration-item {
+        min-width: 0;
+
+        span {
+          line-height: 1.35;
+        }
+      }
+
+      .group-event-next-program-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        min-width: 0;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, transparent);
+
+        mat-icon {
+          font-size: 17px;
+          width: 17px;
+          height: 17px;
+          color: var(--theme-primary);
+          flex-shrink: 0;
+          margin-top: 1px;
+        }
+
+        span {
+          display: -webkit-box;
+          line-clamp: 1;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: var(--theme-text-secondary);
+          font-size: 0.82rem;
+          line-height: 1.35;
+        }
+      }
+
       .group-event-distance-link {
-        color: var(--theme-primary);
-        text-decoration: none;
-        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+        font-weight: 600;
+        text-align: left;
+        white-space: nowrap;
       }
 
       .group-event-distance-action {
         width: fit-content;
-        padding: 3px 8px;
-        border-radius: 999px;
-        background: color-mix(in srgb, var(--theme-primary) 10%, transparent);
+        gap: 6px;
+        padding: 5px 7px;
         cursor: pointer;
+        transition: color 0.2s ease;
+
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+          color: var(--theme-text-secondary);
+        }
+
+        &:hover {
+          color: var(--theme-primary);
+        }
       }
 
       .group-event-description {
         margin: 0;
         color: var(--theme-text-secondary);
-        font-size: 0.86rem;
-        line-height: 1.45;
+        font-size: 0.82rem;
+        line-height: 1.4;
         display: -webkit-box;
-        line-clamp: 2;
-        -webkit-line-clamp: 2;
+        line-clamp: 1;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1227,21 +1294,23 @@ body.is-resizing-panels {
         width: 100%;
         display: flex;
         align-items: center;
-        justify-content: flex-start;
         gap: 6px;
         color: var(--theme-text-secondary);
         font-size: 0.76rem;
-        font-weight: 500;
         cursor: pointer;
-        border-radius: 6px;
-        padding: 5px 0;
+        padding: 5px 7px;
         transition: color 0.2s ease;
 
         mat-icon {
           font-size: 14px;
           width: 14px;
           height: 14px;
+          color: var(--theme-text-secondary);
           flex-shrink: 0;
+        }
+
+        &:hover {
+          color: var(--theme-primary);
         }
       }
 
@@ -1292,8 +1361,6 @@ body.is-resizing-panels {
         color: inherit;
         font: inherit;
         font-weight: 600;
-        text-decoration: underline;
-        text-underline-offset: 2px;
         cursor: pointer;
         text-align: left;
         white-space: nowrap;
