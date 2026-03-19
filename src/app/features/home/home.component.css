@@ -642,7 +642,7 @@ body.is-resizing-panels {
         color: var(--theme-text-secondary);
         font-size: 0.86rem;
         min-height: 28px;
-        padding: 3px 7px;
+        padding: 0px 7px;
         border-radius: 8px;
         background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
 
@@ -656,6 +656,8 @@ body.is-resizing-panels {
 
       .group-event-date-item {
         grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
         min-width: 0;
 
         span {
@@ -663,13 +665,10 @@ body.is-resizing-panels {
           overflow: hidden;
           text-overflow: ellipsis;
         }
-      }
 
-      .group-event-duration-item {
-        min-width: 0;
-
-        span {
-          line-height: 1.35;
+        > span {
+          flex: 1;
+          min-width: 0;
         }
       }
 
@@ -691,6 +690,59 @@ body.is-resizing-panels {
           color: var(--theme-primary);
           flex-shrink: 0;
           margin-top: 1px;
+        }
+
+        .group-event-next-program-content {
+          display: flex;
+          flex: 1;
+          flex-direction: column;
+          min-width: 0;
+          gap: 2px;
+        }
+
+        .group-event-next-program-schedule-row {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+          min-width: 0;
+        }
+
+        .group-event-next-program-prefix {
+          color: var(--theme-text-secondary);
+          font-size: 0.82rem;
+          line-height: 1.35;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        .group-event-next-program-schedule {
+          color: var(--theme-text-secondary);
+          font-size: 0.82rem;
+          line-height: 1.35;
+          text-align: right;
+          margin-left: auto;
+          white-space: nowrap;
+          overflow-x: auto;
+          overflow-y: hidden;
+
+          &::-webkit-scrollbar {
+            height: 4px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--theme-primary) 35%, transparent);
+            border-radius: 999px;
+          }
+        }
+
+        .group-event-next-program-title {
+          color: var(--theme-text);
+          font-size: 0.84rem;
+          font-weight: 600;
+          line-height: 1.35;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         span {
@@ -717,7 +769,7 @@ body.is-resizing-panels {
       .group-event-distance-link {
         padding: 0;
         margin: 0;
-        color: inherit;
+        color: var(--theme-text-secondary);
         font: inherit;
         font-weight: 600;
         text-align: right;
@@ -725,10 +777,15 @@ body.is-resizing-panels {
       }
 
       .group-event-distance-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-end;
         width: auto;
         margin-left: auto;
         gap: 6px;
-        padding: 3px 7px;
+        padding: 0;
+        border: 0;
+        background: transparent;
         cursor: pointer;
         transition: color 0.2s ease;
 
@@ -741,6 +798,14 @@ body.is-resizing-panels {
 
         &:hover {
           color: var(--theme-primary);
+
+          mat-icon {
+            color: var(--theme-primary);
+          }
+
+          .group-event-distance-link {
+            color: var(--theme-primary);
+          }
         }
       }
 

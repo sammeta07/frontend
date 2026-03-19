@@ -184,8 +184,8 @@
                                 {{ event.title }}
                               </button>
                             </div>
-                            <span class="group-event-program-count" *ngIf="event.programs.length">
-                              {{ event.programs.length }} Program{{ event.programs.length !== 1 ? 's' : '' }}
+                            <span class="group-event-program-count" *ngIf="getEventProgramCountLabel(event) as programCountLabel">
+                              {{ programCountLabel }}
                             </span>
                           </div>
 
@@ -193,20 +193,27 @@
                             <div class="group-event-meta-item group-event-date-item">
                               <mat-icon>event</mat-icon>
                               <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
-                            </div>
-                            <div class="group-event-meta-item group-event-duration-item" *ngIf="getEventDurationLabel(event) as duration">
-                              <mat-icon>schedule</mat-icon>
-                              <span>{{ duration }}</span>
-                            </div>
-                            <div class="group-event-meta-item group-event-distance-action" *ngIf="event.distanceFromUser" (click)="openMap(event.locationCords)">
-                              <mat-icon>navigation</mat-icon>
-                              <span class="group-event-distance-link">{{ getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
+                              <button
+                                type="button"
+                                class="group-event-distance-action"
+                                *ngIf="event.distanceFromUser"
+                                (click)="openMap(event.locationCords)"
+                              >
+                                <mat-icon>navigation</mat-icon>
+                                <span class="group-event-distance-link">{{ getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
+                              </button>
                             </div>
                           </div>
 
-                          <div class="group-event-next-program-item" *ngIf="getNextProgramInEvent(event)">
+                          <div class="group-event-next-program-item" *ngIf="getNextProgramInEvent(event) as nextProgram">
                             <mat-icon>playlist_play</mat-icon>
-                            <span>{{ getNextProgramSummary(event) }}</span>
+                            <div class="group-event-next-program-content">
+                              <div class="group-event-next-program-schedule-row">
+                                <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event) }}:</span>
+                                <span class="group-event-next-program-schedule">{{ getProgramScheduleSummary(nextProgram) }}</span>
+                              </div>
+                              <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
+                            </div>
                           </div>
 
                           <p

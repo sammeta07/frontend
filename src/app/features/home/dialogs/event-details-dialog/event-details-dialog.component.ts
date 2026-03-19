@@ -2,12 +2,13 @@ import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { EventDetailsModel, ProgramDetailModel } from '../../models/home.model';
 
 @Component({
   selector: 'app-event-details-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, CommonModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, CommonModule],
   templateUrl: './event-details-dialog.component.html',
   styleUrls: ['./event-details-dialog.component.css']
 })

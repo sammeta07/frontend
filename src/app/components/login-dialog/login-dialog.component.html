@@ -1,4 +1,9 @@
-<h2 mat-dialog-title>Login</h2>
+<div class="dialog-header">
+  <h2 mat-dialog-title>Login</h2>
+  <button mat-icon-button (click)="onCancel()" aria-label="Close dialog" class="dialog-close-btn">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 <mat-dialog-content class="login-content">
   <p class="login-instruction">Please enter your credentials to continue.</p>
   

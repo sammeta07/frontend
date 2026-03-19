@@ -322,7 +322,15 @@ export class HomeComponent implements OnInit {
 
     const millisecondsPerDay = 1000 * 60 * 60 * 24;
     const dayCount = Math.max(1, Math.floor((end.getTime() - start.getTime()) / millisecondsPerDay) + 1);
-    return `${dayCount}-day event`;
+    return `${dayCount} Day${dayCount !== 1 ? 's' : ''}`;
+  }
+
+  getEventProgramCountLabel(event: EventDetailsModel): string {
+    const durationLabel = this.getEventDurationLabel(event);
+    const programCount = event.programs?.length ?? 0;
+    const programLabel = `${programCount} Program${programCount !== 1 ? 's' : ''}`;
+
+    return durationLabel ? `${durationLabel} / ${programLabel}` : programLabel;
   }
 
   getNextProgramInEvent(event: EventDetailsModel): ProgramDetailModel | null {
@@ -356,10 +364,10 @@ export class HomeComponent implements OnInit {
     }) ?? null;
   }
 
-  getNextProgramSummary(event: EventDetailsModel): string {
+  getNextProgramPrefix(event: EventDetailsModel): string {
     const nextProgram = this.getNextProgramInEvent(event);
     if (!nextProgram) {
-      return 'No upcoming programs scheduled';
+      return 'Next program';
     }
 
     const status = this.getProgramStatus({
@@ -369,8 +377,7 @@ export class HomeComponent implements OnInit {
       year_count: event.year_count,
     });
 
-    const prefix = status === 'live' ? 'Live now' : 'Next program';
-    return `${prefix}: ${nextProgram.title} - ${this.getProgramScheduleSummary(nextProgram)}`;
+    return status === 'live' ? 'Live now' : 'Next program';
   }
 
   getProgramScheduleSummary(program: ProgramDetailModel): string {

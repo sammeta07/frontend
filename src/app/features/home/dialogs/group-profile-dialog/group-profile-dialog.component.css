@@ -1,3 +1,23 @@
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 24px 0;
+}
+
+.dialog-close-btn {
+  flex-shrink: 0;
+  margin-right: 4px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(231, 76, 60, 0.1);
+    transform: rotate(90deg);
+  }
+}
+
 .profile-header {
   display: flex;
   justify-content: space-between;
