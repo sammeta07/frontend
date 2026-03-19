@@ -397,7 +397,7 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .group-events-tabs .mdc-tab--active {
-        background-color:var(--theme-primary-dark);
+        background: var(--theme-primary-dark);
         border-radius: 6px 6px 0 0;
       }
 
@@ -437,7 +437,7 @@ body.is-resizing-panels {
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
-        background: linear-gradient(140deg, color-mix(in srgb, var(--theme-primary-dark) 84%, #000) 0%, color-mix(in srgb, var(--theme-primary-dark) 72%, #111) 100%);
+        background: var(--theme-primary-dark);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
         border-radius: 12px;
         &::-webkit-scrollbar {
@@ -464,29 +464,43 @@ body.is-resizing-panels {
       }
 
       .group-event-card {
-        flex: 0 0 clamp(320px, calc((100% - 34px) / 2), 460px);
+        flex: 0 0 calc((100% - 35px) / 2);
+        max-width: calc((100% - 35px) / 2);
         scroll-snap-align: start;
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 20%, var(--theme-border));
-        border-radius: 14px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-        background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-surface-light) 100%);
-        padding: 13px;
-        aspect-ratio: 16 / 14;
-        min-height: 330px;
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
+        border-left: 4px solid var(--theme-border);
+        border-radius: 18px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface) 92%, white) 0%, color-mix(in srgb, var(--theme-surface-light) 96%, white) 100%);
+        padding: 8px;
+        aspect-ratio: 16 / 13;
+        min-height: 306px;
         transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       }
 
       .group-event-card:hover {
         transform: translateY(-2px);
-        border-color: color-mix(in srgb, var(--theme-primary) 42%, var(--theme-border));
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
+        border-color: color-mix(in srgb, var(--theme-primary) 36%, var(--theme-border));
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
+      }
+
+      .group-event-card.started-card {
+        border-left-color: #d62828;
+      }
+
+      .group-event-card.upcoming-card {
+        border-left-color: #f59e0b;
+      }
+
+      .group-event-card.completed-card {
+        border-left-color: #94a3b8;
       }
 
       .group-event-body-split {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: minmax(0, 52%) minmax(0, 48%);
-        gap: 10px;
+        grid-template-rows: minmax(154px, 52%) minmax(0, 48%);
+        gap: 6px;
         align-items: stretch;
         height: 100%;
       }
@@ -512,17 +526,22 @@ body.is-resizing-panels {
         text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
       }
 
-      .group-event-status-overlay.started-chip {
+      .group-event-status-overlay.started-chip,
+      .live-chip {
         background: linear-gradient(135deg, #c62828, #e53935);
+        color: #fff;
       }
 
-      .group-event-status-overlay.upcoming-chip {
+      .group-event-status-overlay.upcoming-chip,
+      .upcoming-chip {
         background: #f59e0b;
         color: #fff;
       }
 
-      .group-event-status-overlay.completed-chip {
+      .group-event-status-overlay.completed-chip,
+      .completed-chip {
         background: linear-gradient(135deg, #616161, #757575);
+        color: #fff;
       }
 
       .group-event-year-overlay {
@@ -571,7 +590,7 @@ body.is-resizing-panels {
         display: block;
         width: 100%;
         height: 100%;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
       }
 
@@ -583,36 +602,41 @@ body.is-resizing-panels {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 12px;
       }
 
       .group-event-details-pane {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 5px;
         min-width: 0;
         min-height: 0;
-        border-top: 3px solid transparent;
-        border-image: linear-gradient(90deg, var(--theme-primary), transparent) 1;
-        padding-top: 10px;
+        padding: 6px 8px 7px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 8%, transparent) 0%, rgba(255, 255, 255, 0.02) 100%);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
         overflow: visible;
       }
 
       .group-event-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 6px;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 0;
       }
 
       .group-event-title-block {
         min-width: 0;
+        flex: 1;
       }
 
       .group-event-title {
+        display: -webkit-box;
+        width: 100%;
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.98rem;
+        line-height: 1.25;
         color: var(--theme-text);
         border: none;
         background: transparent;
@@ -622,6 +646,10 @@ body.is-resizing-panels {
         text-align: left;
         cursor: pointer;
         transition: color 0.2s ease;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
 
         &:hover {
           color: var(--theme-primary);
@@ -630,9 +658,9 @@ body.is-resizing-panels {
 
       .group-event-meta {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 6px 10px;
-        margin: 2px 0;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+        margin: 0;
       }
 
       .group-event-meta-item {
@@ -640,16 +668,17 @@ body.is-resizing-panels {
         align-items: center;
         gap: 6px;
         color: var(--theme-text-secondary);
-        font-size: 0.86rem;
+        font-size: 0.82rem;
         min-height: 28px;
-        padding: 0px 7px;
-        border-radius: 8px;
-        background: color-mix(in srgb, var(--theme-primary) 8%, transparent);
+        padding: 4px 8px;
+        border-radius: 10px;
+        background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
 
         mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
           color: var(--theme-primary);
         }
       }
@@ -675,21 +704,21 @@ body.is-resizing-panels {
       .group-event-next-program-item {
         display: flex;
         align-items: flex-start;
-        gap: 6px;
+        gap: 8px;
         min-width: 0;
-        padding: 8px 10px;
+        padding: 5px 8px;
         border-radius: 10px;
-        background: linear-gradient(135deg, color-mix(in srgb, var(--theme-primary) 10%, transparent) 0%, color-mix(in srgb, var(--theme-primary) 4%, transparent) 100%);
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 22%, transparent);
+        background: linear-gradient(135deg, color-mix(in srgb, var(--theme-primary) 12%, transparent) 0%, color-mix(in srgb, var(--theme-primary) 5%, transparent) 100%);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 16%, transparent);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
         mat-icon {
-          font-size: 17px;
-          width: 17px;
-          height: 17px;
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
           color: var(--theme-primary);
           flex-shrink: 0;
-          margin-top: 1px;
+          margin-top: 2px;
         }
 
         .group-event-next-program-content {
@@ -709,7 +738,8 @@ body.is-resizing-panels {
 
         .group-event-next-program-prefix {
           color: var(--theme-text-secondary);
-          font-size: 0.82rem;
+          font-size: 0.77rem;
+          font-weight: 700;
           line-height: 1.35;
           white-space: nowrap;
           flex-shrink: 0;
@@ -717,7 +747,7 @@ body.is-resizing-panels {
 
         .group-event-next-program-schedule {
           color: var(--theme-text-secondary);
-          font-size: 0.82rem;
+          font-size: 0.76rem;
           line-height: 1.35;
           text-align: right;
           margin-left: auto;
@@ -737,7 +767,7 @@ body.is-resizing-panels {
 
         .group-event-next-program-title {
           color: var(--theme-text);
-          font-size: 0.84rem;
+          font-size: 0.82rem;
           font-weight: 600;
           line-height: 1.35;
           white-space: nowrap;
@@ -771,6 +801,7 @@ body.is-resizing-panels {
         margin: 0;
         color: var(--theme-text-secondary);
         font: inherit;
+        font-size: 0.78rem;
         font-weight: 600;
         text-align: right;
         white-space: nowrap;
@@ -813,10 +844,13 @@ body.is-resizing-panels {
         margin: 0;
         color: var(--theme-text-secondary);
         font-size: 0.82rem;
-        line-height: 1.4;
+        line-height: 1.45;
+        padding: 4px 8px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
         display: -webkit-box;
-        line-clamp: 1;
-        -webkit-line-clamp: 1;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -824,13 +858,14 @@ body.is-resizing-panels {
 
       .group-event-program-count {
         flex-shrink: 0;
-        font-size: 0.76rem;
+        font-size: 0.72rem;
         font-weight: 700;
         color: #fff;
         background: linear-gradient(135deg, var(--theme-primary-dark), var(--theme-primary));
         border-radius: 999px;
-        padding: 3px 8px;
+        padding: 5px 9px;
         white-space: nowrap;
+        box-shadow: 0 6px 14px color-mix(in srgb, var(--theme-primary) 28%, transparent);
       }
 
       .group-event-no-photos-state {
@@ -1201,18 +1236,19 @@ body.is-resizing-panels {
       }
 
       .program-card {
-        border-radius: 14px;
-        border: 1px solid var(--theme-border);
+        border-radius: 18px;
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
         border-left: 4px solid var(--theme-border);
-        background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-surface-light) 100%);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-        padding: 10px 12px;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface) 92%, white) 0%, color-mix(in srgb, var(--theme-surface-light) 96%, white) 100%);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        padding: 8px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
 
         &:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+          border-color: color-mix(in srgb, var(--theme-primary) 36%, var(--theme-border));
+          box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
         }
       }
 
@@ -1233,9 +1269,7 @@ body.is-resizing-panels {
         align-items: flex-start;
         justify-content: space-between;
         gap: 8px;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        border-bottom: 1px solid var(--theme-border);
+        margin-bottom: 6px;
       }
 
       .program-heading-group {
@@ -1275,14 +1309,14 @@ body.is-resizing-panels {
       }
 
       .program-title-badge {
-        font-size: 0.82rem;
+        font-size: 0.72rem;
         font-weight: 700;
         color: #fff;
-        background: var(--theme-primary-dark);
-        padding: 3px 10px;
+        background: linear-gradient(135deg, var(--theme-primary-dark), var(--theme-primary));
+        padding: 5px 9px;
         border-radius: 999px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        border: 1px solid color-mix(in srgb, white 16%, transparent);
+        box-shadow: 0 6px 14px color-mix(in srgb, var(--theme-primary) 28%, transparent);
         white-space: nowrap;
         max-width: 130px;
         overflow: hidden;
@@ -1291,14 +1325,17 @@ body.is-resizing-panels {
 
       .program-body-split {
         display: grid;
-        grid-template-columns: 65% 35%;
-        gap: 10px;
+        grid-template-columns: 58% 42%;
+        gap: 8px;
         align-items: stretch;
       }
 
       .program-photos-pane {
         min-width: 0;
         position: relative;
+        min-height: 0;
+        overflow: hidden;
+        border-radius: 10px;
       }
 
       .program-status-overlay {
@@ -1306,6 +1343,10 @@ body.is-resizing-panels {
         top: 8px;
         left: 8px;
         z-index: 10;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 999px;
         text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
       }
 
@@ -1328,6 +1369,7 @@ body.is-resizing-panels {
       .program-photo-swiper {
         display: block;
         width: 100%;
+        height: 100%;
         border-radius: 10px;
         overflow: hidden;
       }
@@ -1338,7 +1380,8 @@ body.is-resizing-panels {
 
       .program-photo {
         width: 100%;
-        height: 140px;
+        height: 100%;
+        min-height: 158px;
         object-fit: cover;
         border-radius: 8px;
       }
@@ -1346,10 +1389,13 @@ body.is-resizing-panels {
       .program-details-pane {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        border-left: 3px solid transparent;
-        border-image: linear-gradient(180deg, var(--theme-primary), transparent) 1;
-        padding-left: 10px;
+        gap: 5px;
+        min-width: 0;
+        min-height: 0;
+        padding: 6px 8px 7px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 8%, transparent) 0%, rgba(255, 255, 255, 0.02) 100%);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
       }
 
       .program-meta-item {
@@ -1360,9 +1406,10 @@ body.is-resizing-panels {
         font-size: 0.82rem;
         font-weight: 500;
         min-height: 28px;
-        padding: 2px 6px;
-        border-radius: 8px;
+        padding: 4px 8px;
+        border-radius: 10px;
         background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
 
         mat-icon {
           font-size: 15px;
@@ -1384,10 +1431,11 @@ body.is-resizing-panels {
         color: var(--theme-text-secondary);
         font-size: 0.82rem;
         cursor: pointer;
-        padding: 2px 6px;
+        padding: 4px 8px;
         margin: 0;
-        border-radius: 8px;
+        border-radius: 10px;
         background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
         transition: color 0.2s ease;
 
         mat-icon {
@@ -1414,7 +1462,7 @@ body.is-resizing-panels {
       }
 
       .live-chip {
-        background: #d62828;
+        background: linear-gradient(135deg, #c62828, #e53935);
         color: #fff;
         box-shadow: 0 0 0 0 rgba(214, 40, 40, 0.45);
         animation: live-chip-pulse 1.6s ease-out infinite;
@@ -1426,7 +1474,7 @@ body.is-resizing-panels {
       }
 
       .completed-chip {
-        background: #94a3b8;
+        background: linear-gradient(135deg, #616161, #757575);
         color: #fff;
       }
 

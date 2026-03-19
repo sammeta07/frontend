@@ -112,7 +112,7 @@
                   [matTooltipDisabled]="!group.description || group.description.length <= 100"
                   matTooltipClass="group-description-tooltip"
                 >
-                {{group.description}}
+                {{ getGroupDescriptionPreview(group.description) }}
                   <!-- {{ group.description && group.description.length > 200 ? (group.description | slice: 0 : 200) + '...' : group.description }} -->
                 </span>
               </div>
@@ -142,7 +142,13 @@
 
                 <ng-container *ngIf="getGroupEventsByTab(group, tab) as filteredEvents">
                   <div class="group-events-list" *ngIf="filteredEvents.length; else noEventsTemplate">
-                    <mat-card class="group-event-card" *ngFor="let event of filteredEvents">
+                    <mat-card
+                      class="group-event-card"
+                      [class.started-card]="getEventStatus(event) === 'live'"
+                      [class.upcoming-card]="getEventStatus(event) === 'upcoming'"
+                      [class.completed-card]="getEventStatus(event) === 'completed'"
+                      *ngFor="let event of filteredEvents"
+                    >
                       <div class="group-event-body-split">
                         <div class="group-event-photos-pane">
                           <span
@@ -205,23 +211,27 @@
                             </div>
                           </div>
 
-                          <div class="group-event-next-program-item" *ngIf="getNextProgramInEvent(event) as nextProgram">
-                            <mat-icon>playlist_play</mat-icon>
-                            <div class="group-event-next-program-content">
-                              <div class="group-event-next-program-schedule-row">
-                                <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event) }}:</span>
-                                <span class="group-event-next-program-schedule">{{ getProgramScheduleSummary(nextProgram) }}</span>
+                          <ng-container *ngIf="getNextProgramInEvent(event) as nextProgram; else eventDescriptionTemplate">
+                            <div class="group-event-next-program-item">
+                              <mat-icon>playlist_play</mat-icon>
+                              <div class="group-event-next-program-content">
+                                <div class="group-event-next-program-schedule-row">
+                                  <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event) }}:</span>
+                                  <span class="group-event-next-program-schedule">{{ getProgramScheduleSummary(nextProgram) }}</span>
+                                </div>
+                                <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
                               </div>
-                              <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
                             </div>
-                          </div>
+                          </ng-container>
 
-                          <p
-                            class="group-event-description"
-                            *ngIf="event.description"
-                            [matTooltip]="event.description"
-                            [matTooltipDisabled]="event.description.length <= 90"
-                          >{{ event.description }}</p>
+                          <ng-template #eventDescriptionTemplate>
+                            <p
+                              class="group-event-description"
+                              *ngIf="event.description"
+                              [matTooltip]="event.description"
+                              [matTooltipDisabled]="event.description.length <= 90"
+                            >{{ getEventDescriptionPreview(event.description) }}</p>
+                          </ng-template>
                         </div>
                       </div>
                     </mat-card>

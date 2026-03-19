@@ -133,7 +133,25 @@ export class HomeComponent implements OnInit {
 
   getGroupEventsByTab(group: GroupDetailsModel, tab: number): EventDetailsModel[] {
     const events = group.events ?? [];
-    return events.filter((event) => this.eventFallsInYear(event, tab));
+    const statusOrder: Record<'completed' | 'live' | 'upcoming', number> = {
+      completed: 0,
+      live: 1,
+      upcoming: 2,
+    };
+
+    return events
+      .filter((event) => this.eventFallsInYear(event, tab))
+      .sort((a, b) => {
+        const statusA = statusOrder[this.getEventStatus(a)];
+        const statusB = statusOrder[this.getEventStatus(b)];
+        if (statusA !== statusB) {
+          return statusA - statusB;
+        }
+
+        const startA = this.getEventDateBoundary(a.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+        const startB = this.getEventDateBoundary(b.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+        return startA - startB;
+      });
   }
 
   private eventFallsInYear(event: EventDetailsModel, year: number): boolean {
@@ -258,55 +276,35 @@ export class HomeComponent implements OnInit {
   getProgramStatus(program: ProgramDetailWithContextModel): 'live' | 'upcoming' | 'completed' {
     const startDateTime = this.getProgramDateTime(program.date, program.from_time, false);
     const endDateTime = this.getProgramDateTime(program.date, program.to_time, true);
-
-    if (!startDateTime || !endDateTime) {
-      return 'upcoming';
-    }
-
-    const now = new Date();
-    if (now >= startDateTime && now <= endDateTime) {
-      return 'live';
-    }
-
-    return now < startDateTime ? 'upcoming' : 'completed';
+    return this.resolveTemporalStatus(startDateTime, endDateTime);
   }
 
   getProgramStatusLabel(program: ProgramDetailWithContextModel): string {
-    const status = this.getProgramStatus(program);
-    if (status === 'live') {
-      return 'Live';
+    switch (this.getProgramStatus(program)) {
+      case 'live':
+        return 'Live';
+      case 'upcoming':
+        return 'Upcoming';
+      default:
+        return 'Completed';
     }
-    if (status === 'upcoming') {
-      return 'Upcoming';
-    }
-    return 'Completed';
   }
 
   getEventStatus(event: EventDetailsModel): 'live' | 'upcoming' | 'completed' {
     const startDate = this.getEventDateBoundary(event.start_date, false);
     const endDate = this.getEventDateBoundary(event.end_date, true);
-
-    if (!startDate || !endDate) {
-      return 'upcoming';
-    }
-
-    const now = new Date();
-    if (now >= startDate && now <= endDate) {
-      return 'live';
-    }
-
-    return now < startDate ? 'upcoming' : 'completed';
+    return this.resolveTemporalStatus(startDate, endDate);
   }
 
   getEventStatusLabel(event: EventDetailsModel): string {
-    const status = this.getEventStatus(event);
-    if (status === 'live') {
-      return 'Started';
+    switch (this.getEventStatus(event)) {
+      case 'live':
+        return 'Started';
+      case 'upcoming':
+        return 'Upcoming';
+      default:
+        return 'Completed';
     }
-    if (status === 'upcoming') {
-      return 'Upcoming';
-    }
-    return 'Completed';
   }
 
   getEventDurationLabel(event: EventDetailsModel): string {
@@ -394,6 +392,52 @@ export class HomeComponent implements OnInit {
     }
 
     return dateLabel;
+  }
+
+  getEventDescriptionPreview(description: string | undefined): string {
+    if (!description) {
+      return '';
+    }
+
+    const normalizedDescription = description.replace(/(?:\s*\.\.\.|\s*…)+\s*$/, '').trim();
+    const maxLength = 90;
+
+    if (normalizedDescription.length <= maxLength) {
+      return normalizedDescription;
+    }
+
+    return `${normalizedDescription.slice(0, maxLength).trimEnd()}...`;
+  }
+
+  getGroupDescriptionPreview(description: string | undefined): string {
+    if (!description) {
+      return '';
+    }
+
+    const normalizedDescription = description.replace(/(?:\s*\.\.\.|\s*…)+\s*$/, '').trim();
+    const maxLength = 90;
+
+    if (normalizedDescription.length <= maxLength) {
+      return normalizedDescription;
+    }
+
+    return `${normalizedDescription.slice(0, maxLength).trimEnd()}...`;
+  }
+
+  private resolveTemporalStatus(
+    startDate: Date | null,
+    endDate: Date | null
+  ): 'live' | 'upcoming' | 'completed' {
+    if (!startDate || !endDate) {
+      return 'upcoming';
+    }
+
+    const now = new Date();
+    if (now >= startDate && now <= endDate) {
+      return 'live';
+    }
+
+    return now < startDate ? 'upcoming' : 'completed';
   }
 
   private getEventDateBoundary(dateValue: string | undefined, isEndDate: boolean): Date | null {
