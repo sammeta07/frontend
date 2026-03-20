@@ -60,15 +60,20 @@ export class HomeComponent implements OnInit {
   programsData: ProgramDetailWithContextModel[] = [];
 
   get filteredSamitiGroups(): GroupDetailsModel[] {
-    if (!this.groupSearchTerm) {
-      return this.samitiGroups;
-    }
     const term = this.groupSearchTerm.toLowerCase();
-    return this.samitiGroups.filter((group) =>
-      group.title?.toLowerCase().includes(term) ||
-      group.locationName?.toLowerCase().includes(term) ||
-      group.groupId?.toLowerCase().includes(term)
-    );
+    const maxDistanceMeters = this.groupSelectedDistance * 1000;
+
+    return this.samitiGroups.filter((group) => {
+      const distanceMeters = this.parseDistanceToMeters(group.distanceFromUser);
+      if (distanceMeters > maxDistanceMeters) return false;
+
+      if (!term) return true;
+      return (
+        group.title?.toLowerCase().includes(term) ||
+        group.locationName?.toLowerCase().includes(term) ||
+        group.groupId?.toLowerCase().includes(term)
+      );
+    });
   }
 
   readonly currentYear = new Date().getFullYear();
@@ -257,10 +262,13 @@ export class HomeComponent implements OnInit {
     };
 
     const term = this.programSearchTerm.toLowerCase().trim();
+    const maxDistanceMeters = this.programSelectedDistance * 1000;
 
     return this.programsData
       .filter((program) => {
         if (program.type !== type) return false;
+        const distanceMeters = this.parseDistanceToMeters(program.distanceFromUser);
+        if (distanceMeters > maxDistanceMeters) return false;
         if (!term) return true;
         return (
           program.title?.toLowerCase().includes(term) ||
