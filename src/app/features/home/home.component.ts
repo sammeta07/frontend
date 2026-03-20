@@ -134,9 +134,9 @@ export class HomeComponent implements OnInit {
   getGroupEventsByTab(group: GroupDetailsModel, tab: number): EventDetailsModel[] {
     const events = group.events ?? [];
     const statusOrder: Record<'completed' | 'live' | 'upcoming', number> = {
-      completed: 0,
-      live: 1,
-      upcoming: 2,
+      live: 0,
+      upcoming: 1,
+      completed: 2,
     };
 
     return events

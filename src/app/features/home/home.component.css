@@ -429,7 +429,7 @@ body.is-resizing-panels {
 
       .group-events-list {
         display: flex;
-        gap: 11px;
+        gap: 9px;
         padding: 12px 0;
         scroll-padding-left: 12px;
         scroll-padding-right: 12px;
@@ -464,8 +464,8 @@ body.is-resizing-panels {
       }
 
       .group-event-card {
-        flex: 0 0 calc((100% - 35px) / 2);
-        max-width: calc((100% - 35px) / 2);
+        flex: 0 0 calc((100% - 30px) / 2);
+        max-width: calc((100% - 30px) / 2);
         scroll-snap-align: start;
         border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
         border-left: 4px solid var(--theme-border);
