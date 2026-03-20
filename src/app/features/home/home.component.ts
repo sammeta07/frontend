@@ -59,6 +59,18 @@ export class HomeComponent implements OnInit {
   samitiGroupsCopy: GroupDetailsModel[] = [];
   programsData: ProgramDetailWithContextModel[] = [];
 
+  get filteredSamitiGroups(): GroupDetailsModel[] {
+    if (!this.groupSearchTerm) {
+      return this.samitiGroups;
+    }
+    const term = this.groupSearchTerm.toLowerCase();
+    return this.samitiGroups.filter((group) =>
+      group.title?.toLowerCase().includes(term) ||
+      group.locationName?.toLowerCase().includes(term) ||
+      group.groupId?.toLowerCase().includes(term)
+    );
+  }
+
   readonly currentYear = new Date().getFullYear();
   readonly groupEventYearOffsets: number[] = [1, 0, -1, -2, -3, -4];
   readonly groupEventTabs: number[] = this.groupEventYearOffsets.map((offset) => this.currentYear + offset);
@@ -244,8 +256,19 @@ export class HomeComponent implements OnInit {
       completed: 2,
     };
 
+    const term = this.programSearchTerm.toLowerCase().trim();
+
     return this.programsData
-      .filter((program) => program.type === type)
+      .filter((program) => {
+        if (program.type !== type) return false;
+        if (!term) return true;
+        return (
+          program.title?.toLowerCase().includes(term) ||
+          program.groupTitle?.toLowerCase().includes(term) ||
+          program.eventTitle?.toLowerCase().includes(term) ||
+          program.locationName?.toLowerCase().includes(term)
+        );
+      })
       .sort((a, b) => {
         const statusA = statusOrder[this.getProgramStatus(a)];
         const statusB = statusOrder[this.getProgramStatus(b)];

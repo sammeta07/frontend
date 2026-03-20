@@ -86,7 +86,7 @@ body.is-resizing-panels {
         .group-search-input {
           border: none;
           background: transparent;
-          color: #2c3e50;
+          color: var(--theme-text);
           width: 100%;
           font-size: 15px;
           font-weight: 500;
@@ -1017,7 +1017,7 @@ body.is-resizing-panels {
         .program-search-input {
           border: none;
           background: transparent;
-          color: #2c3e50;
+          color: var(--theme-text);
           width: 100%;
           font-size: 15px;
           outline: none;

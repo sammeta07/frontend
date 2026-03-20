@@ -49,7 +49,7 @@
     </div>
     <div class="group-list  ">
       <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel *ngFor="let group of samitiGroups" #panel>
+        <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
           <mat-expansion-panel-header tabindex="-1">
             <div class="group-details-container" (click)="$event.stopPropagation()">
               <div class="one">
