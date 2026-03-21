@@ -5,7 +5,7 @@ body.is-resizing-panels {
 
 .home-container {
   display: grid;
-  grid-template-columns: 65% 10px 1fr;
+  grid-template-columns: 75% 10px 1fr;
   grid-template-rows: repeat(12, 1fr);
   height: 100%;
   grid-gap: 0px;
@@ -431,11 +431,11 @@ body.is-resizing-panels {
         display: grid;
         --group-event-gap: 9px;
         gap: var(--group-event-gap);
-        padding: 12px 0;
+        padding: 8px 0;
         scroll-padding-left: 0;
         scroll-padding-right: 0;
         grid-auto-flow: column;
-        grid-auto-columns: calc((100% - var(--group-event-gap)) / 2);
+        grid-auto-columns: calc((100% - var(--group-event-gap)) / 3);
         overflow-x: auto;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
