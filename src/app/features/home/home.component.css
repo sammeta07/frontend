@@ -5,7 +5,7 @@ body.is-resizing-panels {
 
 .home-container {
   display: grid;
-  grid-template-columns: 75% 10px 1fr;
+  grid-template-columns: 70% 10px 1fr;
   grid-template-rows: repeat(12, 1fr);
   height: 100%;
   grid-gap: 0px;
