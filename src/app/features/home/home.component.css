@@ -257,7 +257,6 @@ body.is-resizing-panels {
       grid-row: 2 / 13;
       overflow: auto;
       background: var(--theme-surface);
-      border: 1px solid var(--theme-border);
 
       /* Custom scrollbar */
       &::-webkit-scrollbar {
