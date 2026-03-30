@@ -88,9 +88,9 @@ export class HomeComponent implements OnInit {
   userLocationCords = this.locationService.userLocationCords$;
   private hasFetchedGroupsEventsPrograms = false;
 
-  groupsWidthPercent = 65;
-  private readonly minGroupsWidthPercent = 35;
-  private readonly maxGroupsWidthPercent = 75;
+  groupsWidthPercent = 70;
+  private readonly minGroupsWidthPercent = 60;
+  private readonly maxGroupsWidthPercent = 70;
   isResizingPanels = false;
 
   get homeGridTemplateColumns(): string {
