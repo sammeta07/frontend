@@ -19,7 +19,7 @@ body.is-resizing-panels {
     grid-template-rows: repeat(12, 1fr);
     grid-gap: 5px;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface-light) 100%);
+    background: var(--theme-background);
     padding: 8px;
 
     .group-header {
@@ -256,8 +256,8 @@ body.is-resizing-panels {
       grid-column: 1 / 9;
       grid-row: 2 / 13;
       overflow: auto;
-      background: transparent;
-      border: none;
+      background: var(--theme-surface);
+      border: 1px solid var(--theme-border);
       border-radius: 12px;
       padding: 8px;
 
@@ -398,7 +398,7 @@ body.is-resizing-panels {
 
       ::ng-deep .group-events-tabs .mdc-tab--active {
         background: var(--theme-primary-dark);
-        border-radius: 6px 6px 0 0;
+        /* border-radius: 6px 6px 0 0; */
       }
 
       ::ng-deep .group-events-tabs .mdc-tab-indicator {
@@ -439,7 +439,7 @@ body.is-resizing-panels {
         scroll-behavior: smooth;
         background: var(--theme-primary-dark);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
-        border-radius: 12px;
+        /* border-radius: 12px; */
         &::-webkit-scrollbar {
           height: 8px;
         }
@@ -883,7 +883,6 @@ body.is-resizing-panels {
           min-height: calc(min(420px, 88vw) * 13 / 16);
         box-sizing: border-box;
         padding: 14px;
-        border-radius: 10px;
           background: var(--theme-primary-dark);
         display: flex;
         align-items: center;
@@ -898,7 +897,7 @@ body.is-resizing-panels {
     grid-column: 2 / 3;
     grid-row: 1 / 13;
     width: 10px;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     cursor: col-resize;
     display: flex;
     align-items: center;
@@ -927,7 +926,7 @@ body.is-resizing-panels {
     grid-template-rows: repeat(12, 1fr);
     grid-gap: 5px;
     overflow: hidden;
-    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface-light) 100%);
+    background: var(--theme-background);
     /* border-radius: 16px; */
     padding: 8px;
     
@@ -1134,10 +1133,10 @@ body.is-resizing-panels {
       grid-column: 1 / 5;
       grid-row: 2 / 13;
       overflow: auto;
-      background: transparent;
-      border: none;
-      border-radius: 12px;
-      padding: 6px;
+      /* background: var(--theme-surface); */
+      /* border: 1px solid var(--theme-border); */
+      /* border-radius: 12px; */
+      /* padding: 8px; */
 
       /* Custom scrollbar */
       &::-webkit-scrollbar {
@@ -1161,6 +1160,54 @@ body.is-resizing-panels {
 
       .program-tabs {
         height: 100%;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-header {
+        background: var(--theme-surface);
+        height: 36px;
+        min-height: 36px;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-header-content {
+        justify-content: flex-start;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-label-container {
+        flex-grow: 0;
+        border-bottom-style: none !important;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab {
+        min-width: 80px;
+        width: 80px;
+        flex: 0 0 80px;
+        height: 36px;
+        min-height: 36px;
+        padding: 0;
+        --mdc-ripple-color: var(--theme-primary);
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-label-content {
+        color: var(--theme-text-secondary) !important;
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab:hover .mat-mdc-tab-label-content {
+        color: var(--theme-primary) !important;
+      }
+
+      ::ng-deep .program-tabs .mdc-tab--active .mat-mdc-tab-label-content {
+        color: #fff !important;
+      }
+
+      ::ng-deep .program-tabs .mdc-tab--active {
+        background: var(--theme-primary-dark);
+        /* border-radius: 6px 6px 0 0; */
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-indicator {
+        display: none !important;
       }
 
       .program-tab-inline {
@@ -1195,15 +1242,31 @@ body.is-resizing-panels {
 
       ::ng-deep .program-tabs .mat-mdc-tab-header {
         background: var(--theme-surface);
-        border-bottom: 1px solid var(--theme-border);
+        height: 36px;
+        min-height: 36px;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-header-content {
+        justify-content: flex-start;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-label-container {
+        flex-grow: 0;
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab {
+        min-width: 80px;
+        width: 80px;
+        flex: 0 0 80px;
+        height: 36px;
+        min-height: 36px;
+        padding: 0;
         --mdc-ripple-color: var(--theme-primary);
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-label-content {
         color: var(--theme-text-secondary) !important;
+        font-weight: 700;
         transition: color 0.3s ease;
       }
 
@@ -1213,7 +1276,6 @@ body.is-resizing-panels {
 
       ::ng-deep .program-tabs .mdc-tab--active .mat-mdc-tab-label-content {
         color: var(--theme-primary) !important;
-        font-weight: 600 !important;
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-header-pagination-chevron {
@@ -1221,18 +1283,29 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .program-tabs .mdc-tab--active {
-        border-bottom: 4px solid var(--theme-primary) !important;
+        background: var(--theme-primary-dark);
+        /* border-radius: 6px 6px 0 0; */
       }
 
       ::ng-deep .program-tabs .mdc-tab-indicator {
         display: none !important;
       }
 
+      ::ng-deep .program-tabs .mat-mdc-tab-label-container {
+        border-bottom-style: none !important;
+      }
+
+      ::ng-deep .program-tabs .mat-mdc-tab-body-content {
+        padding: 0 !important;
+      }
+
       .program-cards {
         display: grid;
         grid-template-columns: 1fr;
         gap: 8px;
-        padding: 10px 4px;
+        padding: 12px;
+        background: var(--theme-primary-dark);
+        border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
       }
 
       .program-card {
