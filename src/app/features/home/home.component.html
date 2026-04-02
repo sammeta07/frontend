@@ -5,41 +5,21 @@
       <div class="group-controls-container" role="search" aria-label="Search groups">
         <div class="group-search-wrapper">
           <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
-          <input
-            #groupSearchInput
-            type="text"
-            class="group-search-input"
-            placeholder="Search groups in..."
-            [value]="groupSearchTerm"
-            (input)="onSearchGroups($event)"
-            [disabled]="!userLocationName()"
+          <input #groupSearchInput type="text" class="group-search-input" placeholder="Search groups in..."
+            [value]="groupSearchTerm" (input)="onSearchGroups($event)" [disabled]="!userLocationName()"
             [attr.aria-label]="userLocationName() ? 'Search for groups' : 'Search disabled until location is detected'"
-            [matTooltip]="!userLocationName() ? 'Waiting for location...' : ''"
-            matTooltipPosition="below"
-            autocomplete="off"
-          />
-          <button
-            *ngIf="groupSearchTerm"
-            mat-icon-button
-            class="clear-btn"
-            (click)="clearGroupSearch()"
-            type="button"
-            aria-label="Clear search"
-            matTooltip="Clear search"
-          >
+            [matTooltip]="!userLocationName() ? 'Waiting for location...' : ''" matTooltipPosition="below"
+            autocomplete="off" />
+          <button *ngIf="groupSearchTerm" mat-icon-button class="clear-btn" (click)="clearGroupSearch()" type="button"
+            aria-label="Clear search" matTooltip="Clear search">
             <mat-icon>close</mat-icon>
           </button>
         </div>
         <div class="divider" role="separator" aria-hidden="true"></div>
         <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
           <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
-          <mat-select
-            [(value)]="groupSelectedDistance"
-            (selectionChange)="onGroupDistanceChange($event.value)"
-            aria-label="Select search distance radius"
-            [disabled]="!userLocationName()"
-            disableRipple
-          >
+          <mat-select [(value)]="groupSelectedDistance" (selectionChange)="onGroupDistanceChange($event.value)"
+            aria-label="Select search distance radius" [disabled]="!userLocationName()" disableRipple>
             <mat-option *ngFor="let km of groupDistanceOptions" [value]="km">
               <span><strong>{{ km }}</strong> km</span>
             </mat-option>
@@ -48,208 +28,357 @@
       </div>
     </div>
     <div class="group-list">
-      <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
-          <mat-expansion-panel-header tabindex="-1">
-            <div class="group-details-container" (click)="$event.stopPropagation()">
-              <div class="one">
-                <div class="group-name" (click)="openGroupProfile(group)">{{ group.title }}</div>
-                <div class="group-id-info" *ngIf="group.groupId">
-                  <span class="group-id-label">Group Id:</span>
-                  <span class="group-id-value">{{ group.groupId }}</span>
-                  <button
-                    mat-icon-button
-                    type="button"
-                    class="copy-icon"
-                    (click)="copyToClipboard(group.groupId)"
-                    aria-label="Copy Group ID"
-                    title="Copy Group ID"
-                  >
-                    <mat-icon>content_copy</mat-icon>
-                  </button>
-                </div>
-              </div>
-              <div class="three">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="$event.stopPropagation(); openJoinGroupDialog(group)"
-                  class="join-btn"
-                >
-                  <mat-icon>group_add</mat-icon>
-                  <span>JOIN GROUP</span>
-                </button>
-              </div>
-              <div class="four">
-                <img [src]="getGroupLogoUrl(group.title)" class="group-avatar" alt="{{group.title}}" />
-              </div>
-              <div class="five">
-                <!-- <div class="header-info"> -->
-                  <div class="info-divider"></div>
-                  <div class="info-item">
-                    <mat-icon>calendar_today</mat-icon>
-                    <span>Since {{ group.since }}</span>
+      <mat-tab-group class="group-tabs">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>groups</mat-icon>
+            <span>All</span>
+          </ng-template>
+          <div class="tab-content-padding">
+            <mat-accordion class="example-headers-align" multi>
+              <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
+                <mat-expansion-panel-header tabindex="-1">
+                  <div class="group-details-container" (click)="$event.stopPropagation()">
+                    <div class="one">
+                      <div class="group-name" (click)="openGroupProfile(group)">{{ group.title }}</div>
+                      <div class="group-id-info" *ngIf="group.groupId">
+                        <span class="group-id-label">Group Id:</span>
+                        <span class="group-id-value">{{ group.groupId }}</span>
+                        <button mat-icon-button type="button" class="copy-icon" (click)="copyToClipboard(group.groupId)"
+                          aria-label="Copy Group ID" title="Copy Group ID">
+                          <mat-icon>content_copy</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="three">
+                      <button mat-raised-button color="primary"
+                        (click)="$event.stopPropagation(); openJoinGroupDialog(group)" class="join-btn">
+                        <mat-icon>group_add</mat-icon>
+                        <span>JOIN GROUP</span>
+                      </button>
+                    </div>
+                    <div class="four">
+                      <img [src]="getGroupLogoUrl(group.title)" class="group-avatar" alt="{{group.title}}" />
+                    </div>
+                    <div class="five">
+                      <div class="info-divider"></div>
+                      <div class="info-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        <span>Since {{ group.since }}</span>
+                      </div>
+                      <div class="info-divider"></div>
+                      <div class="info-item" [title]="group.events.length + ' Events'">
+                        <mat-icon>event</mat-icon>
+                        <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
+                      </div>
+                      <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
+                      <div class="info-item phone-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
+                        <mat-icon>phone</mat-icon>
+                        <span>{{ group.contactNumbers.join(', ') }}</span>
+                      </div>
+                      <div class="info-divider"></div>
+
+
+                      <!-- </div> -->
+                    </div>
+                    <div class="eight">
+                      <span class="description-text" [matTooltip]="group.description"
+                        [matTooltipDisabled]="!group.description || group.description.length <= 100"
+                        matTooltipClass="group-description-tooltip">
+                        {{ getGroupDescriptionPreview(group.description) }}
+                        <!-- {{ group.description && group.description.length > 200 ? (group.description | slice: 0 : 200) + '...' : group.description }} -->
+                      </span>
+                    </div>
+                    <div class="nine">
+                      <div class="group-distance-row">
+                        <mat-icon>location_on</mat-icon>
+                        <span class="distance-link">
+                          {{ getGroupAreaName(group) }}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="info-divider"></div>
-                  <div class="info-item" [title]="group.events.length + ' Events'">
-                    <mat-icon>event</mat-icon>
-                    <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
-                  </div>
-                  <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
-                  <div class="info-item phone-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
-                    <mat-icon>phone</mat-icon>
-                    <span>{{ group.contactNumbers.join(', ') }}</span>
-                  </div>
-                  <div class="info-divider"></div>
-                  
-                  
-                <!-- </div> -->
-              </div>
-              <div class="eight">
-                <span
-                  class="description-text"
-                  [matTooltip]="group.description"
-                  [matTooltipDisabled]="!group.description || group.description.length <= 100"
-                  matTooltipClass="group-description-tooltip"
-                >
-                {{ getGroupDescriptionPreview(group.description) }}
-                  <!-- {{ group.description && group.description.length > 200 ? (group.description | slice: 0 : 200) + '...' : group.description }} -->
-                </span>
-              </div>
-              <div class="nine">
-                <div class="group-distance-row">
-                  <mat-icon>location_on</mat-icon>
-                  <span class="distance-link">
-                    {{ getGroupAreaName(group) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </mat-expansion-panel-header>
-          <div class="group-events-tabs-wrapper">
-            <mat-tab-group
-              class="group-events-tabs"
-              [stretchTabs]="false"
-              [selectedIndex]="getGroupEventTabIndex(group)"
-              (selectedIndexChange)="onGroupEventTabChange(group, $event)"
-            >
-              <mat-tab *ngFor="let tab of groupEventTabs">
-                <ng-template mat-tab-label>
-                  <span class="group-events-tab-inline">
-                    <span class="group-events-tab-label">{{ getGroupEventTabLabel(tab) }}</span>
-                  </span>
-                </ng-template>
+                </mat-expansion-panel-header>
+                <div class="group-events-tabs-wrapper">
+                  <mat-tab-group class="group-events-tabs" [stretchTabs]="false"
+                    [selectedIndex]="getGroupEventTabIndex(group)"
+                    (selectedIndexChange)="onGroupEventTabChange(group, $event)">
+                    <mat-tab *ngFor="let tab of groupEventTabs">
+                      <ng-template mat-tab-label>
+                        <span class="group-events-tab-inline">
+                          <span class="group-events-tab-label">{{ getGroupEventTabLabel(tab) }}</span>
+                        </span>
+                      </ng-template>
 
-                <ng-container *ngIf="getGroupEventsByTab(group, tab) as filteredEvents">
-                  <div class="group-events-list" *ngIf="filteredEvents.length; else noEventsTemplate">
-                    <mat-card
-                      class="group-event-card"
-                      [class.started-card]="getEventStatus(event) === 'live'"
-                      [class.upcoming-card]="getEventStatus(event) === 'upcoming'"
-                      [class.completed-card]="getEventStatus(event) === 'completed'"
-                      *ngFor="let event of filteredEvents"
-                    >
-                      <div class="group-event-body-split">
-                        <div class="group-event-photos-pane">
-                          <span
-                            class="group-event-status-overlay"
-                            [class.started-chip]="getEventStatus(event) === 'live'"
-                            [class.upcoming-chip]="getEventStatus(event) === 'upcoming'"
-                            [class.completed-chip]="getEventStatus(event) === 'completed'"
-                          >{{ getEventStatusLabel(event) }}</span>
-                          <span class="group-event-year-overlay" *ngIf="event.year_count">{{ getYearLabel(event.year_count) }}</span>
-                          <span class="group-event-photo-count" *ngIf="event.photos.length > 1">{{ event.photos.length }} Photos</span>
-                          <div class="group-event-image-overlay" aria-hidden="true"></div>
-                          <swiper-container
-                            class="group-event-photo-swiper"
-                            *ngIf="event.photos.length; else eventNoPhotosTemplate"
-                            slides-per-view="1"
-                            space-between="8"
-                            pagination="true"
-                            navigation="true"
-                            loop="false"
-                          >
-                            <swiper-slide *ngFor="let photo of event.photos">
-                              <img
-                                [src]="photo"
-                                [alt]="event.title"
-                                class="group-event-photo"
-                              />
-                            </swiper-slide>
-                          </swiper-container>
-                        </div>
+                      <ng-container *ngIf="getGroupEventsByTab(group, tab) as filteredEvents">
+                        <div class="group-events-list" *ngIf="filteredEvents.length; else noEventsTemplate">
+                          <mat-card class="group-event-card" [class.started-card]="getEventStatus(event) === 'live'"
+                            [class.upcoming-card]="getEventStatus(event) === 'upcoming'"
+                            [class.completed-card]="getEventStatus(event) === 'completed'"
+                            *ngFor="let event of filteredEvents">
+                            <div class="group-event-body-split">
+                              <div class="group-event-photos-pane">
+                                <span class="group-event-status-overlay"
+                                  [class.started-chip]="getEventStatus(event) === 'live'"
+                                  [class.upcoming-chip]="getEventStatus(event) === 'upcoming'"
+                                  [class.completed-chip]="getEventStatus(event) === 'completed'">{{
+                                  getEventStatusLabel(event) }}</span>
+                                <span class="group-event-year-overlay" *ngIf="event.year_count">{{
+                                  getYearLabel(event.year_count) }}</span>
+                                <span class="group-event-photo-count" *ngIf="event.photos.length > 1">{{
+                                  event.photos.length }} Photos</span>
+                                <div class="group-event-image-overlay" aria-hidden="true"></div>
+                                <swiper-container class="group-event-photo-swiper"
+                                  *ngIf="event.photos.length; else eventNoPhotosTemplate" slides-per-view="1"
+                                  space-between="8" pagination="true" navigation="true" loop="false">
+                                  <swiper-slide *ngFor="let photo of event.photos">
+                                    <img [src]="photo" [alt]="event.title" class="group-event-photo" />
+                                  </swiper-slide>
+                                </swiper-container>
+                              </div>
 
-                        <div class="group-event-details-pane">
-                          <div class="group-event-header">
-                            <div class="group-event-title-block">
-                              <button
-                                type="button"
-                                class="group-event-title"
-                                (click)="openEventDetails(event)"
-                              >
-                                {{ event.title }}
-                              </button>
-                            </div>
-                            <span class="group-event-program-count" *ngIf="getEventProgramCountLabel(event) as programCountLabel">
-                              {{ programCountLabel }}
-                            </span>
-                          </div>
-
-                          <div class="group-event-meta">
-                            <div class="group-event-meta-item group-event-date-item">
-                              <mat-icon>event</mat-icon>
-                              <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
-                              <button
-                                type="button"
-                                class="group-event-distance-action"
-                                *ngIf="event.distanceFromUser"
-                                (click)="openMap(event.locationCords)"
-                              >
-                                <mat-icon>navigation</mat-icon>
-                                <span class="group-event-distance-link">{{ getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
-                              </button>
-                            </div>
-                          </div>
-
-                          <ng-container *ngIf="getNextProgramInEvent(event) as nextProgram; else eventDescriptionTemplate">
-                            <div class="group-event-next-program-item">
-                              <mat-icon>playlist_play</mat-icon>
-                              <div class="group-event-next-program-content">
-                                <div class="group-event-next-program-schedule-row">
-                                  <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event) }}:</span>
-                                  <span class="group-event-next-program-schedule">{{ getProgramScheduleSummary(nextProgram) }}</span>
+                              <div class="group-event-details-pane">
+                                <div class="group-event-header">
+                                  <div class="group-event-title-block">
+                                    <button type="button" class="group-event-title" (click)="openEventDetails(event)">
+                                      {{ event.title }}
+                                    </button>
+                                  </div>
+                                  <span class="group-event-program-count"
+                                    *ngIf="getEventProgramCountLabel(event) as programCountLabel">
+                                    {{ programCountLabel }}
+                                  </span>
                                 </div>
-                                <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
+
+                                <div class="group-event-meta">
+                                  <div class="group-event-meta-item group-event-date-item">
+                                    <mat-icon>event</mat-icon>
+                                    <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
+                                    <button type="button" class="group-event-distance-action"
+                                      *ngIf="event.distanceFromUser" (click)="openMap(event.locationCords)">
+                                      <mat-icon>navigation</mat-icon>
+                                      <span class="group-event-distance-link">{{
+                                        getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <ng-container
+                                  *ngIf="getNextProgramInEvent(event) as nextProgram; else eventDescriptionTemplate">
+                                  <div class="group-event-next-program-item">
+                                    <mat-icon>playlist_play</mat-icon>
+                                    <div class="group-event-next-program-content">
+                                      <div class="group-event-next-program-schedule-row">
+                                        <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event)
+                                          }}:</span>
+                                        <span class="group-event-next-program-schedule">{{
+                                          getProgramScheduleSummary(nextProgram) }}</span>
+                                      </div>
+                                      <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
+                                    </div>
+                                  </div>
+                                </ng-container>
+
+                                <ng-template #eventDescriptionTemplate>
+                                  <p class="group-event-description" *ngIf="event.description"
+                                    [matTooltip]="event.description"
+                                    [matTooltipDisabled]="event.description.length <= 90">{{
+                                    getEventDescriptionPreview(event.description) }}</p>
+                                </ng-template>
                               </div>
                             </div>
-                          </ng-container>
-
-                          <ng-template #eventDescriptionTemplate>
-                            <p
-                              class="group-event-description"
-                              *ngIf="event.description"
-                              [matTooltip]="event.description"
-                              [matTooltipDisabled]="event.description.length <= 90"
-                            >{{ getEventDescriptionPreview(event.description) }}</p>
-                          </ng-template>
+                          </mat-card>
                         </div>
-                      </div>
-                    </mat-card>
-                  </div>
-                </ng-container>
-              </mat-tab>
-            </mat-tab-group>
+                      </ng-container>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+
+                <ng-template #noEventsTemplate>
+                  <div class="no-events-state">No events available for this group.</div>
+                </ng-template>
+
+                <ng-template #eventNoPhotosTemplate>
+                  <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
+                </ng-template>
+              </mat-expansion-panel>
+            </mat-accordion>
           </div>
-
-          <ng-template #noEventsTemplate>
-            <div class="no-events-state">No events available for this group.</div>
+        </mat-tab>
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>favorite</mat-icon>
+            <span>Favourites</span>
           </ng-template>
+          <div class="tab-content-padding">
+            <mat-accordion class="example-headers-align" multi>
+              <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
+                <mat-expansion-panel-header tabindex="-1">
+                  <div class="group-details-container" (click)="$event.stopPropagation()">
+                    <div class="one">
+                      <div class="group-name" (click)="openGroupProfile(group)">{{ group.title }}</div>
+                      <div class="group-id-info" *ngIf="group.groupId">
+                        <span class="group-id-label">Group Id:</span>
+                        <span class="group-id-value">{{ group.groupId }}</span>
+                        <button mat-icon-button type="button" class="copy-icon" (click)="copyToClipboard(group.groupId)"
+                          aria-label="Copy Group ID" title="Copy Group ID">
+                          <mat-icon>content_copy</mat-icon>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="three">
+                      <button mat-raised-button color="primary"
+                        (click)="$event.stopPropagation(); openJoinGroupDialog(group)" class="join-btn">
+                        <mat-icon>group_add</mat-icon>
+                        <span>JOIN GROUP</span>
+                      </button>
+                    </div>
+                    <div class="four">
+                      <img [src]="getGroupLogoUrl(group.title)" class="group-avatar" alt="{{group.title}}" />
+                    </div>
+                    <div class="five">
+                      <div class="info-divider"></div>
+                      <div class="info-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        <span>Since {{ group.since }}</span>
+                      </div>
+                      <div class="info-divider"></div>
+                      <div class="info-item" [title]="group.events.length + ' Events'">
+                        <mat-icon>event</mat-icon>
+                        <span>{{ group.events.length }} Event{{ group.events.length !== 1 ? 's' : '' }}</span>
+                      </div>
+                      <div class="info-divider" *ngIf="group.contactNumbers && group.contactNumbers.length > 0"></div>
+                      <div class="info-item phone-item" *ngIf="group.contactNumbers && group.contactNumbers.length > 0">
+                        <mat-icon>phone</mat-icon>
+                        <span>{{ group.contactNumbers.join(', ') }}</span>
+                      </div>
+                      <div class="info-divider"></div>
+                    </div>
+                    <div class="eight">
+                      <span class="description-text" [matTooltip]="group.description"
+                        [matTooltipDisabled]="!group.description || group.description.length <= 100"
+                        matTooltipClass="group-description-tooltip">
+                        {{ getGroupDescriptionPreview(group.description) }}
 
-          <ng-template #eventNoPhotosTemplate>
-            <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
-          </ng-template>
-        </mat-expansion-panel>
-      </mat-accordion>
+                      </span>
+                    </div>
+                    <div class="nine">
+                      <div class="group-distance-row">
+                        <mat-icon>location_on</mat-icon>
+                        <span class="distance-link">
+                          {{ getGroupAreaName(group) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel-header>
+                <div class="group-events-tabs-wrapper">
+                  <mat-tab-group class="group-events-tabs" [stretchTabs]="false"
+                    [selectedIndex]="getGroupEventTabIndex(group)"
+                    (selectedIndexChange)="onGroupEventTabChange(group, $event)">
+                    <mat-tab *ngFor="let tab of groupEventTabs">
+                      <ng-template mat-tab-label>
+                        <span class="group-events-tab-inline">
+                          <span class="group-events-tab-label">{{ getGroupEventTabLabel(tab) }}</span>
+                        </span>
+                      </ng-template>
+
+                      <ng-container *ngIf="getGroupEventsByTab(group, tab) as filteredEvents">
+                        <div class="group-events-list" *ngIf="filteredEvents.length; else noEventsTemplate">
+                          <mat-card class="group-event-card" [class.started-card]="getEventStatus(event) === 'live'"
+                            [class.upcoming-card]="getEventStatus(event) === 'upcoming'"
+                            [class.completed-card]="getEventStatus(event) === 'completed'"
+                            *ngFor="let event of filteredEvents">
+                            <div class="group-event-body-split">
+                              <div class="group-event-photos-pane">
+                                <span class="group-event-status-overlay"
+                                  [class.started-chip]="getEventStatus(event) === 'live'"
+                                  [class.upcoming-chip]="getEventStatus(event) === 'upcoming'"
+                                  [class.completed-chip]="getEventStatus(event) === 'completed'">{{
+                                  getEventStatusLabel(event) }}</span>
+                                <span class="group-event-year-overlay" *ngIf="event.year_count">{{
+                                  getYearLabel(event.year_count) }}</span>
+                                <span class="group-event-photo-count" *ngIf="event.photos.length > 1">{{
+                                  event.photos.length }} Photos</span>
+                                <div class="group-event-image-overlay" aria-hidden="true"></div>
+                                <swiper-container class="group-event-photo-swiper"
+                                  *ngIf="event.photos.length; else eventNoPhotosTemplate" slides-per-view="1"
+                                  space-between="8" pagination="true" navigation="true" loop="false">
+                                  <swiper-slide *ngFor="let photo of event.photos">
+                                    <img [src]="photo" [alt]="event.title" class="group-event-photo" />
+                                  </swiper-slide>
+                                </swiper-container>
+                              </div>
+
+                              <div class="group-event-details-pane">
+                                <div class="group-event-header">
+                                  <div class="group-event-title-block">
+                                    <button type="button" class="group-event-title" (click)="openEventDetails(event)">
+                                      {{ event.title }}
+                                    </button>
+                                  </div>
+                                  <span class="group-event-program-count"
+                                    *ngIf="getEventProgramCountLabel(event) as programCountLabel">
+                                    {{ programCountLabel }}
+                                  </span>
+                                </div>
+
+                                <div class="group-event-meta">
+                                  <div class="group-event-meta-item group-event-date-item">
+                                    <mat-icon>event</mat-icon>
+                                    <span>{{ formatDate(event.start_date) }} - {{ formatDate(event.end_date) }}</span>
+                                    <button type="button" class="group-event-distance-action"
+                                      *ngIf="event.distanceFromUser" (click)="openMap(event.locationCords)">
+                                      <mat-icon>navigation</mat-icon>
+                                      <span class="group-event-distance-link">{{
+                                        getDistanceInMetersFromYou(event.distanceFromUser) }}</span>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <ng-container
+                                  *ngIf="getNextProgramInEvent(event) as nextProgram; else eventDescriptionTemplate">
+                                  <div class="group-event-next-program-item">
+                                    <mat-icon>playlist_play</mat-icon>
+                                    <div class="group-event-next-program-content">
+                                      <div class="group-event-next-program-schedule-row">
+                                        <span class="group-event-next-program-prefix">{{ getNextProgramPrefix(event)
+                                          }}:</span>
+                                        <span class="group-event-next-program-schedule">{{
+                                          getProgramScheduleSummary(nextProgram) }}</span>
+                                      </div>
+                                      <span class="group-event-next-program-title">{{ nextProgram.title }}</span>
+                                    </div>
+                                  </div>
+                                </ng-container>
+
+                                <ng-template #eventDescriptionTemplate>
+                                  <p class="group-event-description" *ngIf="event.description"
+                                    [matTooltip]="event.description"
+                                    [matTooltipDisabled]="event.description.length <= 90">{{
+                                    getEventDescriptionPreview(event.description) }}</p>
+                                </ng-template>
+                              </div>
+                            </div>
+                          </mat-card>
+                        </div>
+                      </ng-container>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+
+                <ng-template #noEventsTemplate>
+                  <div class="no-events-state">No events available for this group.</div>
+                </ng-template>
+
+                <ng-template #eventNoPhotosTemplate>
+                  <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
+                </ng-template>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </div>
   </div>
 
@@ -264,38 +393,20 @@
       <div class="program-controls-container" role="search" aria-label="Search programs">
         <div class="program-search-wrapper">
           <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
-          <input
-            #programSearchInput
-            type="text"
-            class="program-search-input"
-            placeholder="Search programs in..."
-            [value]="programSearchTerm"
-            (input)="onSearchProgram($event)"
-            [disabled]="!userLocationName()"
+          <input #programSearchInput type="text" class="program-search-input" placeholder="Search programs in..."
+            [value]="programSearchTerm" (input)="onSearchProgram($event)" [disabled]="!userLocationName()"
             [attr.aria-label]="userLocationName() ? 'Search for programs' : 'Search disabled until location is detected'"
-            autocomplete="off"
-          />
-          <button
-            *ngIf="programSearchTerm"
-            mat-icon-button
-            class="clear-btn"
-            (click)="clearProgramSearch()"
-            type="button"
-            aria-label="Clear program search"
-          >
+            autocomplete="off" />
+          <button *ngIf="programSearchTerm" mat-icon-button class="clear-btn" (click)="clearProgramSearch()"
+            type="button" aria-label="Clear program search">
             <mat-icon>close</mat-icon>
           </button>
         </div>
         <div class="divider" role="separator" aria-hidden="true"></div>
         <mat-form-field appearance="outline" class="borderless-field custom-select-field" subscriptSizing="dynamic">
           <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
-          <mat-select
-            [(value)]="programSelectedDistance"
-            (selectionChange)="onProgramDistanceChange($event.value)"
-            aria-label="Select program distance radius"
-            [disabled]="!userLocationName()"
-            disableRipple
-          >
+          <mat-select [(value)]="programSelectedDistance" (selectionChange)="onProgramDistanceChange($event.value)"
+            aria-label="Select program distance radius" [disabled]="!userLocationName()" disableRipple>
             <mat-option *ngFor="let km of programDistanceOptions" [value]="km">
               <span><strong>{{ km }}</strong> km</span>
             </mat-option>
@@ -304,24 +415,22 @@
       </div>
     </div>
     <div class="program-list">
-      <mat-tab-group (wheel)="scrollTabs($event)" #tabGroup *ngIf="programTypes.length > 0; else noProgramsTemplate" class="program-tabs">
+      <mat-tab-group (wheel)="scrollTabs($event)" #tabGroup *ngIf="programTypes.length > 0; else noProgramsTemplate"
+        class="program-tabs">
         <mat-tab *ngFor="let type of programTypes">
           <ng-template mat-tab-label>
             <span class="program-tab-inline">
 
               <!-- <span class="program-tab-label">{{ type }}</span> -->
-               <mat-icon>home</mat-icon>
+              <mat-icon>home</mat-icon>
               <span class="program-tab-count">{{ getEventCountByType(type) }}</span>
             </span>
           </ng-template>
           <div class="program-cards">
-            <mat-card
-              class="program-card"
-              [class.live-card]="getProgramStatus(program) === 'live'"
+            <mat-card class="program-card" [class.live-card]="getProgramStatus(program) === 'live'"
               [class.upcoming-card]="getProgramStatus(program) === 'upcoming'"
               [class.completed-card]="getProgramStatus(program) === 'completed'"
-              *ngFor="let program of getProgramsByType(type)"
-            >
+              *ngFor="let program of getProgramsByType(type)">
               <div class="program-card-header">
                 <div class="program-heading-group">
                   <h3 class="program-group-title">{{ program.groupTitle }}</h3>
@@ -334,28 +443,17 @@
 
               <div class="program-body-split">
                 <div class="program-photos-pane">
-                  <span
-                    class="program-type-chip program-status-overlay"
+                  <span class="program-type-chip program-status-overlay"
                     [class.live-chip]="getProgramStatus(program) === 'live'"
                     [class.upcoming-chip]="getProgramStatus(program) === 'upcoming'"
-                    [class.completed-chip]="getProgramStatus(program) === 'completed'"
-                  >{{ getProgramStatusLabel(program) }}</span>
-                  <span class="program-year-overlay" *ngIf="program.year_count">{{ getYearLabel(program.year_count) }}</span>
-                  <swiper-container
-                    class="program-photo-swiper"
-                    *ngIf="program.photos.length; else noPhotosTemplate"
-                    slides-per-view="1"
-                    space-between="8"
-                    pagination="true"
-                    navigation="true"
-                    loop="false"
-                  >
+                    [class.completed-chip]="getProgramStatus(program) === 'completed'">{{ getProgramStatusLabel(program)
+                    }}</span>
+                  <span class="program-year-overlay" *ngIf="program.year_count">{{ getYearLabel(program.year_count)
+                    }}</span>
+                  <swiper-container class="program-photo-swiper" *ngIf="program.photos.length; else noPhotosTemplate"
+                    slides-per-view="1" space-between="8" pagination="true" navigation="true" loop="false">
                     <swiper-slide *ngFor="let photo of program.photos">
-                      <img
-                        [src]="photo"
-                        [alt]="program.title"
-                        class="program-photo"
-                      />
+                      <img [src]="photo" [alt]="program.title" class="program-photo" />
                     </swiper-slide>
                   </swiper-container>
                 </div>
@@ -369,17 +467,12 @@
                     <mat-icon>schedule</mat-icon>
                     <span>{{ formatTime12Hour(program.from_time) }} - {{ formatTime12Hour(program.to_time) }}</span>
                   </div>
-                  <div
-                    class="program-meta-item program-distance-row"
-                    *ngIf="program.distanceFromUser"
-                    (click)="$event.stopPropagation(); openMap(program.locationCords)"
-                  >
+                  <div class="program-meta-item program-distance-row" *ngIf="program.distanceFromUser"
+                    (click)="$event.stopPropagation(); openMap(program.locationCords)">
                     <mat-icon>navigation</mat-icon>
-                    <button
-                      type="button"
-                      class="program-distance-link"
-                      (click)="$event.stopPropagation(); openMap(program.locationCords)"
-                    >{{ getDistanceInMetersFromYou(program.distanceFromUser) }}</button>
+                    <button type="button" class="program-distance-link"
+                      (click)="$event.stopPropagation(); openMap(program.locationCords)">{{
+                      getDistanceInMetersFromYou(program.distanceFromUser) }}</button>
                   </div>
                 </div>
               </div>
