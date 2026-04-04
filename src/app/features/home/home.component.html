@@ -28,6 +28,18 @@
       </div>
     </div>
     <div class="group-list">
+      <div class="group-tab-actions" aria-label="Group panel actions">
+        <button mat-stroked-button type="button" class="group-tab-action-btn"
+          (click)="expandAllGroupPanels()">
+          <mat-icon>unfold_more</mat-icon>
+          <span>Expand All</span>
+        </button>
+        <button mat-stroked-button type="button" class="group-tab-action-btn"
+          (click)="collapseAllGroupPanels()">
+          <mat-icon>unfold_less</mat-icon>
+          <span>Collapse All</span>
+        </button>
+      </div>
       <mat-tab-group class="group-tabs">
         <mat-tab>
           <ng-template mat-tab-label>
@@ -425,7 +437,7 @@
 
               <!-- <span class="program-tab-label">{{ type }}</span> -->
               <mat-icon>{{ getProgramTypeIcon(type) }}</mat-icon>
-              <span class="program-tab-count">{{ getEventCountByType(type) }}</span>
+              <span class="program-tab-count">{{ getProgramCountByType(type) }}</span>
             </span>
           </ng-template>
           <div class="program-cards">

@@ -15,6 +15,7 @@ export interface ProgramDetailModel {
   locationCords: LocationModel;
   locationName?: string; // Optional human-readable location name
   distanceFromUser?: string;
+  
 }
 
 export interface ProgramDetailWithContextModel extends ProgramDetailModel {
@@ -51,6 +52,7 @@ export interface GroupDetailsModel {
   groupId: string; // Combination of first letters of group name words and id
   title: string;
   locationCords: LocationModel;
+  area: string;
   since: number;
   admins: GroupAdminModel[];
   events: EventDetailsModel[];

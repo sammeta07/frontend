@@ -21,6 +21,7 @@ export class HomeService {
       "groupId": "ANM_1",
       "title": "Azad Navyuvak Mandal",
       "locationCords": { "lat": 21.2310, "long": 81.4508 },  // ~150m from user
+      "area": "Kumhari",
       "since": 2018,
       "description": "Azad Navyuvak Mandal is a vibrant youth organization based in Raipur, Chhattisgarh. Founded in 2018, the group has quickly become a hub for young people passionate about community service, cultural activities, and social change. With a focus on empowering youth and fostering a sense of unity, Azad Navyuvak Mandal organizes a wide range of events throughout the year, including festivals, charity drives, educational workshops, and sports tournaments. The group is known for its inclusive and energetic approach, attracting members from diverse backgrounds who share a common goal of making a positive impact in their community.",
       "contactNumbers": ["9876543210", "9123456780"],
@@ -99,6 +100,7 @@ export class HomeService {
       "groupId": "ESB_2",
       "title": "Ekta Samiti Bhilai",
       "locationCords": { "lat": 21.2345, "long": 81.4520 },  // ~550m from user
+      "area": "Charoda",
       "since": 2010,
       "description": "Ekta Samiti Bhilai promotes community harmony and organizes cultural events that bring people together in celebration and solidarity.",
       "contactNumbers": ["9876123456", "9123456781"],
@@ -155,6 +157,7 @@ export class HomeService {
       "groupId": "NSM_3",
       "title": "Navjivan Samaj Mandal",
       "locationCords": { "lat": 21.2420, "long": 81.4580 },  // ~1.5km from user
+      "area": "Bhilai 3",
       "since": 2015,
       "description": "Navjivan Samaj Mandal works towards social welfare and youth empowerment through various educational and cultural programs.",
       "contactNumbers": ["9876543211", "9123456782"],
@@ -210,6 +213,7 @@ export class HomeService {
       "groupId": "RSYC_4",
       "title": "Rising Star Youth Club",
       "locationCords": { "lat": 21.2510, "long": 81.4620 },  // ~2.8km from user
+      "area": "Jamul",
       "since": 2021,
       "description": "Rising Star Youth Club nurtures young talent through sports, education, and personality development programs.",
       "contactNumbers": ["9876456789", "9123456784"],
@@ -245,6 +249,7 @@ export class HomeService {
       "groupId": "USM_5",
       "title": "Unity Seva Mandal",
       "locationCords": { "lat": 21.2640, "long": 81.4710 },  // ~4.5km from user
+      "area": "Ahiwara",
       "since": 2012,
       "description": "Unity Seva Mandal is dedicated to community service, organizing health camps, educational programs, and social welfare activities.",
       "contactNumbers": ["9876789012", "9123456785"],
@@ -302,6 +307,7 @@ export class HomeService {
       "groupId": "VNC_10",
       "title": "Very Nearby Club",
       "locationCords": { "lat": 21.2301, "long": 81.4501 },  // ~120m from user (very close)
+      "area": "Kumhari",
       "since": 2025,
       "description": "A community club located very close to you, perfect for quick meetups and local events.",
       "contactNumbers": ["9000000000"],
@@ -325,7 +331,42 @@ export class HomeService {
           "description": "Casual weekend meetup for community members to connect, share ideas, and plan future activities together."
         }
       ]
+    },
+    {
+      "id": 11,
+      "groupId": "DSS_11",
+      "title": "Bemetera Seva Sangh",
+      "locationCords": { "lat": 21.6480, "long": 81.4500 },
+      "area": "Bemetara",
+      "since": 2016,
+      "description": "Durg Seva Sangh is a long-running community organization known for devotional gatherings, public service programs, and large-scale annual celebrations that attract members from across the district.",
+      "contactNumbers": ["9876500011", "9123400011"],
+      "logo": "https://picsum.photos/seed/dss-logo/200/200",
+      "favourite": false,
+      "admins": [],
+      "events": [
+        {
+          "id": 1101,
+          "title": "Sharad Mahotsav",
+          "type": EventType.FESTIVAL,
+          "year_count": 14,
+          "start_date": "2026-10-18",
+          "end_date": "2026-10-20",
+          "locationCords": { "lat": 21.6482, "long": 81.4503 },
+          "photos": [
+            "https://picsum.photos/seed/sharad-mahotsav/800/500",
+            "https://picsum.photos/seed/sharad-mahotsav-2/800/500"
+          ],
+          "programs": [
+            { "id": 1101001, "description": "The mahotsav opens with a ceremonial deep prajwalan and evening aarati, bringing together families and elders in a peaceful devotional atmosphere.", "title": "Deep Prajwalan Aarati", "type": ProgramType.SPIRITUAL, "date": "2026-10-18", "from_time": "18:00", "to_time": "19:00", "photos": ["https://picsum.photos/seed/program-1101001-1/800/500", "https://picsum.photos/seed/program-1101001-2/800/500"], "locationCords": { "lat": 21.6482, "long": 81.4503 } },
+            { "id": 1101002, "description": "Local artists perform folk songs, dance, and stage acts celebrating regional culture and community traditions.", "title": "Lok Sanskritik Sandhya", "type": ProgramType.CULTURAL, "date": "2026-10-19", "from_time": "19:30", "to_time": "21:30", "photos": ["https://picsum.photos/seed/program-1101002-1/800/500", "https://picsum.photos/seed/program-1101002-2/800/500"], "locationCords": { "lat": 21.6481, "long": 81.4504 } },
+            { "id": 1101003, "description": "A large community meal is served to attendees and volunteers as a mark of gratitude and collective celebration.", "title": "Samuhik Bhandara", "type": ProgramType.BHANDARA, "date": "2026-10-20", "from_time": "12:00", "to_time": "14:30", "photos": ["https://picsum.photos/seed/program-1101003-1/800/500", "https://picsum.photos/seed/program-1101003-2/800/500"], "locationCords": { "lat": 21.6483, "long": 81.4502 } }
+          ],
+          "description": "Sharad Mahotsav is a three-day celebration featuring devotional programs, cultural performances, and community dining for families across the region."
+        }
+      ]
     }
+    
   ];
 
   groupSearchTerm = signal<string>('');

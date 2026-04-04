@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, effect, viewChild, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, OnInit, effect, viewChildren, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,11 +49,11 @@ export class HomeComponent implements OnInit {
 
   groupSearchTerm: string = '';
   groupSelectedDistance: number = 5;
-  groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
+  groupDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20,50];
   
   programSearchTerm: string = '';
   programSelectedDistance: number = 5;
-  programDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20];
+  programDistanceOptions: number[] = [1, 2, 3, 4, 5, 10, 20,50];
   
   samitiGroups: GroupDetailsModel[] = [];
   samitiGroupsCopy: GroupDetailsModel[] = [];
@@ -70,6 +70,7 @@ export class HomeComponent implements OnInit {
       if (!term) return true;
       return (
         group.title?.toLowerCase().includes(term) ||
+        group.area?.toLowerCase().includes(term) ||
         group.locationName?.toLowerCase().includes(term) ||
         group.groupId?.toLowerCase().includes(term)
       );
@@ -117,7 +118,15 @@ export class HomeComponent implements OnInit {
     return `${this.groupsWidthPercent}% 10px 1fr`;
   }
 
-  accordion = viewChild.required(MatAccordion);
+  accordions = viewChildren(MatAccordion);
+
+  expandAllGroupPanels(): void {
+    this.accordions().forEach((accordion) => accordion.openAll());
+  }
+
+  collapseAllGroupPanels(): void {
+    this.accordions().forEach((accordion) => accordion.closeAll());
+  }
 
   constructor() {
     effect(() => {
@@ -235,6 +244,11 @@ export class HomeComponent implements OnInit {
 
   private async populateGroupLocationNamesSequentially(groups: GroupDetailsModel[]): Promise<void> {
     for (const group of groups) {
+      if (group.area?.trim()) {
+        group.locationName = group.area;
+        continue;
+      }
+
       if (group.locationName?.trim()) {
         continue;
       }
@@ -314,14 +328,8 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getEventCountByType(type: ProgramType): number {
-    const uniqueEvents = new Set(
-      this.programsData
-        .filter((program) => program.type === type)
-        .map((program) => `${program.groupTitle}::${program.eventTitle}`)
-    );
-
-    return uniqueEvents.size;
+  getProgramCountByType(type: ProgramType): number {
+    return this.getProgramsByType(type).length;
   }
 
   getProgramStatus(program: ProgramDetailWithContextModel): 'live' | 'upcoming' | 'completed' {
@@ -717,7 +725,7 @@ export class HomeComponent implements OnInit {
   }
 
   getGroupAreaName(group: GroupDetailsModel): string {
-    const areaName = group.locationName?.trim();
+    const areaName = group.area?.trim() || group.locationName?.trim();
     if (!areaName || areaName.toLowerCase() === 'failed') {
       return 'Area unavailable';
     }

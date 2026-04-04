@@ -257,6 +257,40 @@ body.is-resizing-panels {
       grid-row: 2 / 13;
       overflow: hidden;
       border-radius: 8px;
+      position: relative;
+
+      .group-tab-actions {
+        position: absolute;
+        top: 4px;
+        right: 8px;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .group-tab-action-btn {
+        height: 28px;
+        min-width: auto;
+        padding: 0 10px;
+        border-radius: 999px;
+        border-color: color-mix(in srgb, var(--theme-primary) 28%, var(--theme-border));
+        background: color-mix(in srgb, var(--theme-surface) 96%, white);
+        color: var(--theme-text);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .group-tab-action-btn mat-icon {
+        margin-right: 6px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+
+      .group-tab-action-btn:hover {
+        background: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-surface));
+      }
+
       .group-tabs {
         height: 100%;
       }
@@ -430,6 +464,7 @@ body.is-resizing-panels {
         min-height: 36px;
         overflow-x: hidden !important;
         overflow-y: hidden !important;
+        padding-right: 244px;
       }
 
       ::ng-deep .group-tabs .mat-mdc-tab-header-content {
