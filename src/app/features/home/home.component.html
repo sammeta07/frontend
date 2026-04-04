@@ -210,11 +210,11 @@
           <ng-template mat-tab-label>
             <mat-icon>favorite</mat-icon>
             <span>Favourites</span>
-            <span class="tab-count-badge">0</span>
+            <span class="tab-count-badge" *ngIf="filteredFavouriteGroups.length > 0">{{ filteredFavouriteGroups.length }}</span>
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
+              <mat-expansion-panel *ngFor="let group of filteredFavouriteGroups" #panel>
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
                     <div class="one">

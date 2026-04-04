@@ -25,6 +25,7 @@ export class HomeService {
       "description": "Azad Navyuvak Mandal is a vibrant youth organization based in Raipur, Chhattisgarh. Founded in 2018, the group has quickly become a hub for young people passionate about community service, cultural activities, and social change. With a focus on empowering youth and fostering a sense of unity, Azad Navyuvak Mandal organizes a wide range of events throughout the year, including festivals, charity drives, educational workshops, and sports tournaments. The group is known for its inclusive and energetic approach, attracting members from diverse backgrounds who share a common goal of making a positive impact in their community.",
       "contactNumbers": ["9876543210", "9123456780"],
       "logo": "https://picsum.photos/seed/anm-logo/200/200",
+      "favourite": true,
       "admins": [],
       "events": [
         {
@@ -102,6 +103,7 @@ export class HomeService {
       "description": "Ekta Samiti Bhilai promotes community harmony and organizes cultural events that bring people together in celebration and solidarity.",
       "contactNumbers": ["9876123456", "9123456781"],
       "logo": "https://picsum.photos/seed/esb-logo/200/200",
+      "favourite": false,
       "admins": [],
       "events": [
         {
@@ -157,6 +159,7 @@ export class HomeService {
       "description": "Navjivan Samaj Mandal works towards social welfare and youth empowerment through various educational and cultural programs.",
       "contactNumbers": ["9876543211", "9123456782"],
       "logo": "https://picsum.photos/seed/nsm-logo/200/200",
+      "favourite": true,
       "admins": [],
       "events": [
         {
@@ -211,6 +214,7 @@ export class HomeService {
       "description": "Rising Star Youth Club nurtures young talent through sports, education, and personality development programs.",
       "contactNumbers": ["9876456789", "9123456784"],
       "logo": "https://picsum.photos/seed/rsyc-logo/200/200",
+      "favourite": false,
       "admins": [],
       "events": [
         {
@@ -245,6 +249,7 @@ export class HomeService {
       "description": "Unity Seva Mandal is dedicated to community service, organizing health camps, educational programs, and social welfare activities.",
       "contactNumbers": ["9876789012", "9123456785"],
       "logo": "https://picsum.photos/seed/usm-logo/200/200",
+      "favourite": true,
       "admins": [],
       "events": [
         {
@@ -301,6 +306,7 @@ export class HomeService {
       "description": "A community club located very close to you, perfect for quick meetups and local events.",
       "contactNumbers": ["9000000000"],
       "logo": "https://picsum.photos/seed/nearby-test/200/200",
+      "favourite": false,
       "admins": [],
       "events": [
         {

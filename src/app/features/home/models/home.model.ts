@@ -57,6 +57,7 @@ export interface GroupDetailsModel {
   description: string;
   contactNumbers: string[];
   logo: string; // Optional logo URL
+  favourite: boolean;
   locationName?: string; // Optional human-readable location name
   distanceFromUser?: string; // Optional property to store distance from user's location
 }
