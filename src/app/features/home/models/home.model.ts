@@ -71,8 +71,10 @@ export enum ProgramType {
 }
 
 export enum EventType {
-  SPORTS = 'SPORTS',
-  PUJA = 'PUJA',
-  FESTIVAL = 'FESTIVAL',
+  SPORTS = 'SPORTS', // Cricket, Football, Volleyball, etc.
+  PUJA = 'PUJA', // sarasvati puja, ganesh chaturthi, durga puja, etc.
+  RELIGIOUS = 'RELIGIOUS', // Processions, Hawan, Aarati, Visarjan, etc.
+  CULTURAL = 'CULTURAL', // Music, Dance, Cultural performances / Nachna Gana
+  FESTIVAL = 'FESTIVAL', // Holi
   OTHER = 'OTHER'
 }

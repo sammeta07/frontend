@@ -13,7 +13,7 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
 import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance, programTypeSortOrder } from './utils/home.utils';
-import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel, ProgramDetailWithContextModel } from './models/home.model';
+import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel, ProgramDetailWithContextModel, ProgramType } from './models/home.model';
 import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
@@ -87,6 +87,22 @@ export class HomeComponent implements OnInit {
 
   getGroupLogoUrl = getGroupLogoUrl;
   getYearLabel = getYearLabel;
+
+  getProgramTypeIcon(type: ProgramType): string {
+    switch (type) {
+      case ProgramType.BHANDARA:
+        return 'restaurant';
+      case ProgramType.CULTURAL:
+        return 'theater_comedy';
+      case ProgramType.SPIRITUAL:
+        return 'self_improvement';
+      case ProgramType.CRICKET:
+        return 'sports_cricket';
+      case ProgramType.OTHER:
+      default:
+        return 'category';
+    }
+  }
 
   userLocationName = this.locationService.userLocationName$;
   userLocationCords = this.locationService.userLocationCords$;
@@ -250,7 +266,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  get programTypes(): string[] {
+  get programTypes(): ProgramType[] {
     return [...new Set(this.programsData.map((program) => program.type))].sort(
       (a, b) =>
         (programTypeSortOrder[a] ?? Number.MAX_SAFE_INTEGER) -
@@ -258,7 +274,7 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  getProgramsByType(type: string): ProgramDetailWithContextModel[] {
+  getProgramsByType(type: ProgramType): ProgramDetailWithContextModel[] {
     const statusOrder: Record<'live' | 'upcoming' | 'completed', number> = {
       live: 0,
       upcoming: 1,
@@ -298,7 +314,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  getEventCountByType(type: string): number {
+  getEventCountByType(type: ProgramType): number {
     const uniqueEvents = new Set(
       this.programsData
         .filter((program) => program.type === type)

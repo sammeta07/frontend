@@ -421,10 +421,10 @@
         class="program-tabs">
         <mat-tab *ngFor="let type of programTypes">
           <ng-template mat-tab-label>
-            <span class="program-tab-inline">
+            <span class="program-tab-inline" [matTooltip]="type" matTooltipPosition="below">
 
               <!-- <span class="program-tab-label">{{ type }}</span> -->
-              <mat-icon>home</mat-icon>
+              <mat-icon>{{ getProgramTypeIcon(type) }}</mat-icon>
               <span class="program-tab-count">{{ getEventCountByType(type) }}</span>
             </span>
           </ng-template>
