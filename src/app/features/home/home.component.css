@@ -302,6 +302,7 @@ body.is-resizing-panels {
       .tab-content-padding {
         padding: 10px;
         background: var(--theme-primary-dark);
+        border-radius: 8px;
       }
 
       /* Custom scrollbar */
@@ -453,7 +454,7 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .group-tabs .mat-mdc-tab-header {
-        background: var(--theme-surface);
+        /* background: var(--theme-surface); */
         height: 36px;
         min-height: 36px;
         overflow-x: hidden !important;
@@ -534,6 +535,7 @@ body.is-resizing-panels {
 
       ::ng-deep .group-tabs .mat-mdc-tab-label-container {
         border-bottom-style: none !important;
+        margin-left: 8px;
       }
 
       ::ng-deep .group-tabs .mat-mdc-tab-header-pagination-chevron {
@@ -1305,7 +1307,7 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-header {
-        background: var(--theme-surface);
+        /* background: var(--theme-surface); */
         height: 36px;
         min-height: 36px;
       }
@@ -1383,7 +1385,7 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-header {
-        background: var(--theme-surface);
+        /* background: var(--theme-surface); */
         height: 36px;
         min-height: 36px;
       }
@@ -1435,6 +1437,7 @@ body.is-resizing-panels {
 
       ::ng-deep .program-tabs .mat-mdc-tab-label-container {
         border-bottom-style: none !important;
+        margin-left: 8px;
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-body-content {
@@ -1447,7 +1450,7 @@ body.is-resizing-panels {
         gap: 8px;
         padding: 10px;
         background: var(--theme-primary-dark);
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
+        border-radius: 8px;
       }
 
       .program-card {
