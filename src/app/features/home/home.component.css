@@ -255,7 +255,15 @@ body.is-resizing-panels {
     .group-list {
       grid-column: 1 / 9;
       grid-row: 2 / 13;
-      overflow: auto;
+      overflow: hidden;
+      border-radius: 8px;
+      .group-tabs {
+        height: 100%;
+      }
+
+      ::ng-deep .group-tabs .mat-mdc-tab-body-wrapper {
+        overflow: auto;
+      }
 
       .tab-content-padding {
         padding: 10px;
@@ -439,9 +447,9 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .group-tabs .mat-mdc-tab {
-        min-width: 100px;
-        width: 100px;
-        flex: 0 0 100px;
+        min-width: 140px;
+        width: 140px;
+        flex: 0 0 140px;
         height: 36px;
         min-height: 36px;
         padding: 0;
@@ -453,10 +461,6 @@ body.is-resizing-panels {
 
       ::ng-deep .group-tabs .mat-mdc-tab-header-pagination-chevron {
         display: none !important;
-      }
-
-      .tab-content-padding {
-        padding: 10px;
       }
 
       ::ng-deep .group-tabs .mat-mdc-tab-label-content {
@@ -492,6 +496,7 @@ body.is-resizing-panels {
 
       ::ng-deep .group-tabs .mdc-tab--active {
         background: var(--theme-primary-dark);
+        border-radius: 8px 8px 0 0;
       }
 
       ::ng-deep .group-tabs .mdc-tab-indicator {
@@ -504,6 +509,22 @@ body.is-resizing-panels {
 
       ::ng-deep .group-tabs .mat-mdc-tab-header-pagination-chevron {
         display: none !important;
+      }
+
+      .tab-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 6px;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        line-height: 18px;
+        margin-left: 6px;
+        background: rgba(255, 255, 255, 0.2);
+        color: inherit;
       }
 
       .group-events-tab-inline {
@@ -531,7 +552,7 @@ body.is-resizing-panels {
         scroll-behavior: smooth;
         background: var(--theme-primary-dark);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
-        /* border-radius: 12px; */
+        border-radius: 12px;
       }
 
       .group-events-list.scrollable {
@@ -561,7 +582,7 @@ body.is-resizing-panels {
         scroll-margin: 8px;
         border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
         border-left: 4px solid var(--theme-border);
-        border-radius: 18px;
+        border-radius: 12px;
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
         background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface) 92%, white) 0%, color-mix(in srgb, var(--theme-surface-light) 96%, white) 100%);
         padding: 8px;
@@ -592,7 +613,6 @@ body.is-resizing-panels {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: minmax(154px, 52%) minmax(0, 48%);
-        gap: 6px;
         align-items: stretch;
         height: 100%;
       }
@@ -974,6 +994,7 @@ body.is-resizing-panels {
         width: 100%;
           min-height: calc(min(420px, 88vw) * 13 / 16);
         box-sizing: border-box;
+        border-radius: 12px;
         padding: 14px;
           background: var(--theme-primary-dark);
         display: flex;
@@ -1227,7 +1248,7 @@ body.is-resizing-panels {
       overflow: auto;
       /* background: var(--theme-surface); */
       /* border: 1px solid var(--theme-border); */
-      /* border-radius: 12px; */
+      border-radius: 8px;
       /* padding: 8px; */
 
       /* Custom scrollbar */
@@ -1295,7 +1316,7 @@ body.is-resizing-panels {
 
       ::ng-deep .program-tabs .mdc-tab--active {
         background: var(--theme-primary-dark);
-        /* border-radius: 6px 6px 0 0; */
+        border-radius: 8px 8px 0 0;
       }
 
       ::ng-deep .program-tabs .mat-mdc-tab-indicator {
@@ -1401,7 +1422,7 @@ body.is-resizing-panels {
       }
 
       .program-card {
-        border-radius: 18px;
+        border-radius: 12px;
         border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
         border-left: 4px solid var(--theme-border);
         background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface) 92%, white) 0%, color-mix(in srgb, var(--theme-surface-light) 96%, white) 100%);

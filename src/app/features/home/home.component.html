@@ -1,7 +1,7 @@
 <div class="home-container" [style.gridTemplateColumns]="homeGridTemplateColumns">
   <div class="groups-container">
     <div class="group-header">
-      <h2>Groups<span class="count-badge" *ngIf="samitiGroups.length > 0">{{ samitiGroups.length }}</span></h2>
+      <h2>Groups</h2>
       <div class="group-controls-container" role="search" aria-label="Search groups">
         <div class="group-search-wrapper">
           <mat-icon class="search-icon" aria-hidden="true">search</mat-icon>
@@ -33,6 +33,7 @@
           <ng-template mat-tab-label>
             <mat-icon>groups</mat-icon>
             <span>All</span>
+            <span class="tab-count-badge" *ngIf="filteredSamitiGroups.length > 0">{{ filteredSamitiGroups.length }}</span>
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
@@ -209,6 +210,7 @@
           <ng-template mat-tab-label>
             <mat-icon>favorite</mat-icon>
             <span>Favourites</span>
+            <span class="tab-count-badge">0</span>
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
