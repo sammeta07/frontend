@@ -328,7 +328,6 @@ body.is-resizing-panels {
       ::ng-deep .mat-accordion .mat-expansion-panel {
         background: var(--theme-surface);
         border-radius: 12px;
-        margin-bottom: 12px !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         border: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -337,15 +336,10 @@ body.is-resizing-panels {
           transform: translateY(-2px);
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
-        
-        &:not(.mat-expanded) {
-          margin-bottom: 12px !important;
-        }
-        
-        &.mat-expanded {
-          margin-bottom: 12px !important;
-          margin-top: 0 !important;
-        }
+      }
+
+      ::ng-deep .mat-accordion .mat-expansion-panel + .mat-expansion-panel {
+        margin-top: 12px !important;
       }
 
       ::ng-deep .mat-expansion-panel-header {
@@ -1451,7 +1445,7 @@ body.is-resizing-panels {
         display: grid;
         grid-template-columns: 1fr;
         gap: 8px;
-        padding: 12px;
+        padding: 10px;
         background: var(--theme-primary-dark);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
       }
