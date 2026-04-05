@@ -1355,6 +1355,11 @@ body.is-resizing-panels {
         display: none !important;
       }
 
+      ::ng-deep .program-tabs .mat-mdc-tab-body-wrapper {
+        overflow: auto;
+        border-radius: 8px;
+      }
+
       .program-tab-inline {
         display: inline-flex;
         align-items: center;

@@ -36,15 +36,62 @@ header button {
     transform: rotate(90deg);
   }
 }
-.contact-item{
+.contact-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--theme-gradient);
+    border-radius: 10px;
+  }
+}
+
+.contact-item {
   display: flex;
+}
+
+.tab-icon {
+  margin-right: 8px;
+}
+
+.contact-numbers-section {
+  margin-top: 12px;
+}
+
+.contact-numbers-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.contact-remove-btn {
+  margin-top: 4px;
+}
+
+.flex-spacer {
+  flex: 1;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
 }
 
 /* Scrollable Content */
 .dialog-body {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 28px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -71,8 +118,8 @@ header button {
 
 /* Setup Cards */
 .setup-card {
-  background: var(--theme-surface);
-  border-radius: 16px;
+  background: var(--theme-primary-dark);
+  border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   border: none;
   overflow: hidden;
@@ -107,11 +154,11 @@ header button {
 }
 
 .card-content {
-  padding: 28px 24px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-
+  gap: 5px;
+  height: calc(100vh - 250px);
   mat-form-field {
     ::ng-deep .mat-mdc-text-field-wrapper {
       background: var(--theme-surface-light);
@@ -223,37 +270,69 @@ mat-form-field {
 
 
 /* Tab Group Styling */
-mat-tab-group .mat-mdc-tab-header {
-  border-bottom: 1px solid var(--theme-border) !important;
+.dialog-tabs .mat-mdc-tab-header {
+  height: 36px;
+  min-height: 36px;
+  overflow: hidden;
 }
 
-.mdc-tab {
-  position: relative !important;
-  border-bottom: 3px solid transparent !important;
-  transition: all 0.3s ease !important;
+.dialog-tabs .mat-mdc-tab-header-content {
+  justify-content: flex-start;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
 }
 
-.mdc-tab--active {
-  border-bottom: 4px solid var(--theme-primary) !important;
-  color: var(--theme-primary) !important;
+.dialog-tabs .mat-mdc-tab-label-container {
+  flex-grow: 0;
+  margin-left: 8px;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  white-space: nowrap;
+  border-bottom-style: none !important;
 }
 
-.mdc-tab-indicator {
+.dialog-tabs .mat-mdc-tab {
+  min-width: 160px;
+  width: 160px;
+  flex: 0 0 160px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 8px 8px 0 0;
+  --mdc-ripple-color: var(--theme-primary);
+  /* margin-left: 8px; */
+}
+
+.dialog-tabs .mat-mdc-tab-header-pagination-chevron {
   display: none !important;
 }
 
-.mat-mdc-tab-label-content {
+.dialog-tabs .mat-mdc-tab-label-content {
   color: var(--theme-text-secondary) !important;
-  font-weight: 500 !important;
-  transition: color 0.3s ease !important;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.3s ease;
 }
 
-.mdc-tab--active .mat-mdc-tab-label-content {
+.dialog-tabs .mat-mdc-tab:hover .mat-mdc-tab-label-content {
   color: var(--theme-primary) !important;
-  font-weight: 700 !important;
 }
 
-.mat-mdc-tab:hover:not(.mdc-tab--active) .mat-mdc-tab-label-content {
-  color: var(--theme-primary) !important;
+.dialog-tabs .mdc-tab--active {
+  background: var(--theme-primary-dark);
+}
+
+.dialog-tabs .mdc-tab--active .mat-mdc-tab-label-content {
+  color: #fff !important;
+}
+
+.dialog-tabs .mdc-tab-indicator {
+  display: none !important;
+}
+
+.dialog-tabs .mat-mdc-tab-body-wrapper {
+  border-radius: 0 8px 8px 8px;
 }
 

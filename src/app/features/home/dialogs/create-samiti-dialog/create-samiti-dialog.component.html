@@ -8,15 +8,15 @@
 <div class="dialog-body">
   
   <form [formGroup]="samitiForm">
-    <mat-tab-group animationDuration="300ms">  
+    <mat-tab-group class="dialog-tabs" animationDuration="300ms">  
       <!-- TAB 1: Organization Profile -->
       <mat-tab>   
         <ng-template mat-tab-label>
-          <mat-icon style="margin-right: 8px">business</mat-icon>
+          <mat-icon class="tab-icon">business</mat-icon>
           Group Details
         </ng-template>
         
-        <div class="setup-card" style="margin-top: 20px;">
+        <div class="setup-card">
           <div class="card-content">
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Group Name</mat-label>
@@ -42,22 +42,22 @@
               <textarea matInput placeholder="Describe your mission or activities..." formControlName="description" rows="3"></textarea>
             </mat-form-field>
 
-            <div style="margin-top: 16px;">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div class="contact-numbers-section">
+              <div class="contact-numbers-header">
                 <span>Group Contact Numbers</span>
                 <button mat-stroked-button color="primary" (click)="addContactNumber()" type="button">
                   <mat-icon>add</mat-icon> Add Contact
                 </button>
               </div>
               
-              <div formArrayName="groupContactNumbers">
+              <div formArrayName="groupContactNumbers" class="contact-list">
                 <div *ngFor="let contact of groupContactNumbers.controls; let i = index" class="contact-item">
                   <mat-form-field appearance="outline" subscriptSizing="dynamic">
                     <mat-label>Contact Number {{i+1}}</mat-label>
                     <input matInput type="tel" [formControlName]="i" placeholder="+91 98765 43210">
                     <mat-icon matSuffix>phone</mat-icon>
                   </mat-form-field>
-                  <button mat-icon-button color="warn" (click)="removeContactNumber(i)" [disabled]="groupContactNumbers.length === 1" type="button" style="margin-top: 4px;">
+                  <button mat-icon-button color="warn" (click)="removeContactNumber(i)" [disabled]="groupContactNumbers.length === 1" type="button" class="contact-remove-btn">
                     <mat-icon>delete_outline</mat-icon>
                   </button>
                 </div>
@@ -70,14 +70,14 @@
       <!-- TAB 2: Administrative Access -->
       <mat-tab>
         <ng-template mat-tab-label>
-          <mat-icon style="margin-right: 8px">shield</mat-icon>
+          <mat-icon class="tab-icon">shield</mat-icon>
           Admin Details
         </ng-template>
         
-        <div class="setup-card" style="margin-top: 20px;">
+        <div class="setup-card">
           <div class="card-header">
             <span class="card-title">Administrator Management</span>
-            <div style="flex: 1"></div>
+            <div class="flex-spacer"></div>
             <button mat-stroked-button color="primary" (click)="addAdmin()" type="button">
               <mat-icon>add</mat-icon> Add Group Admin
             </button>
@@ -92,7 +92,7 @@
                 </button>
               </div>
               
-              <div class="grid-2" style="margin-bottom: 12px;">
+              <div class="grid-2 mb-12">
                 <mat-form-field appearance="outline" subscriptSizing="dynamic">
                   <mat-label>Email Address</mat-label>
                   <input matInput type="email" formControlName="email" required placeholder="name@example.com">
