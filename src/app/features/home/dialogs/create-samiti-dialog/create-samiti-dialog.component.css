@@ -10,21 +10,25 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 28px;
+  padding: 0px 20px;
+  height: 64px;
   background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-surface-light) 100%);
   border-bottom: 2px solid var(--theme-border);
+  border-radius: 12px 12px 0 0;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
 }
 
 header h2 {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  background: var(--theme-gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--theme-text);
 }
 
 header button {
@@ -73,10 +77,28 @@ header button {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+
+  button {
+    color: var(--theme-text) !important;
+
+    mat-icon {
+      color: var(--theme-text) !important;
+    }
+  }
 }
 
 .contact-remove-btn {
   margin-top: 4px;
+}
+
+.card-header {
+  button {
+    color: var(--theme-text) !important;
+
+    mat-icon {
+      color: var(--theme-text) !important;
+    }
+  }
 }
 
 .flex-spacer {
@@ -132,12 +154,15 @@ header button {
 }
 
 .card-header {
-  padding: 20px 24px;
+  padding: 12px 12px 0px 12px;
   border-bottom: 2px solid var(--theme-border);
   display: flex;
   align-items: center;
   gap: 14px;
-  background: linear-gradient(135deg, var(--theme-surface-light) 0%, var(--theme-surface) 100%);
+
+  & + .card-content {
+    height: calc(100vh - 287px);
+  }
 }
 
 .header-icon {
@@ -150,7 +175,7 @@ header button {
 .card-title {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #2c3e50;
+  color: var(--theme-text);
 }
 
 .card-content {
@@ -158,7 +183,8 @@ header button {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  height: calc(100vh - 250px);
+  height: calc(100vh - 232px);
+  overflow-y: auto;
   mat-form-field {
     ::ng-deep .mat-mdc-text-field-wrapper {
       background: var(--theme-surface-light);
