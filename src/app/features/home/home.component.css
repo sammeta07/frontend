@@ -583,8 +583,7 @@ body.is-resizing-panels {
         scroll-snap-type: x mandatory;
         scroll-behavior: smooth;
         background: var(--theme-primary-dark);
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 24%, transparent);
-        border-radius: 12px;
+          border-radius: 12px;
       }
 
       .group-events-list.scrollable {
@@ -618,8 +617,8 @@ body.is-resizing-panels {
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
         background: linear-gradient(180deg, color-mix(in srgb, var(--theme-surface) 92%, white) 0%, color-mix(in srgb, var(--theme-surface-light) 96%, white) 100%);
         padding: 8px;
-        aspect-ratio: 16 / 13;
-        min-height: 306px;
+        aspect-ratio: 16 / 11;
+        min-height: 320px;
         transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       }
 
@@ -644,7 +643,7 @@ body.is-resizing-panels {
       .group-event-body-split {
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: minmax(154px, 52%) minmax(0, 48%);
+        grid-template-rows: minmax(154px, 48%) minmax(0, 52%);
         align-items: stretch;
         height: 100%;
       }
@@ -752,10 +751,10 @@ body.is-resizing-panels {
       .group-event-details-pane {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 3px;
         min-width: 0;
         min-height: 0;
-        padding: 6px 8px 7px;
+        padding: 4px 7px 5px;
         border-radius: 14px;
         background: linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 8%, transparent) 0%, rgba(255, 255, 255, 0.02) 100%);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
@@ -813,8 +812,8 @@ body.is-resizing-panels {
         gap: 6px;
         color: var(--theme-text-secondary);
         font-size: 0.82rem;
-        min-height: 28px;
-        padding: 4px 8px;
+        min-height: 22px;
+        padding: 2px 7px;
         border-radius: 10px;
         background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
@@ -830,18 +829,14 @@ body.is-resizing-panels {
       .group-event-date-item {
         grid-column: 1 / -1;
         display: flex;
-        justify-content: space-between;
         min-width: 0;
 
         span {
           white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
         }
 
         > span {
           flex: 1;
-          min-width: 0;
         }
       }
 
@@ -987,9 +982,9 @@ body.is-resizing-panels {
       .group-event-description {
         margin: 0;
         color: var(--theme-text-secondary);
-        font-size: 0.82rem;
-        line-height: 1.45;
-        padding: 4px 8px;
+        font-size: 0.80rem;
+        line-height: 1.4;
+        padding: 2px 7px;
         border-radius: 10px;
         background: rgba(255, 255, 255, 0.03);
         display: -webkit-box;
@@ -1010,6 +1005,14 @@ body.is-resizing-panels {
         padding: 5px 9px;
         white-space: nowrap;
         box-shadow: 0 6px 14px color-mix(in srgb, var(--theme-primary) 28%, transparent);
+      }
+
+      .group-event-meta-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        padding-top: 2px;
       }
 
       .group-event-no-photos-state {
@@ -1512,6 +1515,7 @@ body.is-resizing-panels {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        width: 100%;
       }
 
       .program-event-subtitle {
@@ -1522,6 +1526,7 @@ body.is-resizing-panels {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        width: 100%;
       }
 
       .program-title-right {
@@ -1613,66 +1618,45 @@ body.is-resizing-panels {
       .program-details-pane {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        justify-content: flex-start;
+        gap: 2px;
         min-width: 0;
-        min-height: 0;
-        padding: 6px 8px 7px;
-        border-radius: 14px;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--theme-primary) 8%, transparent) 0%, rgba(255, 255, 255, 0.02) 100%);
+        padding: 6px 8px;
+        border-radius: 12px;
+        background: color-mix(in srgb, var(--theme-primary) 6%, transparent);
         border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
       }
 
-      .program-meta-item {
+      .program-info-row {
         display: flex;
         align-items: center;
         gap: 6px;
         color: var(--theme-text-secondary);
-        font-size: 0.82rem;
+        font-size: 0.87rem;
         font-weight: 500;
-        min-height: 28px;
-        padding: 4px 8px;
-        border-radius: 10px;
-        background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
 
         mat-icon {
-          font-size: 15px;
-          width: 15px;
-          height: 15px;
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
           flex-shrink: 0;
+          opacity: 0.75;
         }
 
         span {
-          line-height: 1.3;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
 
-      .program-distance-row {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        color: var(--theme-text-secondary);
-        font-size: 0.82rem;
+      .program-info-distance {
         cursor: pointer;
-        padding: 4px 8px;
-        margin: 0;
-        border-radius: 10px;
-        background: color-mix(in srgb, var(--theme-primary) 7%, transparent);
-        border: 1px solid color-mix(in srgb, var(--theme-primary) 10%, transparent);
-        transition: color 0.2s ease;
-
-        mat-icon {
-          font-size: 14px;
-          width: 14px;
-          height: 14px;
-          color: var(--theme-text-secondary);
-          flex-shrink: 0;
-        }
-
-        &:hover {
-          color: var(--theme-primary);
-        }
+        &:hover { color: var(--theme-primary); }
       }
 
       .program-type-chip {
