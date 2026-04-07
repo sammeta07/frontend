@@ -1,5 +1,5 @@
 <header>
-  <h2>Create New Organization</h2>
+  <h2>Create New Samiti</h2>
   <button mat-icon-button (click)="onCancel()">
     <mat-icon>close</mat-icon>
   </button>
@@ -13,7 +13,7 @@
       <mat-tab>   
         <ng-template mat-tab-label>
           <mat-icon class="tab-icon">business</mat-icon>
-          Group Details
+          Samiti Details
         </ng-template>
         
         <div class="setup-card">
@@ -25,8 +25,8 @@
 
             <div class="grid-2">
               <mat-form-field appearance="outline" subscriptSizing="dynamic">
-                <mat-label>Location</mat-label>
-                <input matInput placeholder="Ex. Raipur" formControlName="location" required>
+                <mat-label>Area</mat-label>
+                <input matInput placeholder="Ex. Children park, Shiv Mandir" formControlName="location" required>
                 <mat-icon matSuffix>place</mat-icon>
               </mat-form-field>
               
@@ -37,9 +37,38 @@
               </mat-form-field>
             </div>
 
+            <div class="grid-3">
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>State</mat-label>
+                <mat-select formControlName="state" (selectionChange)="onStateChange($event.value)">
+                  <mat-option *ngFor="let state of states" [value]="state.id">{{state.name}}</mat-option>
+                </mat-select>
+                <mat-spinner *ngIf="loadingStates" matSuffix diameter="18"></mat-spinner>
+                <mat-icon *ngIf="!loadingStates" matSuffix>map</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>District</mat-label>
+                <mat-select formControlName="district" (selectionChange)="onDistrictChange($event.value)">
+                  <mat-option *ngFor="let dist of districts" [value]="dist.id">{{dist.name}}</mat-option>
+                </mat-select>
+                <mat-spinner *ngIf="loadingDistricts" matSuffix diameter="18"></mat-spinner>
+                <mat-icon *ngIf="!loadingDistricts" matSuffix>location_city</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>Area / Locality</mat-label>
+                <mat-select formControlName="area">
+                  <mat-option *ngFor="let area of areas" [value]="area.id">{{area.name}}</mat-option>
+                </mat-select>
+                <mat-spinner *ngIf="loadingAreas" matSuffix diameter="18"></mat-spinner>
+                <mat-icon *ngIf="!loadingAreas" matSuffix>place</mat-icon>
+              </mat-form-field>
+            </div>
+
             <mat-form-field appearance="outline" subscriptSizing="dynamic">
               <mat-label>Group Description</mat-label>
-              <textarea matInput placeholder="Describe your mission or activities..." formControlName="description" rows="3"></textarea>
+              <textarea matInput placeholder="Describe about your group..." formControlName="description" rows="3"></textarea>
             </mat-form-field>
 
             <div class="contact-numbers-section">
@@ -124,7 +153,7 @@
     </mat-tab-group>
   </form>
 
-</div>app
+</div>
 
 <footer>
   <button mat-button (click)="onCancel()">Cancel</button>

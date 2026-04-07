@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EventType, ProgramType, GroupDetailsModel } from '../models/home.model';
+import { EventType, ProgramType, GroupDetailsModel, StateModel } from '../models/home.model';
 import { Observable } from 'rxjs';
 import { signal } from '@angular/core';
 
@@ -369,6 +369,45 @@ export class HomeService {
     
   ];
 
+  states: StateModel[] = [
+    { id: 1,  name: 'Jammu and Kashmir',                             abbreviation: 'INJK', stateCode: 1  },
+    { id: 2,  name: 'Himachal Pradesh',                              abbreviation: 'INHP', stateCode: 2  },
+    { id: 3,  name: 'Punjab',                                        abbreviation: 'INPB', stateCode: 3  },
+    { id: 4,  name: 'Chandigarh',                                    abbreviation: 'INCH', stateCode: 4  },
+    { id: 5,  name: 'Uttaranchal',                                   abbreviation: 'INUT', stateCode: 5  },
+    { id: 6,  name: 'Haryana',                                       abbreviation: 'INHR', stateCode: 6  },
+    { id: 7,  name: 'Delhi',                                         abbreviation: 'INDL', stateCode: 7  },
+    { id: 8,  name: 'Rajasthan',                                     abbreviation: 'INRJ', stateCode: 8  },
+    { id: 9,  name: 'Uttar Pradesh',                                 abbreviation: 'INUP', stateCode: 9  },
+    { id: 10, name: 'Bihar',                                         abbreviation: 'INBR', stateCode: 10 },
+    { id: 11, name: 'Sikkim',                                        abbreviation: 'INSK', stateCode: 11 },
+    { id: 12, name: 'Arunachal Pradesh',                             abbreviation: 'INAR', stateCode: 12 },
+    { id: 13, name: 'Nagaland',                                      abbreviation: 'INNL', stateCode: 13 },
+    { id: 14, name: 'Manipur',                                       abbreviation: 'INMN', stateCode: 14 },
+    { id: 15, name: 'Mizoram',                                       abbreviation: 'INMZ', stateCode: 15 },
+    { id: 16, name: 'Tripura',                                       abbreviation: 'INTR', stateCode: 16 },
+    { id: 17, name: 'Meghalaya',                                     abbreviation: 'INML', stateCode: 17 },
+    { id: 18, name: 'Assam',                                         abbreviation: 'INAS', stateCode: 18 },
+    { id: 19, name: 'West Bengal',                                   abbreviation: 'INWB', stateCode: 19 },
+    { id: 20, name: 'Jharkhand',                                     abbreviation: 'INJH', stateCode: 20 },
+    { id: 21, name: 'Orissa',                                        abbreviation: 'INOR', stateCode: 21 },
+    { id: 22, name: 'Chhattisgarh',                                  abbreviation: 'INCT', stateCode: 22 },
+    { id: 23, name: 'Madhya Pradesh',                                abbreviation: 'INMP', stateCode: 23 },
+    { id: 24, name: 'Gujarat',                                       abbreviation: 'INGJ', stateCode: 24 },
+    { id: 25, name: 'Dādra and Nagar Haveli and Damān and Diu',      abbreviation: 'INDH', stateCode: 26 },
+    { id: 26, name: 'Maharashtra',                                   abbreviation: 'INMH', stateCode: 27 },
+    { id: 27, name: 'Karnataka',                                     abbreviation: 'INKA', stateCode: 29 },
+    { id: 28, name: 'Goa',                                           abbreviation: 'INGA', stateCode: 30 },
+    { id: 29, name: 'Lakshadweep',                                   abbreviation: 'INLD', stateCode: 31 },
+    { id: 30, name: 'Kerala',                                        abbreviation: 'INKL', stateCode: 32 },
+    { id: 31, name: 'Tamil Nadu',                                    abbreviation: 'INTN', stateCode: 33 },
+    { id: 32, name: 'Puducherry',                                    abbreviation: 'INPY', stateCode: 34 },
+    { id: 33, name: 'Andaman and Nicobar',                           abbreviation: 'INAN', stateCode: 35 },
+    { id: 34, name: 'Telangana',                                     abbreviation: 'INTG', stateCode: 36 },
+    { id: 35, name: 'Andhra Pradesh',                                abbreviation: 'INAP', stateCode: 37 },
+    { id: 36, name: 'Ladakh',                                        abbreviation: 'INLA', stateCode: 38 },
+  ];
+
   groupSearchTerm = signal<string>('');
   groupSelectedDistance = signal<number>(1); // Default distance in kilometers
 
@@ -378,5 +417,21 @@ export class HomeService {
       observer.next(this.samitiGroups);
       observer.complete();
     });
+  }
+
+  getStates(): Observable<StateModel[]> {
+    // return this.http.get<StateModel[]>('api/states');
+    return new Observable(observer => {
+      observer.next(this.states);
+      observer.complete();
+    });
+  }
+
+  getDistricts(stateId: number): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`api/districts/${stateId}`);
+  }
+
+  getAreas(districtId: number): Observable<{ id: number; name: string }[]> {
+    return this.http.get<{ id: number; name: string }[]>(`api/areas/${districtId}`);
   }
 }

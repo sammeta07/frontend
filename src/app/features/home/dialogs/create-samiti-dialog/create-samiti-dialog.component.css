@@ -246,6 +246,12 @@ header button {
   gap: 16px;
 }
 
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
 /* Footer style */
 footer {
   padding: 20px 28px;
@@ -286,6 +292,10 @@ mat-form-field {
 /* Media Queries */
 @media (max-width: 600px) {
   .grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-3 {
     grid-template-columns: 1fr;
   }
   

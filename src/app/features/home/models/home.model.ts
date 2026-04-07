@@ -3,6 +3,13 @@ export interface LocationModel {
   long: number;
 }
 
+export interface StateModel {
+  id: number;
+  name: string;
+  abbreviation: string;
+  stateCode: number;
+}
+
 export interface ProgramDetailModel {
   id: number;
   title: string;
