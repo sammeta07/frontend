@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Router } from '@angular/router';
 
 const COOKIE_EMAIL_KEY = 'remember_email';
 const COOKIE_DAYS = 30;
@@ -37,7 +38,7 @@ export class LoginDialogComponent implements OnInit {
   resetEmail = '';
   resetEmailSent = false;
 
-  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>) {}
+  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private router: Router) {}
 
   ngOnInit(): void {
     const saved = this.getCookie(COOKIE_EMAIL_KEY);
@@ -59,6 +60,7 @@ export class LoginDialogComponent implements OnInit {
     }
     console.log('Login attempt:', { email: this.email, password: this.password, rememberMe: this.rememberMe });
     this.dialogRef.close(true);
+    this.router.navigate(['/dashboard']);
   }
 
   onForgotPassword(): void {

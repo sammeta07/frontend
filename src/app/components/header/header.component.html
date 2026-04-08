@@ -57,6 +57,7 @@
     </div>
 
     <button 
+      *ngIf="!isLoggedIn"
       mat-raised-button
       color="primary"
       (click)="onCreateSamiti()"
@@ -68,6 +69,7 @@
     </button>
     
     <button 
+      *ngIf="!isLoggedIn"
       mat-flat-button 
       color="primary"
       (click)="openLoginDialog()"
@@ -76,6 +78,18 @@
     >
       <mat-icon aria-hidden="true">login</mat-icon>
       <span>LOGIN</span>
+    </button>
+
+    <button 
+      *ngIf="isLoggedIn"
+      mat-stroked-button
+      color="warn"
+      (click)="onLogout()"
+      class="logout-btn"
+      aria-label="Logout"
+    >
+      <mat-icon aria-hidden="true">logout</mat-icon>
+      <span>LOGOUT</span>
     </button>
   </div>
 </mat-toolbar>

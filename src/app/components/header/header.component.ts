@@ -10,6 +10,7 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { CreateSamitiDialogComponent } from '../../features/home/dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { LocationService } from '../../shared/location.service';
 import { ThemeService } from '../../shared/theme.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -34,11 +35,12 @@ export class HeaderComponent {
   private snackBar = inject(MatSnackBar);
   
   isPaletteOpen = false;
+  isLoggedIn = false;
   
   userLocationName = this.locationService.userLocationName$;
   userLocationCords = this.locationService.userLocationCords$;
 
-  constructor( public dialog: MatDialog ) {
+  constructor( public dialog: MatDialog, private router: Router ) {
   }
   openLoginDialog() {
     this.dialog.open(LoginDialogComponent, {
@@ -46,6 +48,10 @@ export class HeaderComponent {
       autoFocus: false,
       disableClose: true,
       backdropClass: 'dark-backdrop'
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.isLoggedIn = true;
+      }
     });
   }
 
@@ -70,6 +76,11 @@ export class HeaderComponent {
         });
       }
     });
+  }
+
+  onLogout(): void {
+    this.isLoggedIn = false;
+    this.router.navigate(['/']);
   }
 
   selectTheme(themeId: string) {
