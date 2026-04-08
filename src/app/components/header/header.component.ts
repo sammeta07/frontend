@@ -44,7 +44,8 @@ export class HeaderComponent {
     this.dialog.open(LoginDialogComponent, {
       width: '400px',
       autoFocus: false,
-      disableClose: true
+      disableClose: true,
+      backdropClass: 'dark-backdrop'
     });
   }
 

@@ -1,12 +1,14 @@
-<div class="dialog-header">
-  <h2 mat-dialog-title>Login</h2>
-  <button mat-icon-button (click)="onCancel()" aria-label="Close dialog" class="dialog-close-btn">
+<header>
+  <h2>{{ isForgotPassword ? 'Reset Password' : 'Login' }}</h2>
+  <button mat-icon-button type="button" (click)="onCancel()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
-</div>
-<mat-dialog-content class="login-content">
+</header>
+
+<!-- LOGIN VIEW -->
+<div class="dialog-body" *ngIf="!isForgotPassword">
   <p class="login-instruction">Please enter your credentials to continue.</p>
-  
+
   <form (ngSubmit)="onSubmit()" class="login-form">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email</mat-label>
@@ -22,10 +24,49 @@
         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
       </button>
     </mat-form-field>
-  </form>
-</mat-dialog-content>
 
-<mat-dialog-actions align="end">
+    <div class="form-bottom-row">
+      <mat-checkbox [(ngModel)]="rememberMe" name="rememberMe" color="primary">
+        Remember me
+      </mat-checkbox>
+      <button mat-button type="button" class="forgot-link" (click)="isForgotPassword = true">
+        Forgot password?
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- FORGOT PASSWORD VIEW -->
+<div class="dialog-body" *ngIf="isForgotPassword">
+  <p class="login-instruction">Enter your registered email and we'll send you a reset link.</p>
+
+  <form (ngSubmit)="onForgotPassword()" class="login-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput [(ngModel)]="resetEmail" name="resetEmail" placeholder="Ex. user@example.com" required email>
+      <mat-icon matPrefix>email</mat-icon>
+    </mat-form-field>
+
+    <p class="reset-success" *ngIf="resetEmailSent">
+      <mat-icon>check_circle</mat-icon> Reset link sent! Check your inbox.
+    </p>
+  </form>
+</div>
+
+<!-- LOGIN FOOTER -->
+<footer *ngIf="!isForgotPassword">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!email || !password">Login</button>
-</mat-dialog-actions>
+  <button mat-stroked-button (click)="onSubmit()" [disabled]="!email || !password" type="button">
+    <mat-icon>login</mat-icon> Login
+  </button>
+</footer>
+
+<!-- FORGOT PASSWORD FOOTER -->
+<footer *ngIf="isForgotPassword">
+  <button mat-button type="button" (click)="isForgotPassword = false; resetEmailSent = false" style="margin-right: auto;">
+    <mat-icon>arrow_back</mat-icon> Back to Login
+  </button>
+  <button mat-stroked-button type="button" (click)="onForgotPassword()" [disabled]="!resetEmail || resetEmailSent">
+    <mat-icon>send</mat-icon> Send Reset Link
+  </button>
+</footer>

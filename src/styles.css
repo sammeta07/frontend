@@ -493,3 +493,8 @@ mat-icon {
   -webkit-text-fill-color: var(--theme-text) !important;
   background: none !important;
 }
+
+.dark-backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+}
