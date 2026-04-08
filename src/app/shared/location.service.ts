@@ -54,7 +54,7 @@ export class LocationService {
         width: '700px',
         maxWidth: '90vw',
         autoFocus: false,
-        disableClose: false
+        disableClose: true
       });
     }
   }
@@ -66,6 +66,16 @@ export class LocationService {
         err => {
           reject(err);
         });
+    });
+  }
+
+  getHighAccuracyLocation(): Promise<{ lat: number; long: number }> {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        resp => resolve({ lat: resp.coords.latitude, long: resp.coords.longitude }),
+        err => reject(err),
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      );
     });
   }
   reverseGeocode(coord: LocationModel): Observable<string> {

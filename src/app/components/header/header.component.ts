@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { CreateSamitiDialogComponent } from '../../features/home/dialogs/create-samiti-dialog/create-samiti-dialog.component';
 import { LocationService } from '../../shared/location.service';
@@ -21,6 +22,7 @@ import { ThemeService } from '../../shared/theme.service';
     MatIconModule,
     MatDialogModule,
     MatTooltipModule,
+    MatSnackBarModule,
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -28,6 +30,8 @@ import { ThemeService } from '../../shared/theme.service';
 export class HeaderComponent {
   private locationService = inject(LocationService);
   public themeService = inject(ThemeService);
+  
+  private snackBar = inject(MatSnackBar);
   
   isPaletteOpen = false;
   
@@ -39,7 +43,8 @@ export class HeaderComponent {
   openLoginDialog() {
     this.dialog.open(LoginDialogComponent, {
       width: '400px',
-      autoFocus: false
+      autoFocus: false,
+      disableClose: true
     });
   }
 
@@ -52,8 +57,17 @@ export class HeaderComponent {
       maxHeight: '100vh',
       panelClass: 'slide-in-dialog',
       autoFocus: false,
+      disableClose: true,
       enterAnimationDuration: '300ms',
       exitAnimationDuration: '300ms'
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        this.snackBar.open('"' + result.name + '" samiti created successfully!', 'Close', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom'
+        });
+      }
     });
   }
 

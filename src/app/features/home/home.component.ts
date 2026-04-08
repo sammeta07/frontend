@@ -662,7 +662,8 @@ export class HomeComponent implements OnInit {
     this.dialog.open(EventDetailsDialogComponent, {
       width: '800px',
       data: event,
-      autoFocus: false 
+      autoFocus: false,
+      disableClose: true
     });
   }
 
@@ -674,6 +675,7 @@ export class HomeComponent implements OnInit {
       maxHeight: '100vh',
       data: event,
       autoFocus: false,
+      disableClose: true,
       panelClass: ['event-details-slide-dialog'],
       position: { top: '0', right: '0' }
     });
@@ -687,6 +689,7 @@ export class HomeComponent implements OnInit {
       maxHeight: '90vh',
       data: group,
       autoFocus: false,
+      disableClose: true,
       panelClass: ['event-details-slide-dialog'],
       position: { top: '0', right: '0' }
     });
@@ -702,7 +705,8 @@ export class HomeComponent implements OnInit {
     this.dialog.open(JoinGroupDialogComponent, {
       width: '400px',
       data: group,
-      autoFocus: false
+      autoFocus: false,
+      disableClose: true
     });
   }
 

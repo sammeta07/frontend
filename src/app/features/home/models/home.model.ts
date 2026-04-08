@@ -7,7 +7,12 @@ export interface StateModel {
   id: number;
   name: string;
   abbreviation: string;
-  stateCode: number;
+  stateId: number;
+}
+
+export interface DistrictModel {
+  id: number;
+  name: string;
 }
 
 export interface ProgramDetailModel {

@@ -43,6 +43,7 @@ header button {
 .contact-list {
   max-height: 240px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 4px;
 
   &::-webkit-scrollbar {
@@ -64,19 +65,19 @@ header button {
   display: flex;
 }
 
-.tab-icon {
-  margin-right: 8px;
+.contact-list .admin-item {
+  padding: 0;
 }
 
-.contact-numbers-section {
-  margin-top: 12px;
+.tab-icon {
+  margin-right: 8px;
 }
 
 .contact-numbers-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 
   button {
     color: var(--theme-text) !important;
@@ -161,7 +162,8 @@ header button {
   gap: 14px;
 
   & + .card-content {
-    height: calc(100vh - 287px);
+    height: calc(100vh - 235px);
+    overflow: hidden;
   }
 }
 
@@ -184,7 +186,7 @@ header button {
   flex-direction: column;
   gap: 5px;
   height: calc(100vh - 232px);
-  overflow-y: auto;
+  overflow: visible;
   mat-form-field {
     ::ng-deep .mat-mdc-text-field-wrapper {
       background: var(--theme-surface-light);
@@ -208,10 +210,9 @@ header button {
   background: linear-gradient(135deg, var(--theme-surface-light) 0%, var(--theme-surface) 100%);
   border: 2px solid var(--theme-border);
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 16px;
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 6px;
 }
 
 .admin-item:hover {
@@ -224,7 +225,7 @@ header button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin: 0px 0px 6px 6px
 }
 
 .admin-badge {
@@ -243,18 +244,18 @@ header button {
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .grid-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 /* Footer style */
 footer {
-  padding: 20px 28px;
+  padding: 5px 12px;
   background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-surface-light) 100%);
   border-top: 2px solid var(--theme-border);
   display: flex;
