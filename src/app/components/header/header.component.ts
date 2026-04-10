@@ -65,6 +65,7 @@ export class HeaderComponent {
       panelClass: 'slide-in-dialog',
       autoFocus: false,
       disableClose: true,
+      backdropClass: 'dark-backdrop',
       enterAnimationDuration: '300ms',
       exitAnimationDuration: '300ms'
     }).afterClosed().subscribe(result => {

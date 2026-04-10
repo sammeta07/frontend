@@ -663,7 +663,8 @@ export class HomeComponent implements OnInit {
       width: '800px',
       data: event,
       autoFocus: false,
-      disableClose: true
+      disableClose: true,
+      backdropClass: 'dark-backdrop'
     });
   }
 
@@ -677,7 +678,8 @@ export class HomeComponent implements OnInit {
       autoFocus: false,
       disableClose: true,
       panelClass: ['event-details-slide-dialog'],
-      position: { top: '0', right: '0' }
+      position: { top: '0', right: '0' },
+      backdropClass: 'dark-backdrop'
     });
   }
 
@@ -691,7 +693,8 @@ export class HomeComponent implements OnInit {
       autoFocus: false,
       disableClose: true,
       panelClass: ['event-details-slide-dialog'],
-      position: { top: '0', right: '0' }
+      position: { top: '0', right: '0' },
+      backdropClass: 'dark-backdrop'
     });
   }
 
@@ -706,7 +709,8 @@ export class HomeComponent implements OnInit {
       width: '400px',
       data: group,
       autoFocus: false,
-      disableClose: true
+      disableClose: true,
+      backdropClass: 'dark-backdrop'
     });
   }
 

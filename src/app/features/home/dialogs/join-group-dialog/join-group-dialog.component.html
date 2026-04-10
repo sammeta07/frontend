@@ -1,17 +1,24 @@
-<div class="dialog-header">
-  <h2 mat-dialog-title>Join {{ data.title }}</h2>
-  <button mat-icon-button (click)="onCancel()" aria-label="Close dialog" class="dialog-close-btn">
+<header>
+  <h2>Join {{ data.title }}</h2>
+  <button mat-icon-button type="button" (click)="onCancel()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
-</div>
-<mat-dialog-content>
-  <p>Fill out the form below to request to join this group.</p>
-  <!-- Form will be designed later -->
-  <div style="padding: 20px; background: #f5f5f5; border-radius: 8px; text-align: center; color: #666;">
-    [Join Form Placeholder]
+</header>
+
+<div class="dialog-body">
+  <p class="join-instruction">Fill out the form below to request to join this group.</p>
+
+  <!-- Join Form - To be implemented -->
+  <div class="form-placeholder">
+    <mat-icon>group_add</mat-icon>
+    <span>Join form coming soon...</span>
   </div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()">Submit Request</button>
-</mat-dialog-actions>
+</div>
+
+<footer>
+  <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  <button mat-stroked-button type="button" (click)="onSubmit()">
+    <mat-icon>how_to_reg</mat-icon> Submit Request
+  </button>
+</footer>
+

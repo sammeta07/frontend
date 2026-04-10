@@ -1,19 +1,30 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 import { EventDetailsModel, ProgramDetailModel } from '../../models/home.model';
 
 @Component({
   selector: 'app-event-details-dialog',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, CommonModule],
+  imports: [MatDialogModule, MatButtonModule, MatIconModule, CommonModule, MatTableModule],
   templateUrl: './event-details-dialog.component.html',
-  styleUrls: ['./event-details-dialog.component.css']
+  styleUrls: ['./event-details-dialog.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class EventDetailsDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: EventDetailsModel) {}
+  constructor(
+    public dialogRef: MatDialogRef<EventDetailsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: EventDetailsModel
+  ) {}
+
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  readonly programColumns = ['sno', 'date', 'time', 'title', 'status'];
 
   getSortedPrograms(): ProgramDetailModel[] {
     return [...(this.data.programs ?? [])].sort((first, second) => {

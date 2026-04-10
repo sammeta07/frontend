@@ -17,10 +17,10 @@
         </ng-template>
         
         <div class="setup-card">
-          <div class="card-header">
+          <div class="samiti-card-header">
             <span class="card-title">Samiti Details</span>
           </div>
-          <div class="card-content">
+          <div class="samiti-card-content">
             <div style="display: flex; gap: 16px; align-items: flex-start;">
               <mat-form-field appearance="outline" subscriptSizing="dynamic" style="flex: 1;">
                 <mat-label>Group Name</mat-label>
@@ -95,7 +95,7 @@
         </ng-template>
         
         <div class="setup-card">
-          <div class="card-header">
+          <div class="admin-card-header">
             <span class="card-title">Administrator Management</span>
             <div class="flex-spacer"></div>
             <button mat-stroked-button (click)="addAdmin()" type="button">
@@ -103,7 +103,7 @@
             </button>
           </div>
           
-          <div class="card-content" formArrayName="admins">
+          <div class="admin-card-content" formArrayName="admins">
             <div class="admin-item" *ngFor="let admin of admins.controls; let i = index" [formGroupName]="i">
               <div class="admin-header">
                 <span class="admin-badge">GROUP Admin #{{i+1}}</span>

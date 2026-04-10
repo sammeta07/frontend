@@ -1,10 +1,11 @@
-<div class="dialog-header">
-  <h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
-  <button mat-icon-button mat-dialog-close aria-label="Close dialog" class="dialog-close-btn">
+<header>
+  <h2>{{ data.title }}</h2>
+  <button mat-icon-button type="button" (click)="close()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
-</div>
-<mat-dialog-content class="mat-typography dialog-content">
+</header>
+
+<div class="dialog-body">
   <div class="hero-row">
     <span class="status-badge" [attr.data-status]="getEventStatus()">{{ getEventStatusLabel() }}</span>
     <span class="program-count-badge" *ngIf="data.programs.length">
@@ -33,29 +34,57 @@
     <p>{{ data.description }}</p>
   </div>
 
-  <div class="details-section">
-    <div class="section-header-row">
+  <div class="details-section programs-section">
       <h3>Programs</h3>
       <span class="section-summary" *ngIf="!data.programs.length">No programs scheduled</span>
     </div>
 
-    <div class="program-list" *ngIf="data.programs.length">
-      <article class="program-item" *ngFor="let program of getSortedPrograms()">
-        <div class="program-item-header">
-          <div>
-            <h4>{{ program.title }}</h4>
-            <p>{{ getProgramScheduleSummary(program) }}</p>
-          </div>
-          <span class="program-status-badge" [attr.data-status]="getProgramStatus(program)">
-            {{ getProgramStatusLabel(program) }}
-          </span>
-        </div>
+    <div class="program-table-wrapper" *ngIf="data.programs.length">
+      <table mat-table [dataSource]="getSortedPrograms()" class="program-table">
 
-        <p class="program-description" *ngIf="program.description">{{ program.description }}</p>
-      </article>
+        <!-- S No -->
+        <ng-container matColumnDef="sno">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let program; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let program">{{ formatDate(program.date) }}</td>
+        </ng-container>
+
+        <!-- Time -->
+        <ng-container matColumnDef="time">
+          <th mat-header-cell *matHeaderCellDef>Time</th>
+          <td mat-cell *matCellDef="let program">
+            {{ formatTime12Hour(program.from_time) }} - {{ formatTime12Hour(program.to_time) }}
+          </td>
+        </ng-container>
+
+        <!-- Program Name -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Program Name</th>
+          <td mat-cell *matCellDef="let program">{{ program.title }}</td>
+        </ng-container>
+
+        <!-- Status -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let program">
+            <span class="program-status-badge" [attr.data-status]="getProgramStatus(program)">
+              {{ getProgramStatusLabel(program) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="programColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: programColumns;"></tr>
+      </table>
     </div>
   </div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
-</mat-dialog-actions>
+</div>
+
+<footer>
+  <button mat-button type="button" (click)="close()">Close</button>
+</footer>

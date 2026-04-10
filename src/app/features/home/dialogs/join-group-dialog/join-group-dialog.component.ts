@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,7 +10,8 @@ import { GroupDetailsModel } from '../../models/home.model';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule],
   templateUrl: './join-group-dialog.component.html',
-  styleUrl: './join-group-dialog.component.css'
+  styleUrl: './join-group-dialog.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class JoinGroupDialogComponent {
   constructor(
@@ -28,3 +29,4 @@ export class JoinGroupDialogComponent {
     this.dialogRef.close(true);
   }
 }
+

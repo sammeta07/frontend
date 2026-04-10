@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,8 @@ import { MatDividerModule } from '@angular/material/divider';
   standalone: true,
   imports: [CommonModule, MatDialogModule, MatButtonModule, MatIconModule, MatListModule, MatDividerModule],
   templateUrl: './group-profile-dialog.component.html',
-  styleUrl: './group-profile-dialog.component.css'
+  styleUrl: './group-profile-dialog.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class GroupProfileDialogComponent {
   constructor(

@@ -1,23 +1,24 @@
-<div class="dialog-header">
-  <h2 mat-dialog-title>{{ data.name }}</h2>
-  <button mat-icon-button (click)="close()" aria-label="Close dialog" class="dialog-close-btn">
+<header>
+  <h2>{{ data.name }}</h2>
+  <button mat-icon-button type="button" (click)="close()" aria-label="Close dialog">
     <mat-icon>close</mat-icon>
   </button>
-</div>
-<mat-dialog-content>
+</header>
+
+<div class="dialog-body">
   <div class="profile-header">
-     <div class="stat">
-       <span class="label">Established</span>
-       <span class="value">{{ data.since }}</span>
-     </div>
-     <div class="stat">
-       <span class="label">Total Members</span>
-       <span class="value">{{ data.totalMembers || 0 }}</span>
-     </div>
-     <div class="stat">
-       <span class="label">Location</span>
-       <span class="value">{{ data.location }}</span>
-     </div>
+    <div class="stat">
+      <span class="label">Established</span>
+      <span class="value">{{ data.since }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">Total Members</span>
+      <span class="value">{{ data.totalMembers || 0 }}</span>
+    </div>
+    <div class="stat">
+      <span class="label">Location</span>
+      <span class="value">{{ data.location }}</span>
+    </div>
   </div>
 
   <mat-divider></mat-divider>
@@ -33,7 +34,7 @@
         <span class="role-title">Upadhyaksh (Vice President)</span>
         <span class="role-name">{{ data.vicePresident || 'Not Assigned' }}</span>
       </div>
-       <div class="role-item">
+      <div class="role-item">
         <span class="role-title">Koshadhyaksh (Cashier)</span>
         <span class="role-name">{{ data.treasurer || 'Not Assigned' }}</span>
       </div>
@@ -43,19 +44,19 @@
   <mat-divider></mat-divider>
 
   <div class="members-section">
-    <h3>All Members ({{data.members?.length || 0}})</h3>
+    <h3>All Members ({{ data.members?.length || 0 }})</h3>
     <mat-list role="list" class="members-list">
-       <mat-list-item role="listitem" *ngFor="let member of data.members">
-          <mat-icon matListItemIcon>person</mat-icon>
-          <div matListItemTitle>{{ member }}</div>
-       </mat-list-item>
-       <div *ngIf="!data.members || data.members.length === 0" class="no-members">
-         No members listed.
-       </div>
+      <mat-list-item role="listitem" *ngFor="let member of data.members">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <div matListItemTitle>{{ member }}</div>
+      </mat-list-item>
+      <div *ngIf="!data.members || data.members.length === 0" class="no-members">
+        No members listed.
+      </div>
     </mat-list>
   </div>
+</div>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="close()">Close</button>
-</mat-dialog-actions>
+<footer>
+  <button mat-button type="button" (click)="close()">Close</button>
+</footer>

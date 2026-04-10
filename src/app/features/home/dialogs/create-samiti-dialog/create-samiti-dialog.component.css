@@ -92,7 +92,8 @@ header button {
   margin-top: 4px;
 }
 
-.card-header {
+.samiti-card-header,
+.admin-card-header {
   button {
     color: var(--theme-text) !important;
 
@@ -154,39 +155,23 @@ header button {
   }
 }
 
-.card-header {
+/* Samiti Tab - card header & content */
+.samiti-card-header {
   padding: 12px 12px 0px 12px;
   border-bottom: 2px solid var(--theme-border);
   display: flex;
   align-items: center;
   gap: 14px;
-
-  & + .card-content {
-    height: calc(100vh - 235px);
-    overflow: hidden;
-  }
 }
 
-.header-icon {
-  color: var(--theme-primary);
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-}
-
-.card-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--theme-text);
-}
-
-.card-content {
+.samiti-card-content {
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  height: calc(100vh - 232px);
-  overflow: visible;
+  height: calc(100vh - 235px);
+  overflow: hidden;
+
   mat-form-field {
     ::ng-deep .mat-mdc-text-field-wrapper {
       background: var(--theme-surface-light);
@@ -204,6 +189,71 @@ header button {
     }
   }
 }
+
+/* Admin Tab - card header & content */
+.admin-card-header {
+  padding: 8px 12px;
+  border-bottom: 2px solid var(--theme-border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-card-content {
+  padding: 9px 12px 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: calc(100vh - 252px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--theme-gradient);
+    border-radius: 10px;
+  }
+
+  mat-form-field {
+    ::ng-deep .mat-mdc-text-field-wrapper {
+      background: var(--theme-surface-light);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: #f0f1f3;
+      }
+    }
+
+    ::ng-deep .mdc-text-field--focused .mat-mdc-text-field-wrapper {
+      background: var(--theme-surface);
+      box-shadow: 0 4px 16px rgba(25, 118, 210, 0.15);
+    }
+  }
+}
+
+.header-icon {
+  color: var(--theme-primary);
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--theme-text);
+}
+
+
 
 /* Admin Item Styling */
 .admin-item {
