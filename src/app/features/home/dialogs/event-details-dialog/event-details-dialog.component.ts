@@ -27,7 +27,12 @@ export class EventDetailsDialogComponent {
   readonly programColumns = ['sno', 'date', 'time', 'title', 'status'];
 
   getSortedPrograms(): ProgramDetailModel[] {
+    const statusOrder: Record<string, number> = { live: 0, upcoming: 1, completed: 2 };
     return [...(this.data.programs ?? [])].sort((first, second) => {
+      const statusDiff = statusOrder[this.getProgramStatus(first)] - statusOrder[this.getProgramStatus(second)];
+      if (statusDiff !== 0) {
+        return statusDiff;
+      }
       const firstDate = this.getProgramDateTime(first.date, first.from_time, false)?.getTime() ?? Number.POSITIVE_INFINITY;
       const secondDate = this.getProgramDateTime(second.date, second.from_time, false)?.getTime() ?? Number.POSITIVE_INFINITY;
       return firstDate - secondDate;

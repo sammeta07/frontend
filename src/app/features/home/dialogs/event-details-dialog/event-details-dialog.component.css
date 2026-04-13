@@ -159,12 +159,12 @@ footer {
 }
 
 .details-section {
-  margin-bottom: 24px;
+  /* margin-bottom: 24px; */
   flex-shrink: 0;
 }
 
 .programs-section {
-  flex: 1;
+  /* flex: 1; */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -245,6 +245,9 @@ footer {
   letter-spacing: 0.04em;
   white-space: nowrap;
   padding: 10px 14px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .program-table td.mat-mdc-cell {

@@ -306,6 +306,13 @@ body.is-resizing-panels {
         border-radius: 8px;
       }
 
+      .panel-separator {
+        height: 2px;
+        background: color-mix(in srgb, var(--theme-primary) 60%, transparent);
+        margin: 8px 4px;
+        border-radius: 2px;
+      }
+
       /* Custom scrollbar */
       &::-webkit-scrollbar {
         width: 8px;

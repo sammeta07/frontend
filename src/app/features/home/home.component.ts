@@ -128,6 +128,25 @@ export class HomeComponent implements OnInit {
     this.accordions().forEach((accordion) => accordion.closeAll());
   }
 
+  scrollPanelIntoView(el: HTMLElement): void {
+    let scrollContainer: HTMLElement | null = el.parentElement;
+    while (scrollContainer) {
+      const overflowY = getComputedStyle(scrollContainer).overflowY;
+      if (overflowY === 'auto' || overflowY === 'scroll') break;
+      scrollContainer = scrollContainer.parentElement;
+    }
+
+    if (!scrollContainer) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    const containerTop = scrollContainer.getBoundingClientRect().top;
+    const elTop = el.getBoundingClientRect().top;
+    const offset = elTop - containerTop + scrollContainer.scrollTop - 10;
+    scrollContainer.scrollTo({ top: offset, behavior: 'smooth' });
+  }
+
   constructor() {
     effect(() => {
       const cords = this.userLocationCords();

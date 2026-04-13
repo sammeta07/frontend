@@ -49,7 +49,8 @@
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <mat-expansion-panel *ngFor="let group of filteredSamitiGroups" #panel>
+              <div *ngFor="let group of filteredSamitiGroups; let i = index" #panelWrapper>
+              <mat-expansion-panel [expanded]="i === 0" (afterExpand)="scrollPanelIntoView(panelWrapper)">
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
                     <div class="one">
@@ -199,6 +200,8 @@
                   <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
                 </ng-template>
               </mat-expansion-panel>
+              <div class="panel-separator"></div>
+              </div>
             </mat-accordion>
           </div>
         </mat-tab>
@@ -210,7 +213,8 @@
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <mat-expansion-panel *ngFor="let group of filteredFavouriteGroups" #panel>
+              <div *ngFor="let group of filteredFavouriteGroups" #panelWrapper>
+              <mat-expansion-panel (afterExpand)="scrollPanelIntoView(panelWrapper)">
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
                     <div class="one">
@@ -358,6 +362,8 @@
                   <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
                 </ng-template>
               </mat-expansion-panel>
+              <div class="panel-separator"></div>
+              </div>
             </mat-accordion>
           </div>
         </mat-tab>
@@ -410,10 +416,10 @@
             </span>
           </ng-template>
           <div class="program-cards">
+            <ng-container *ngFor="let program of getProgramsByType(type); let last = last">
             <mat-card class="program-card" [class.live-card]="getProgramStatus(program) === 'live'"
               [class.upcoming-card]="getProgramStatus(program) === 'upcoming'"
-              [class.completed-card]="getProgramStatus(program) === 'completed'"
-              *ngFor="let program of getProgramsByType(type)">
+              [class.completed-card]="getProgramStatus(program) === 'completed'">
               <div class="program-card-header">
                 <div class="program-heading-group">
                   <h3 class="program-group-title">{{ program.title }}</h3>
@@ -459,6 +465,8 @@
                 </div>
               </div>
             </mat-card>
+            <div class="program-separator" *ngIf="!last"></div>
+            </ng-container>
           </div>
         </mat-tab>
       </mat-tab-group>
