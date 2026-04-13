@@ -49,7 +49,7 @@
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <div *ngFor="let group of filteredSamitiGroups; let i = index" #panelWrapper>
+              <div *ngFor="let group of filteredSamitiGroups; let i = index; let last = last" #panelWrapper>
               <mat-expansion-panel [expanded]="i === 0" (afterExpand)="scrollPanelIntoView(panelWrapper)">
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
@@ -172,7 +172,7 @@
                                   getEventDescriptionPreview(event.description) }}</p>
 
                                 <div class="group-event-meta-bottom">
-                                  <span class="group-event-program-count"
+                                    <span class="group-event-program-count" (click)="openEventDetails(event)"
                                     *ngIf="getEventProgramCountLabel(event) as programCountLabel">
                                     {{ programCountLabel }}
                                   </span>
@@ -200,7 +200,7 @@
                   <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
                 </ng-template>
               </mat-expansion-panel>
-              <div class="panel-separator"></div>
+              <div class="panel-separator" *ngIf="!last"></div>
               </div>
             </mat-accordion>
           </div>
@@ -213,7 +213,7 @@
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <div *ngFor="let group of filteredFavouriteGroups" #panelWrapper>
+              <div *ngFor="let group of filteredFavouriteGroups; let last = last" #panelWrapper>
               <mat-expansion-panel (afterExpand)="scrollPanelIntoView(panelWrapper)">
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
@@ -334,7 +334,7 @@
                                   getEventDescriptionPreview(event.description) }}</p>
 
                                 <div class="group-event-meta-bottom">
-                                  <span class="group-event-program-count"
+                                  <span class="group-event-program-count" (click)="openEventDetails(event)"
                                     *ngIf="getEventProgramCountLabel(event) as programCountLabel">
                                     {{ programCountLabel }}
                                   </span>
@@ -362,7 +362,7 @@
                   <div class="no-photos-state group-event-no-photos-state">No photos available.</div>
                 </ng-template>
               </mat-expansion-panel>
-              <div class="panel-separator"></div>
+              <div class="panel-separator" *ngIf="!last"></div>
               </div>
             </mat-accordion>
           </div>
@@ -465,7 +465,7 @@
                 </div>
               </div>
             </mat-card>
-            <div class="program-separator"></div>
+            <div class="program-separator" *ngIf="!last"></div>
             </ng-container>
           </div>
         </mat-tab>

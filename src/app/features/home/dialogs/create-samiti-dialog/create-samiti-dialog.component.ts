@@ -172,7 +172,6 @@ export class CreateSamitiDialogComponent implements OnInit {
         locationCords,
         groupContactNumbers: formValue.groupContactNumbers.filter((num: string) => num.trim() !== ''),
         admins: formValue.admins,
-        events: []
       };
       this.dialogRef.close(newSamiti);
     }

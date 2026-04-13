@@ -70,6 +70,7 @@ export class HeaderComponent {
       exitAnimationDuration: '300ms'
     }).afterClosed().subscribe(result => {
       if (result) {
+        console.log('Samiti created:', result);
         this.snackBar.open('"' + result.name + '" samiti created successfully!', 'Close', {
           duration: 4000,
           horizontalPosition: 'center',

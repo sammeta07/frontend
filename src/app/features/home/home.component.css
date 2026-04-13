@@ -415,9 +415,10 @@ body.is-resizing-panels {
       }
 
       ::ng-deep .group-events-tabs .mat-mdc-tab {
-        min-width: 80px;
-        width: 80px;
-        flex: 0 0 80px;
+            min-width: 70px !important;
+            max-width: 70px !important;
+            width: 70px !important;
+            flex: 0 0 70px !important;
         height: 36px;
         min-height: 36px;
         padding: 0;
@@ -1012,6 +1013,14 @@ body.is-resizing-panels {
         padding: 5px 9px;
         white-space: nowrap;
         box-shadow: 0 6px 14px color-mix(in srgb, var(--theme-primary) 28%, transparent);
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+          filter: brightness(1.05);
+          box-shadow: 0 10px 20px color-mix(in srgb, var(--theme-primary) 32%, transparent);
+        }
       }
 
       .group-event-meta-bottom {
@@ -1464,7 +1473,7 @@ body.is-resizing-panels {
       .program-cards {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 8px;
+        /* gap: 8px; */
         padding: 10px;
         background: var(--theme-primary-dark);
       }
