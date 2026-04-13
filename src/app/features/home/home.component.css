@@ -1469,6 +1469,13 @@ body.is-resizing-panels {
         background: var(--theme-primary-dark);
       }
 
+      .program-separator {
+        height: 2px;
+        background: color-mix(in srgb, var(--theme-primary) 60%, transparent);
+        margin: 8px 4px;
+        border-radius: 2px;
+      }
+
       .program-card {
         border-radius: 12px;
         border: 1px solid color-mix(in srgb, var(--theme-primary) 18%, var(--theme-border));
