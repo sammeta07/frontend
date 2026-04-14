@@ -109,13 +109,49 @@ export class HomeComponent implements OnInit {
   userLocationCords = this.locationService.userLocationCords$;
   private hasFetchedGroupsEventsPrograms = false;
 
-  groupsWidthPercent = 70;
+  groupsWidthPercent = 65;
   private readonly minGroupsWidthPercent = 60;
-  private readonly maxGroupsWidthPercent = 70;
+  private readonly maxGroupsWidthPercent = 75;
   isResizingPanels = false;
 
   get homeGridTemplateColumns(): string {
     return `${this.groupsWidthPercent}% 10px 1fr`;
+  }
+
+  /** Calculate optimal grid width based on viewport width */
+  private getOptimalGroupsWidthPercent(): number {
+    if (typeof window === 'undefined') return 65;
+    
+    const width = window.innerWidth;
+    
+    // 14-inch laptops (typically 1024px - 1366px)
+    if (width >= 1024 && width < 1366) {
+      return 60;
+    }
+    
+    // 16-inch laptops (typically 1366px - 1920px)
+    if (width >= 1366 && width < 1920) {
+      return 68;
+    }
+    
+    // 4K and larger screens (1920px+)
+    if (width >= 1920) {
+      return 70;
+    }
+    
+    // Small screens
+    return 60;
+  }
+
+  /** Handles window resize to adjust layout */
+  @HostListener('window:resize', ['$event'])
+  onWindowResize(event: Event): void {
+    const newWidth = this.getOptimalGroupsWidthPercent();
+    // Only update if significantly different (avoid constant updates)
+    const diff = Math.abs(newWidth - this.groupsWidthPercent);
+    if (diff >= 2) {
+      this.groupsWidthPercent = newWidth;
+    }
   }
 
   accordions = viewChildren(MatAccordion);
@@ -158,6 +194,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Initialize optimal grid width based on viewport
+    this.groupsWidthPercent = this.getOptimalGroupsWidthPercent();
   }
 
   async fetchGroupsEventsPrograms(): Promise<void> {

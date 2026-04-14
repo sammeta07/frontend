@@ -169,7 +169,7 @@ header button {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  height: calc(100vh - 235px);
+  height: calc(100vh - 236px);
   overflow: hidden;
 
   mat-form-field {

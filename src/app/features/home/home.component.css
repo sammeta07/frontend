@@ -5,7 +5,7 @@ body.is-resizing-panels {
 
 .home-container {
   display: grid;
-  grid-template-columns: 70% 10px 1fr;
+  grid-template-columns: 65% 10px 1fr;
   grid-template-rows: repeat(12, 1fr);
   height: 100%;
   grid-gap: 0px;
@@ -2151,6 +2151,168 @@ mat-expansion-panel-header{
   mat-expansion-panel-header {
     height: 108px;
     padding: 6px 8px;
+  }
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Medium Screens: 14-inch laptops (1024px - 1366px) */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .home-container {
+    grid-template-columns: 60% 10px 1fr;
+  }
+
+  .groups-container .group-header {
+    height: 60px;
+    padding: 0 16px;
+  }
+
+  .groups-container .group-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .group-details-container {
+    column-gap: 8px;
+    row-gap: 4px;
+    height: 110px;
+    padding: 6px;
+  }
+
+  .group-details-container .one .group-name {
+    font-size: 0.95rem;
+  }
+
+  .group-details-container .five .info-item {
+    font-size: 0.75rem;
+    height: 22px;
+    padding: 0 6px;
+  }
+
+  .group-details-container .three .join-btn {
+    padding: 6px 10px;
+    font-size: 0.72rem;
+  }
+
+  .programs-container .program-header {
+    height: 60px;
+    padding: 0 16px;
+  }
+
+  .programs-container .program-header h2 {
+    font-size: 1.25rem;
+  }
+
+  mat-expansion-panel-header {
+    height: 112px;
+    padding: 6px 10px;
+  }
+}
+
+/* Large Screens: 16-inch laptops and larger (1366px+) */
+@media (min-width: 1366px) {
+  .home-container {
+    grid-template-columns: 68% 10px 1fr;
+  }
+
+  .groups-container .group-header {
+    height: 64px;
+    padding: 0 20px;
+  }
+
+  .groups-container .group-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .group-details-container {
+    column-gap: 10px;
+    row-gap: 5px;
+    height: 120px;
+    padding: 7px;
+  }
+
+  .group-details-container .one .group-name {
+    font-size: 1rem;
+  }
+
+  .group-details-container .five .info-item {
+    font-size: 0.78rem;
+    height: 24px;
+    padding: 0 7px;
+  }
+
+  .group-details-container .three .join-btn {
+    padding: 7px 14px;
+    font-size: 0.75rem;
+  }
+
+  .programs-container .program-header {
+    height: 64px;
+    padding: 0 20px;
+  }
+
+  .programs-container .program-header h2 {
+    font-size: 1.5rem;
+  }
+
+  mat-expansion-panel-header {
+    height: 126px;
+    padding: 6px 12px;
+  }
+}
+
+/* Extra Large Screens: 4K displays, very large monitors (1920px+) */
+@media (min-width: 1920px) {
+  .home-container {
+    grid-template-columns: 70% 10px 1fr;
+  }
+
+  .groups-container .group-header {
+    height: 68px;
+    padding: 0 24px;
+  }
+
+  .groups-container .group-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .group-details-container {
+    column-gap: 12px;
+    row-gap: 6px;
+    height: 130px;
+    padding: 8px;
+  }
+
+  .group-details-container .one .group-name {
+    font-size: 1.05rem;
+  }
+
+  .group-details-container .five .info-item {
+    font-size: 0.82rem;
+    height: 26px;
+    padding: 0 8px;
+  }
+
+  .group-details-container .three .join-btn {
+    padding: 8px 16px;
+    font-size: 0.78rem;
+  }
+
+  .group-controls-container {
+    height: 52px;
+  }
+
+  .programs-container .program-header {
+    height: 68px;
+    padding: 0 24px;
+  }
+
+  .programs-container .program-header h2 {
+    font-size: 1.75rem;
+  }
+
+  mat-expansion-panel-header {
+    height: 130px;
+    padding: 8px 14px;
   }
 }
 
