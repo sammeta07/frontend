@@ -20,7 +20,4 @@ import { Router } from '@angular/router';
 export class SamitiAdminDashboardComponent {
   constructor(private router: Router) {}
 
-  goHome(): void {
-    this.router.navigate(['/']);
-  }
 }
