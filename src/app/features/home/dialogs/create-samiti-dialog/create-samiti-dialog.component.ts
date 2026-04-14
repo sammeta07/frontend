@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { GroupAdminModel, StateModel } from '../../models/home.model';
+import { GroupAdminModel, StateModel, CreateSamitiModel } from '../../models/home.model';
 import { HomeService } from '../../services/home.service';
 import { LocationService } from '../../../../shared/location.service';
 
@@ -41,6 +41,7 @@ export class CreateSamitiDialogComponent implements OnInit {
 
   loadingStates = false;
   loadingDistricts = false;
+  submitting = false;
 
   private destroyRef = inject(DestroyRef);
   private locationService = inject(LocationService);
@@ -156,7 +157,8 @@ export class CreateSamitiDialogComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    if (this.samitiForm.valid) {
+    if (this.samitiForm.valid && !this.submitting) {
+      this.submitting = true;
       const formValue = this.samitiForm.value;
       let locationCords: { lat: number; long: number } | null = null;
       try {
@@ -164,16 +166,28 @@ export class CreateSamitiDialogComponent implements OnInit {
       } catch {
         locationCords = this.locationService.userLocationCords$();
       }
-      const newSamiti = {
+      const payload: CreateSamitiModel = {
         name: formValue.samitiName,
         area: formValue.area,
         description: formValue.description,
         since: formValue.since,
+        stateId: formValue.state || null,
+        districtId: this.samitiForm.get('district')?.value || null,
         locationCords,
         groupContactNumbers: formValue.groupContactNumbers.filter((num: string) => num.trim() !== ''),
-        admins: formValue.admins,
+        admins: formValue.admins.map(({ email, contactNumber, password }: GroupAdminModel) => ({ email, contactNumber, password })),
       };
-      this.dialogRef.close(newSamiti);
+      this.homeService.createSamiti(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: (res) => {
+            this.submitting = false;
+            this.dialogRef.close(res);
+          },
+          error: () => {
+            this.submitting = false;
+          }
+        });
     }
   }
 }

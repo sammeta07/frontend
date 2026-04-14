@@ -59,6 +59,18 @@ export interface GroupAdminModel {
   contactNumber: string;
 }
 
+export interface CreateSamitiModel {
+  name: string;
+  area: string;
+  description?: string;
+  since: number;
+  stateId: number | null;
+  districtId: number | null;
+  locationCords: LocationModel | null;
+  groupContactNumbers: string[];
+  admins: Pick<GroupAdminModel, 'email' | 'contactNumber' | 'password'>[];
+}
+
 export interface GroupDetailsModel {
   id: number;
   groupId: string; // Combination of first letters of group name words and id

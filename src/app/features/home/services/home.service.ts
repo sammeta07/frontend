@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EventType, ProgramType, GroupDetailsModel, StateModel, DistrictModel } from '../models/home.model';
+import { environment } from '../../../../environments/environment';
+import { EventType, ProgramType, GroupDetailsModel, StateModel, DistrictModel, CreateSamitiModel } from '../models/home.model';
 import { Observable } from 'rxjs';
 import { signal } from '@angular/core';
 
@@ -9,6 +10,7 @@ import { signal } from '@angular/core';
 })
 export class HomeService {
   private apiUrl = 'api/data'; // Replace with your actual API endpoint
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -1273,5 +1275,9 @@ export class HomeService {
 
   getAreas(districtId: number): Observable<{ id: number; name: string }[]> {
     return this.http.get<{ id: number; name: string }[]>(`api/areas/${districtId}`);
+  }
+
+  createSamiti(payload: CreateSamitiModel): Observable<{ id: number; message: string }> {
+    return this.http.post<{ id: number; message: string }>(`${this.baseUrl}/groups`, payload);
   }
 }
