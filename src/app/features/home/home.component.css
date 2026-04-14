@@ -1474,6 +1474,7 @@ body.is-resizing-panels {
         display: grid;
         grid-template-columns: 1fr;
         /* gap: 8px; */
+        border-radius: 12px;
         padding: 10px;
         background: var(--theme-primary-dark);
       }
