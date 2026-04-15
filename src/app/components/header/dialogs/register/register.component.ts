@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { RegisterService } from './register.service';
 
 @Component({
   selector: 'app-register-dialog',
@@ -32,15 +33,31 @@ export class RegisterDialogComponent {
   hidePassword = true;
   hideConfirmPassword = true;
 
-  constructor(public dialogRef: MatDialogRef<RegisterDialogComponent>) {}
+  constructor(
+    public dialogRef: MatDialogRef<RegisterDialogComponent>,
+    private registerService: RegisterService
+  ) {}
 
   onCancel(): void {
     this.dialogRef.close();
   }
 
   onSubmit(): void {
-    console.log('Register attempt:', { name: this.name, email: this.email, mobile: this.mobile });
-    this.dialogRef.close(true);
+    this.registerService.register({
+      name: this.name,
+      email: this.email,
+      mobile: this.mobile,
+      password: this.password,
+      type: 'PUBLIC',
+    }).subscribe({
+      next: (result) => {
+        console.log('Register success:', result);
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        console.error('Register failed:', err);
+      }
+    });
   }
 
   get passwordsMatch(): boolean {

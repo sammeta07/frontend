@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:3000',
+  apiBaseUrl: 'https://fictional-acorn-jwgvj99546qh57jx-3000.app.github.dev',
 };

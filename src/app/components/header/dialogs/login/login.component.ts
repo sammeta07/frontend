@@ -7,10 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { Router } from '@angular/router';
+import { LoginService } from './login.service';
 
-const COOKIE_EMAIL_KEY = 'remember_email';
-const COOKIE_DAYS = 30;
+const REMEMBER_KEY = 'remember_login';
 
 @Component({
   selector: 'app-login-dialog',
@@ -30,7 +29,7 @@ const COOKIE_DAYS = 30;
   encapsulation: ViewEncapsulation.None
 })
 export class LoginDialogComponent implements OnInit {
-  email = '';
+  emailOrMobile = '';
   password = '';
   hidePassword = true;
   rememberMe = false;
@@ -38,13 +37,22 @@ export class LoginDialogComponent implements OnInit {
   resetEmail = '';
   resetEmailSent = false;
 
-  constructor(public dialogRef: MatDialogRef<LoginDialogComponent>, private router: Router) {}
+  constructor(
+    public dialogRef: MatDialogRef<LoginDialogComponent>,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
-    const saved = this.getCookie(COOKIE_EMAIL_KEY);
+    const saved = localStorage.getItem(REMEMBER_KEY);
     if (saved) {
-      this.email = saved;
-      this.rememberMe = true;
+      try {
+        const creds = JSON.parse(atob(saved));
+        this.emailOrMobile = creds.emailOrMobile || '';
+        this.password = creds.password || '';
+        this.rememberMe = true;
+      } catch (e) {
+        localStorage.removeItem(REMEMBER_KEY);
+      }
     }
   }
 
@@ -54,13 +62,23 @@ export class LoginDialogComponent implements OnInit {
 
   onSubmit(): void {
     if (this.rememberMe) {
-      this.setCookie(COOKIE_EMAIL_KEY, this.email, COOKIE_DAYS);
+      const creds = btoa(JSON.stringify({ emailOrMobile: this.emailOrMobile, password: this.password }));
+      localStorage.setItem(REMEMBER_KEY, creds);
     } else {
-      this.deleteCookie(COOKIE_EMAIL_KEY);
+      localStorage.removeItem(REMEMBER_KEY);
     }
-    console.log('Login attempt:', { email: this.email, password: this.password, rememberMe: this.rememberMe });
-    this.dialogRef.close(true);
-    this.router.navigate(['/dashboard']);
+    this.loginService.login({
+      emailOrMobile: this.emailOrMobile,
+      password: this.password
+    }).subscribe({
+      next: (response) => {
+        this.loginService.saveUserData(response.data);
+        this.dialogRef.close(true);
+      },
+      error: (err) => {
+        console.error('Login failed:', err);
+      }
+    });
   }
 
   onForgotPassword(): void {
@@ -70,17 +88,9 @@ export class LoginDialogComponent implements OnInit {
     this.resetEmailSent = true;
   }
 
-  private setCookie(name: string, value: string, days: number): void {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Strict`;
-  }
 
-  private getCookie(name: string): string | null {
-    const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
-    return match ? decodeURIComponent(match[1]) : null;
-  }
 
-  private deleteCookie(name: string): void {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Strict`;
+  isEmail(value: string): boolean {
+    return !value || /[a-zA-Z@.]/.test(value);
   }
 }

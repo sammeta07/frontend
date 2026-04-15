@@ -8,6 +8,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoginDialogComponent } from './dialogs/login/login.component';
 import { RegisterDialogComponent } from './dialogs/register/register.component';
+import { LoginService } from './dialogs/login/login.service';
 
 import { LocationService } from '../../shared/location.service';
 import { ThemeService } from '../../shared/theme.service';
@@ -32,6 +33,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent {
   private locationService = inject(LocationService);
   public themeService = inject(ThemeService);
+  private loginService = inject(LoginService);
   
   private snackBar = inject(MatSnackBar);
   
@@ -42,6 +44,7 @@ export class HeaderComponent {
   userLocationCords = this.locationService.userLocationCords$;
 
   constructor( public dialog: MatDialog, private router: Router ) {
+    this.isLoggedIn = this.loginService.isLoggedIn();
   }
   openRegisterDialog() {
     this.dialog.open(RegisterDialogComponent, {
@@ -61,13 +64,15 @@ export class HeaderComponent {
     }).afterClosed().subscribe(result => {
       if (result) {
         this.isLoggedIn = true;
+        this.router.navigate(['/dashboard']);
       }
     });
   }
 
   onLogout(): void {
+    this.loginService.clearUserData();
     this.isLoggedIn = false;
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 
   selectTheme(themeId: string) {
