@@ -25,8 +25,8 @@ const COOKIE_DAYS = 30;
     MatIconModule,
     MatCheckboxModule
   ],
-  templateUrl: './login-dialog.component.html',
-  styleUrl: './login-dialog.component.css',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css',
   encapsulation: ViewEncapsulation.None
 })
 export class LoginDialogComponent implements OnInit {

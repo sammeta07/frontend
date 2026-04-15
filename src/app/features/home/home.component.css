@@ -278,6 +278,9 @@ body.is-resizing-panels {
         background: color-mix(in srgb, var(--theme-surface) 96%, white);
         color: var(--theme-text);
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        line-height: 1;
       }
 
       .group-tab-action-btn mat-icon {
@@ -285,6 +288,7 @@ body.is-resizing-panels {
         font-size: 18px;
         width: 18px;
         height: 18px;
+        vertical-align: middle;
       }
 
       .group-tab-action-btn:hover {

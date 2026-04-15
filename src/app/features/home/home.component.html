@@ -30,6 +30,11 @@
     <div class="group-list">
       <div class="group-tab-actions" aria-label="Group panel actions">
         <button mat-stroked-button type="button" class="group-tab-action-btn"
+          (click)="onCreateSamiti()">
+          <mat-icon>add</mat-icon>
+          <span>Create New Samiti</span>
+        </button>
+        <button mat-stroked-button type="button" class="group-tab-action-btn"
           (click)="expandAllGroupPanels()">
           <mat-icon>unfold_more</mat-icon>
           <span>Expand All</span>

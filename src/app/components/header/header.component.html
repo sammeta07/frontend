@@ -58,16 +58,16 @@
 
     <button 
       *ngIf="!isLoggedIn"
-      mat-raised-button
+      mat-flat-button 
       color="primary"
-      (click)="onCreateSamiti()"
-      class="create-btn"
-      aria-label="Create new samiti"
+      (click)="openRegisterDialog()"
+      class="login-btn"
+      aria-label="Open register dialog"
     >
-      <mat-icon aria-hidden="true">add</mat-icon>
-      <span>CREATE</span>
+      <mat-icon aria-hidden="true">person_add</mat-icon>
+      <span>REGISTER</span>
     </button>
-    
+
     <button 
       *ngIf="!isLoggedIn"
       mat-flat-button 

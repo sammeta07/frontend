@@ -6,8 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
-import { CreateSamitiDialogComponent } from '../../features/home/dialogs/create-samiti-dialog/create-samiti-dialog.component';
+import { LoginDialogComponent } from './dialogs/login/login.component';
+import { RegisterDialogComponent } from './dialogs/register/register.component';
+
 import { LocationService } from '../../shared/location.service';
 import { ThemeService } from '../../shared/theme.service';
 import { Router } from '@angular/router';
@@ -42,6 +43,15 @@ export class HeaderComponent {
 
   constructor( public dialog: MatDialog, private router: Router ) {
   }
+  openRegisterDialog() {
+    this.dialog.open(RegisterDialogComponent, {
+      width: '400px',
+      autoFocus: false,
+      disableClose: true,
+      backdropClass: 'dark-backdrop'
+    });
+  }
+
   openLoginDialog() {
     this.dialog.open(LoginDialogComponent, {
       width: '400px',
@@ -51,31 +61,6 @@ export class HeaderComponent {
     }).afterClosed().subscribe(result => {
       if (result) {
         this.isLoggedIn = true;
-      }
-    });
-  }
-
-  onCreateSamiti() {
-    this.dialog.open(CreateSamitiDialogComponent, {
-      position: { right: '0', top: '0' },
-      height: '100%',
-      width: '50%',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      panelClass: 'slide-in-dialog',
-      autoFocus: false,
-      disableClose: true,
-      backdropClass: 'dark-backdrop',
-      enterAnimationDuration: '300ms',
-      exitAnimationDuration: '300ms'
-    }).afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Samiti created:', result);
-        this.snackBar.open('"' + result.name + '" samiti created successfully!', 'Close', {
-          duration: 4000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
       }
     });
   }

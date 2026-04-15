@@ -20,6 +20,7 @@ import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { firstValueFrom } from 'rxjs';
+import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -46,6 +47,31 @@ export class HomeComponent implements OnInit {
   private locationService = inject(LocationService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+
+  onCreateSamiti() {
+    this.dialog.open(CreateSamitiDialogComponent, {
+      position: { right: '0', top: '0' },
+      height: '100%',
+      width: '50%',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      panelClass: 'slide-in-dialog',
+      autoFocus: false,
+      disableClose: true,
+      backdropClass: 'dark-backdrop',
+      enterAnimationDuration: '300ms',
+      exitAnimationDuration: '300ms'
+    }).afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Samiti created:', result);
+        this.snackBar.open('"' + result.name + '" samiti created successfully!', 'Close', {
+          duration: 4000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom'
+        });
+      }
+    });
+  }
 
   groupSearchTerm: string = '';
   groupSelectedDistance: number = 5;
