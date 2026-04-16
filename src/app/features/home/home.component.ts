@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../shared/notification.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { EventDetailsDialogComponent } from './dialogs/event-details-dialog/event-details-dialog.component';
 import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/group-profile-dialog.component';
@@ -47,28 +48,27 @@ export class HomeComponent implements OnInit {
   private locationService = inject(LocationService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+   private notify = inject(NotificationService);
 
   onCreateSamiti() {
+    document.body.classList.add('dialog-open');
     this.dialog.open(CreateSamitiDialogComponent, {
       position: { right: '0', top: '0' },
       height: '100%',
       width: '50%',
       maxWidth: '100vw',
       maxHeight: '100vh',
-      panelClass: 'slide-in-dialog',
+      panelClass: ['slide-in-dialog', 'no-backdrop-dialog'],
       autoFocus: false,
       disableClose: true,
-      backdropClass: 'dark-backdrop',
+      hasBackdrop: false,
       enterAnimationDuration: '300ms',
       exitAnimationDuration: '300ms'
     }).afterClosed().subscribe(result => {
+      document.body.classList.remove('dialog-open');
       if (result) {
         console.log('Samiti created:', result);
-        this.snackBar.open('"' + result.name + '" samiti created successfully!', 'Close', {
-          duration: 4000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
+        this.notify.success('"' + result.name + '" samiti created successfully!');
       }
     });
   }
@@ -742,16 +742,19 @@ export class HomeComponent implements OnInit {
   }
 
   openProgramDetails(event: EventDetailsModel) {
+    document.body.classList.add('dialog-open');
     this.dialog.open(EventDetailsDialogComponent, {
       width: '800px',
       data: event,
       autoFocus: false,
       disableClose: true,
-      backdropClass: 'dark-backdrop'
-    });
+      hasBackdrop: false,
+      panelClass: 'no-backdrop-dialog'
+    }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
   }
 
   openEventDetails(event: EventDetailsModel) {
+    document.body.classList.add('dialog-open');
     this.dialog.open(EventDetailsDialogComponent, {
       width: '70vw',
       maxWidth: '90vw',
@@ -760,13 +763,14 @@ export class HomeComponent implements OnInit {
       data: event,
       autoFocus: false,
       disableClose: true,
-      panelClass: ['event-details-slide-dialog'],
-      position: { top: '0', right: '0' },
-      backdropClass: 'dark-backdrop'
-    });
+      hasBackdrop: false,
+      panelClass: ['event-details-slide-dialog', 'no-backdrop-dialog'],
+      position: { top: '0', right: '0' }
+    }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
   }
 
   openGroupProfile(group: GroupDetailsModel) {
+    document.body.classList.add('dialog-open');
     this.dialog.open(GroupProfileDialogComponent, {
       width: '70vw',
       maxWidth: '90vw',
@@ -775,10 +779,10 @@ export class HomeComponent implements OnInit {
       data: group,
       autoFocus: false,
       disableClose: true,
-      panelClass: ['event-details-slide-dialog'],
-      position: { top: '0', right: '0' },
-      backdropClass: 'dark-backdrop'
-    });
+      hasBackdrop: false,
+      panelClass: ['event-details-slide-dialog', 'no-backdrop-dialog'],
+      position: { top: '0', right: '0' }
+    }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
   }
 
   openMap(location: LocationModel) {
@@ -788,13 +792,15 @@ export class HomeComponent implements OnInit {
   }
 
   openJoinGroupDialog(group: GroupDetailsModel) {
+    document.body.classList.add('dialog-open');
     this.dialog.open(JoinGroupDialogComponent, {
       width: '400px',
       data: group,
       autoFocus: false,
       disableClose: true,
-      backdropClass: 'dark-backdrop'
-    });
+      hasBackdrop: false,
+      panelClass: 'no-backdrop-dialog'
+    }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
   }
 
   copyToClipboard(text: string) {

@@ -29,10 +29,13 @@ export class LocationService {
       // First check what the permission status is
       const permissionStatus = await navigator.permissions.query({ name: 'geolocation' });
       if (permissionStatus.state === 'denied') {
+        document.body.classList.add('dialog-open');
         this.dialog.open(PermissionInstructionsDialogComponent, {
           autoFocus: false,
-          disableClose: true
-        });
+          disableClose: true,
+          hasBackdrop: false,
+          panelClass: 'no-backdrop-dialog'
+        }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
         return;
       }
       const pos = await this.getGeolocation();
@@ -50,12 +53,15 @@ export class LocationService {
 
     } catch (error) {
       console.error("Location error:", error);
+      document.body.classList.add('dialog-open');
       this.dialog.open(PermissionInstructionsDialogComponent, {
         width: '700px',
         maxWidth: '90vw',
         autoFocus: false,
-        disableClose: true
-      });
+        disableClose: true,
+        hasBackdrop: false,
+        panelClass: 'no-backdrop-dialog'
+      }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
     }
   }
   getGeolocation(): Promise<any> {

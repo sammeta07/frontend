@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../shared/notification.service';
 import { LoginDialogComponent } from './dialogs/login/login.component';
 import { RegisterDialogComponent } from './dialogs/register/register.component';
 import { LoginService } from './dialogs/login/login.service';
@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatDialogModule,
     MatTooltipModule,
-    MatSnackBarModule,
+
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
@@ -35,7 +35,7 @@ export class HeaderComponent {
   public themeService = inject(ThemeService);
   private loginService = inject(LoginService);
   
-  private snackBar = inject(MatSnackBar);
+  private notify = inject(NotificationService);
   
   isPaletteOpen = false;
   isLoggedIn = false;
@@ -47,21 +47,26 @@ export class HeaderComponent {
     this.isLoggedIn = this.loginService.isLoggedIn();
   }
   openRegisterDialog() {
+    document.body.classList.add('dialog-open');
     this.dialog.open(RegisterDialogComponent, {
       width: '400px',
       autoFocus: false,
       disableClose: true,
-      backdropClass: 'dark-backdrop'
-    });
+      hasBackdrop: false,
+      panelClass: 'no-backdrop-dialog'
+    }).afterClosed().subscribe(() => document.body.classList.remove('dialog-open'));
   }
 
   openLoginDialog() {
+    document.body.classList.add('dialog-open');
     this.dialog.open(LoginDialogComponent, {
       width: '400px',
       autoFocus: false,
       disableClose: true,
-      backdropClass: 'dark-backdrop'
+      hasBackdrop: false,
+      panelClass: 'no-backdrop-dialog'
     }).afterClosed().subscribe(result => {
+      document.body.classList.remove('dialog-open');
       if (result) {
         this.isLoggedIn = true;
         this.router.navigate(['/dashboard']);

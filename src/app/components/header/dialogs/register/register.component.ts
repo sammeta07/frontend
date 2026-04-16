@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { RegisterService } from './register.service';
+import { NotificationService } from '../../../../shared/notification.service';
 
 @Component({
   selector: 'app-register-dialog',
@@ -33,6 +34,8 @@ export class RegisterDialogComponent {
   hidePassword = true;
   hideConfirmPassword = true;
 
+  private notify = inject(NotificationService);
+
   constructor(
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
     private registerService: RegisterService
@@ -51,11 +54,11 @@ export class RegisterDialogComponent {
       type: 'PUBLIC',
     }).subscribe({
       next: (result) => {
-        console.log('Register success:', result);
+        this.notify.success('Registration successful!');
         this.dialogRef.close(true);
       },
       error: (err) => {
-        console.error('Register failed:', err);
+        this.notify.error(err?.error?.message || 'Registration failed. Please try again.');
       }
     });
   }

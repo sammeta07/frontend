@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { LoginService } from './login.service';
+import { NotificationService } from '../../../../shared/notification.service';
 
 const REMEMBER_KEY = 'remember_login';
 
@@ -36,6 +37,8 @@ export class LoginDialogComponent implements OnInit {
   isForgotPassword = false;
   resetEmail = '';
   resetEmailSent = false;
+
+  private notify = inject(NotificationService);
 
   constructor(
     public dialogRef: MatDialogRef<LoginDialogComponent>,
@@ -73,10 +76,11 @@ export class LoginDialogComponent implements OnInit {
     }).subscribe({
       next: (response) => {
         this.loginService.saveUserData(response.data);
+        this.notify.success('Login successful!');
         this.dialogRef.close(true);
       },
       error: (err) => {
-        console.error('Login failed:', err);
+        this.notify.error(err?.error?.message || 'Login failed. Please try again.');
       }
     });
   }

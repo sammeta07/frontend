@@ -494,7 +494,50 @@ mat-icon {
   background: none !important;
 }
 
-.dark-backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
+/* ===== NOTIFICATION STYLES ===== */
+.custom-snackbar-panel .mdc-snackbar__surface {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.custom-snackbar-panel .mdc-snackbar__label {
+  padding: 0 !important;
+}
+
+.custom-snackbar-panel .mat-mdc-snack-bar-label {
+  padding: 0 !important;
+}
+
+/* Ensure snackbar always renders above dialog overlays */
+.cdk-overlay-container .cdk-overlay-pane:has(.mat-mdc-snack-bar-container) {
+  z-index: 1100 !important;
+}
+
+/* ===== DIALOG WITHOUT BACKDROP — ELEVATED PANEL ===== */
+.no-backdrop-dialog {
+  box-shadow: 0 11px 60px rgba(0, 0, 0, 0.35), 0 0 0 9999px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid var(--theme-border);
+}
+
+.no-backdrop-dialog .mat-mdc-dialog-container {
+  box-shadow: 0 11px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+.no-backdrop-dialog .mat-mdc-dialog-surface {
+  border-radius: 16px !important;
+  border: 1px solid var(--theme-border);
+}
+
+/* Body dimming when a dialog is open (applied via JS) */
+body.dialog-open > app-root {
+  filter: brightness(0.6);
+  transition: filter 0.3s ease;
+  pointer-events: none;
+}
+
+body:not(.dialog-open) > app-root {
+  filter: none;
+  transition: filter 0.3s ease;
+  pointer-events: auto;
 }
