@@ -3,6 +3,11 @@ export interface LocationModel {
   long: number;
 }
 
+export interface NearbyGroupsRequestBody {
+  locationCords: LocationModel;
+  radiusInKm: number;
+}
+
 export interface StateModel {
   id: number;
   name: string;
@@ -74,14 +79,18 @@ export interface CreateSamitiModel {
 export interface GroupDetailsModel {
   id: number;
   groupId: string; // Combination of first letters of group name words and id
-  title: string;
-  locationCords: LocationModel;
-  area: string;
+  title: string; // name
   since: number;
-  admins: GroupAdminModel[];
-  events: EventDetailsModel[];
   description: string;
-  contactNumbers: string[];
+  area: string;
+  // district_id: number;
+  // state_id: number;
+  locationCords: LocationModel; //json { lat: number, long: number }
+  contactNumbers: string[]; //json array of strings
+  admins: GroupAdminModel[]; ////json array of objects with email, password, contactNumber
+  // created_at: string; //timestamp
+
+  events: EventDetailsModel[];
   logo: string; // Optional logo URL
   favourite: boolean;
   locationName?: string; // Optional human-readable location name
@@ -103,4 +112,59 @@ export enum EventType {
   CULTURAL = 'CULTURAL', // Music, Dance, Cultural performances / Nachna Gana
   FESTIVAL = 'FESTIVAL', // Holi
   OTHER = 'OTHER'
+}
+
+// --- API Response Types (snake_case from backend) ---
+
+export interface ApiResponse<T> {
+  message: string;
+  status: number;
+  data: T;
+}
+
+export interface ApiProgramDetail {
+  id: number;
+  event_id: number;
+  title: string;
+  type: string;
+  description: string;
+  date: string;
+  from_time: string;
+  to_time: string;
+  location_cords: LocationModel;
+  photos: string[];
+  created_at: string;
+}
+
+export interface ApiEventDetail {
+  id: number;
+  group_id: number;
+  title: string;
+  type: string;
+  year_count: number;
+  start_date: string;
+  end_date: string;
+  description: string;
+  location_cords: LocationModel;
+  photos: string[];
+  programs: ApiProgramDetail[];
+  created_at: string;
+}
+
+export interface ApiGroupDetail {
+  id: number;
+  group_id: string;
+  name: string;
+  since: number;
+  description: string;
+  area: string;
+  district_id: number;
+  state_id: number;
+  location_cords: LocationModel;
+  contact_numbers: string[];
+  logo: string;
+  admins: GroupAdminModel[];
+  created_at: string;
+  distance: number;
+  events: ApiEventDetail[];
 }

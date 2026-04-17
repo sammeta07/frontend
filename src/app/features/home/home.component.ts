@@ -14,7 +14,7 @@ import { GroupProfileDialogComponent } from './dialogs/group-profile-dialog/grou
 import { JoinGroupDialogComponent } from './dialogs/join-group-dialog/join-group-dialog.component';
 import { HomeService } from './services/home.service';
 import { getGroupLogoUrl, getYearLabel, sortEventsByStatus, sortGroupsByDistance, sortProgramsByDistance, programTypeSortOrder } from './utils/home.utils';
-import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel, ProgramDetailWithContextModel, ProgramType } from './models/home.model';
+import { GroupDetailsModel, EventDetailsModel, ProgramDetailModel, ProgramDetailWithContextModel, ProgramType, NearbyGroupsRequestBody } from './models/home.model';
 import { LocationModel } from './models/home.model';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
@@ -226,7 +226,13 @@ export class HomeComponent implements OnInit {
 
   async fetchGroupsEventsPrograms(): Promise<void> {
     try {
-      const data = await firstValueFrom(this.homeService.getGroupsEventsPrograms());
+      const cords = this.userLocationCords();
+      if (!cords) return;
+      const requestBody: NearbyGroupsRequestBody = {
+        locationCords: cords,
+        radiusInKm: this.groupSelectedDistance
+      };
+      const data = await firstValueFrom(this.homeService.getGroupsEventsPrograms(requestBody));
 
       this.samitiGroups = data ?? [];
 
