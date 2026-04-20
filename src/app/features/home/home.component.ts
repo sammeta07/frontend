@@ -20,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { LocationService } from '../../shared/location.service';
 import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, forkJoin, of } from 'rxjs';
 import { CreateSamitiDialogComponent } from './dialogs/create-samiti-dialog/create-samiti-dialog.component';
 
 @Component({
@@ -233,14 +233,16 @@ export class HomeComponent implements OnInit {
         radiusInKm: this.groupSelectedDistance
       };
       const data = await firstValueFrom(this.homeService.getGroupsEventsPrograms(requestBody));
-
       this.samitiGroups = data ?? [];
 
-      await this.populateGroupLocationNamesSequentially(this.samitiGroups);
-      await this.populateDistancesSequentially(this.samitiGroups);
-      await this.applyStatusAndSortingSequentially(this.samitiGroups);
+      // Compute distances synchronously so groups are visible immediately
+      this.populateDistances(this.samitiGroups);
+      this.applyStatusAndSorting(this.samitiGroups);
       this.samitiGroupsCopy = [...this.samitiGroups];
       this.populateProgramsData(this.samitiGroups);
+
+      // Geocode location names in parallel (non-blocking for UI)
+      await this.populateGroupLocationNamesParallel(this.samitiGroups);
     } catch (error) {
       this.hasFetchedGroupsEventsPrograms = false;
       console.error('Failed to fetch groups/events/programs', error);
@@ -314,42 +316,56 @@ export class HomeComponent implements OnInit {
     return Number.isInteger(year) && year > 0 ? year : null;
   }
 
-  private async populateDistancesSequentially(groups: GroupDetailsModel[]): Promise<void> {
+  private populateDistances(groups: GroupDetailsModel[]): void {
     for (const group of groups) {
       group.distanceFromUser =
-        (await Promise.resolve(this.locationService.getDistanceFromUser(group.locationCords))) || '';
+        this.locationService.getDistanceFromUser(group.locationCords) || '';
 
       for (const event of group.events ?? []) {
         event.distanceFromUser =
-          (await Promise.resolve(this.locationService.getDistanceFromUser(event.locationCords))) || '';
+          this.locationService.getDistanceFromUser(event.locationCords) || '';
 
         for (const program of event.programs ?? []) {
           program.distanceFromUser =
-            (await Promise.resolve(this.locationService.getDistanceFromUser(program.locationCords))) || '';
+            this.locationService.getDistanceFromUser(program.locationCords) || '';
         }
       }
     }
   }
 
-  private async populateGroupLocationNamesSequentially(groups: GroupDetailsModel[]): Promise<void> {
+  private async populateGroupLocationNamesParallel(groups: GroupDetailsModel[]): Promise<void> {
+    const groupsNeedingGeocode = groups.filter(
+      (group) => !group.area?.trim() && !group.locationName?.trim()
+    );
+
+    // Set area-based names synchronously first
     for (const group of groups) {
       if (group.area?.trim()) {
         group.locationName = group.area;
-        continue;
       }
+    }
 
-      if (group.locationName?.trim()) {
-        continue;
-      }
+    if (groupsNeedingGeocode.length === 0) return;
 
-      group.locationName = await firstValueFrom(this.locationService.getAreaName(group.locationCords));
+    // Fire all geocoding requests in parallel
+    const observables = groupsNeedingGeocode.map((group) =>
+      this.locationService.getAreaName(group.locationCords)
+    );
+
+    try {
+      const results = await firstValueFrom(forkJoin(observables));
+      results.forEach((name, index) => {
+        groupsNeedingGeocode[index].locationName = name;
+      });
+    } catch (error) {
+      console.error('Error geocoding group locations:', error);
     }
   }
 
-  private async applyStatusAndSortingSequentially(groups: GroupDetailsModel[]): Promise<void> {
-    await Promise.resolve(sortEventsByStatus(groups));
-    await Promise.resolve(sortGroupsByDistance(groups));
-    await Promise.resolve(sortProgramsByDistance(groups));
+  private applyStatusAndSorting(groups: GroupDetailsModel[]): void {
+    sortEventsByStatus(groups);
+    sortGroupsByDistance(groups);
+    sortProgramsByDistance(groups);
   }
 
   private populateProgramsData(groups: GroupDetailsModel[]): void {

@@ -11,13 +11,13 @@ export interface NearbyGroupsRequestBody {
 export interface StateModel {
   id: number;
   name: string;
-  abbreviation: string;
   stateId: number;
 }
 
 export interface DistrictModel {
   id: number;
   name: string;
+  districtId: number;
 }
 
 export interface ProgramDetailModel {

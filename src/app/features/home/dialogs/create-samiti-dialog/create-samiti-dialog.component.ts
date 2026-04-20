@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, DestroyRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,12 +36,12 @@ import { LocationService } from '../../../../shared/location.service';
 export class CreateSamitiDialogComponent implements OnInit {
   samitiForm!: FormGroup;
 
-  states: StateModel[] = [];
-  districts: any[] = [];
+  states = signal<StateModel[]>([]);
+  districts = signal<any[]>([]);
 
-  loadingStates = false;
-  loadingDistricts = false;
-  submitting = false;
+  loadingStates = signal(false);
+  loadingDistricts = signal(false);
+  submitting = signal(false);
 
   private destroyRef = inject(DestroyRef);
   private locationService = inject(LocationService);
@@ -68,31 +68,31 @@ export class CreateSamitiDialogComponent implements OnInit {
   }
 
   private loadStates(): void {
-    this.loadingStates = true;
+    this.loadingStates.set(true);
     this.homeService.getStates()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (data) => { this.states = data; this.loadingStates = false; },
-        error: () => { this.loadingStates = false; }
+        next: (data) => { this.states.set(data); this.loadingStates.set(false); },
+        error: () => { this.loadingStates.set(false); }
       });
   }
 
   onStateChange(stateId: number): void {
     this.samitiForm.get('district')?.setValue('');
     this.samitiForm.get('district')?.disable();
-    this.districts = [];
+    this.districts.set([]);
     if (!stateId) return;
 
-    this.loadingDistricts = true;
+    this.loadingDistricts.set(true);
     this.homeService.getDistricts(stateId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (data) => {
-          this.districts = data;
+          this.districts.set(data);
           this.samitiForm.get('district')?.enable();
-          this.loadingDistricts = false;
+          this.loadingDistricts.set(false);
         },
-        error: () => { this.loadingDistricts = false; }
+        error: () => { this.loadingDistricts.set(false); }
       });
   }
 
@@ -157,8 +157,8 @@ export class CreateSamitiDialogComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    if (this.samitiForm.valid && !this.submitting) {
-      this.submitting = true;
+    if (this.samitiForm.valid && !this.submitting()) {
+      this.submitting.set(true);
       const formValue = this.samitiForm.value;
       let locationCords: { lat: number; long: number } | null = null;
       try {
@@ -181,11 +181,11 @@ export class CreateSamitiDialogComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: (res) => {
-            this.submitting = false;
+            this.submitting.set(false);
             this.dialogRef.close(res);
           },
           error: () => {
-            this.submitting = false;
+            this.submitting.set(false);
           }
         });
     }

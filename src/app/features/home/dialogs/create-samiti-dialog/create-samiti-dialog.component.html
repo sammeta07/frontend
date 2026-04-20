@@ -38,17 +38,17 @@
               <mat-form-field appearance="outline" subscriptSizing="dynamic">
                 <mat-label>State</mat-label>
                 <mat-select formControlName="state" (selectionChange)="onStateChange($event.value)">
-                  <mat-option *ngFor="let state of states" [value]="state.id">{{state.name}}</mat-option>
+                  <mat-option *ngFor="let state of states()" [value]="state.id">{{state.name}}</mat-option>
                 </mat-select>
-                <mat-spinner *ngIf="loadingStates" matSuffix diameter="18"></mat-spinner>
+                <mat-spinner *ngIf="loadingStates()" matSuffix diameter="18"></mat-spinner>
               </mat-form-field>
 
               <mat-form-field appearance="outline" subscriptSizing="dynamic">
                 <mat-label>District</mat-label>
                 <mat-select formControlName="district" (selectionChange)="onDistrictChange($event.value)">
-                  <mat-option *ngFor="let dist of districts" [value]="dist.id">{{dist.name}}</mat-option>
+                  <mat-option *ngFor="let dist of districts()" [value]="dist.id">{{dist.name}}</mat-option>
                 </mat-select>
-                <mat-spinner *ngIf="loadingDistricts" matSuffix diameter="18"></mat-spinner>
+                <mat-spinner *ngIf="loadingDistricts()" matSuffix diameter="18"></mat-spinner>
               </mat-form-field>
 
             </div>
