@@ -104,10 +104,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  get filteredFavouriteGroups(): GroupDetailsModel[] {
-    return this.filteredSamitiGroups.filter(group => group.favourite);
-  }
-
   readonly currentYear = new Date().getFullYear();
   readonly groupEventYearOffsets: number[] = [1, 0, -1, -2, -3, -4];
   readonly groupEventTabs: number[] = this.groupEventYearOffsets.map((offset) => this.currentYear + offset);
