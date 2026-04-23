@@ -68,7 +68,8 @@ export class HomeComponent implements OnInit {
       document.body.classList.remove('dialog-open');
       if (result) {
         console.log('Samiti created:', result);
-        this.notify.success('"' + result.name + '" samiti created successfully!');
+        this.notify.success('"' + result.data.name + '" samiti created successfully!');
+        this.fetchGroupsEventsPrograms();
       }
     });
   }

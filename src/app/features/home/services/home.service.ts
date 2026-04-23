@@ -88,7 +88,9 @@ export class HomeService {
     return this.http.get<{ id: number; name: string }[]>(`api/areas/${districtId}`);
   }
 
-  createSamiti(payload: CreateSamitiModel): Observable<{ id: number; message: string }> {
-    return this.http.post<{ id: number; message: string }>(`${this.baseUrl}/groups`, payload);
+  createSamiti(payload: CreateSamitiModel): Observable<any> {
+    return this.http.post<ApiResponse<any>>(`${this.baseUrl}/create-group`, payload).pipe(
+      map(response => response.data)
+    );
   }
 }

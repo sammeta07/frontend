@@ -1808,6 +1808,7 @@ body.is-resizing-panels {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: default;
 
     .group-name {
       font-size: 0.95rem;
@@ -1830,6 +1831,7 @@ body.is-resizing-panels {
       align-items: center;
       gap: 4px;
       flex-shrink: 0;
+      cursor: default;
       font-size: 0.78rem;
       max-width: 46%;
       overflow: hidden;
@@ -1858,6 +1860,7 @@ body.is-resizing-panels {
       align-items: center;
       justify-content: center;
       border-radius: 50%;
+      cursor: pointer;
       color: var(--theme-text-secondary);
       transition: background-color 0.2s ease, color 0.2s ease;
 
@@ -1873,6 +1876,7 @@ body.is-resizing-panels {
       height: 16px;
       line-height: 16px;
       margin: 0;
+      cursor: pointer;
     }
   }
   .three{
@@ -1886,6 +1890,7 @@ body.is-resizing-panels {
     align-items: center;
     gap: 0;
     padding: 0 6px;
+    cursor: default;
 
     .join-btn {
       min-width: auto;
@@ -1896,6 +1901,7 @@ body.is-resizing-panels {
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.02em;
+      cursor: pointer;
       box-shadow: 0 2px 6px rgba(var(--theme-primary-rgb), 0.25) !important;
       transition: none !important;
 
@@ -1913,6 +1919,7 @@ body.is-resizing-panels {
       font-size: 16px;
       margin-left: 4px;
       margin-right: 4px;
+      cursor: pointer;
     }
   }
   .four{
@@ -1922,12 +1929,14 @@ body.is-resizing-panels {
     align-items: center;
     justify-content: center;
     padding-right: 4px;
+    cursor: default;
 
     .group-avatar {
       width: 66px;
       height: 66px;
       border-radius: 50%;
       object-fit: cover;
+      cursor: default;
       border: 2px solid var(--theme-border);
       background: var(--theme-surface-light);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
@@ -1935,12 +1944,15 @@ body.is-resizing-panels {
   }
 
   .eight{
-    grid-column: 2 / 10;
+    grid-column: 2 / 8;
     grid-row: 3 / 5;
     background-color: var(--theme-surface-light);
     border: 1px solid var(--theme-border);
     border-radius: 8px;
     padding: 3px 8px;
+    cursor: default;
+    display: flex;
+    align-items: center;
 
 
     .description-text {
@@ -1952,6 +1964,7 @@ body.is-resizing-panels {
       overflow: hidden;
       text-overflow: ellipsis;
       font-weight: 500;
+      cursor: default;
     }
   }
   .five{
@@ -1967,6 +1980,7 @@ body.is-resizing-panels {
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
+    cursor: default;
 
     &::-webkit-scrollbar {
       display: none;
@@ -1988,6 +2002,7 @@ body.is-resizing-panels {
       border: 1px solid var(--theme-border);
       flex-shrink: 0;
       transition: border-color 0.2s ease, transform 0.2s ease;
+      cursor: default;
 
       &:hover {
         border-color: rgba(var(--theme-primary-rgb), 0.3);
@@ -2000,6 +2015,7 @@ body.is-resizing-panels {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: default;
     }
 
     .info-item.phone-item span {
@@ -2012,6 +2028,7 @@ body.is-resizing-panels {
       font-size: 13px;
       width: 13px;
       height: 13px;
+      cursor: default;
     }
 
     .info-divider {
@@ -2019,7 +2036,7 @@ body.is-resizing-panels {
     }
   }
   .nine{
-    grid-column: 10 / 13;
+    grid-column: 8 / 13;
     grid-row: 3 / 5;
     background-color: var(--theme-surface-light);
     border: 1px solid var(--theme-border);
@@ -2028,6 +2045,7 @@ body.is-resizing-panels {
     justify-content: flex-start;
     align-items: center;
     padding: 0 6px;
+    cursor: default;
 
     .group-distance-row {
       width: 100%;
@@ -2042,6 +2060,7 @@ body.is-resizing-panels {
       /* border: 1px solid var(--theme-border); */
       /* transition: all 0.2s ease; */
       justify-content: flex-end;
+      cursor: default;
 
       mat-icon {
         font-size: 14px;
@@ -2058,6 +2077,7 @@ body.is-resizing-panels {
         font-weight: 600;
         text-align: left;
         white-space: nowrap;
+        cursor: pointer;
       }
     }
   }

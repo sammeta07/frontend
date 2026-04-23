@@ -96,16 +96,12 @@
                         <span>{{ group.contactNumbers.join(', ') }}</span>
                       </div>
                       <div class="info-divider"></div>
-
-
-                      <!-- </div> -->
                     </div>
                     <div class="eight">
                       <span class="description-text" [matTooltip]="group.description"
-                        [matTooltipDisabled]="!group.description || group.description.length <= 100"
+                        [matTooltipDisabled]="!group.description"
                         matTooltipClass="group-description-tooltip">
                         {{ getGroupDescriptionPreview(group.description) }}
-                        <!-- {{ group.description && group.description.length > 200 ? (group.description | slice: 0 : 200) + '...' : group.description }} -->
                       </span>
                     </div>
                     <div class="nine">
@@ -263,7 +259,7 @@
                     </div>
                     <div class="eight">
                       <span class="description-text" [matTooltip]="group.description"
-                        [matTooltipDisabled]="!group.description || group.description.length <= 100"
+                        [matTooltipDisabled]="!group.description"
                         matTooltipClass="group-description-tooltip">
                         {{ getGroupDescriptionPreview(group.description) }}
 
