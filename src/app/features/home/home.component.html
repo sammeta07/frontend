@@ -20,7 +20,7 @@
           <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
           <mat-select [(value)]="groupSelectedDistance" (selectionChange)="onGroupDistanceChange($event.value)"
             aria-label="Select search distance radius" [disabled]="!userLocationName()" disableRipple>
-            <mat-option *ngFor="let km of groupDistanceOptions" [value]="km">
+            <mat-option *ngFor="let km of groupDistanceOptions; trackBy: trackByDistanceOption" [value]="km">
               <span><strong>{{ km }}</strong> km</span>
             </mat-option>
           </mat-select>
@@ -54,7 +54,7 @@
           </ng-template>
           <div class="tab-content-padding">
             <mat-accordion class="example-headers-align" multi>
-              <div *ngFor="let group of filteredSamitiGroups; let i = index; let last = last" #panelWrapper>
+              <div *ngFor="let group of filteredSamitiGroups; let i = index; let last = last; trackBy: trackByGroup" #panelWrapper>
               <mat-expansion-panel [expanded]="i === 0" (afterExpand)="scrollPanelIntoView(panelWrapper)">
                 <mat-expansion-panel-header tabindex="-1">
                   <div class="group-details-container" (click)="$event.stopPropagation()">
@@ -118,7 +118,7 @@
                   <mat-tab-group class="group-events-tabs" [stretchTabs]="false"
                     [selectedIndex]="getGroupEventTabIndex(group)"
                     (selectedIndexChange)="onGroupEventTabChange(group, $event)">
-                    <mat-tab *ngFor="let tab of groupEventTabs">
+                    <mat-tab *ngFor="let tab of groupEventTabs; trackBy: trackByTab">
                       <ng-template mat-tab-label>
                         <span class="group-events-tab-inline">
                           <span class="group-events-tab-label">{{ getGroupEventTabLabel(tab) }}</span>
@@ -130,7 +130,7 @@
                           <mat-card class="group-event-card" [class.started-card]="getEventStatus(event) === 'live'"
                             [class.upcoming-card]="getEventStatus(event) === 'upcoming'"
                             [class.completed-card]="getEventStatus(event) === 'completed'"
-                            *ngFor="let event of filteredEvents">
+                            *ngFor="let event of filteredEvents; trackBy: trackByEvent">
                             <div class="group-event-body-split">
                               <div class="group-event-photos-pane">
                                 <span class="group-event-status-overlay"
@@ -146,7 +146,7 @@
                                 <swiper-container class="group-event-photo-swiper"
                                   *ngIf="event.photos.length; else eventNoPhotosTemplate" slides-per-view="1"
                                   space-between="8" pagination="true" navigation="true" loop="false">
-                                  <swiper-slide *ngFor="let photo of event.photos">
+                                  <swiper-slide *ngFor="let photo of event.photos; trackBy: trackByPhoto">
                                     <img [src]="photo" [alt]="event.title" class="group-event-photo" />
                                   </swiper-slide>
                                 </swiper-container>
@@ -235,7 +235,7 @@
           <mat-icon matPrefix aria-hidden="true">radar</mat-icon>
           <mat-select [(value)]="programSelectedDistance" (selectionChange)="onProgramDistanceChange($event.value)"
             aria-label="Select program distance radius" [disabled]="!userLocationName()" disableRipple>
-            <mat-option *ngFor="let km of programDistanceOptions" [value]="km">
+            <mat-option *ngFor="let km of programDistanceOptions; trackBy: trackByDistanceOption" [value]="km">
               <span><strong>{{ km }}</strong> km</span>
             </mat-option>
           </mat-select>
@@ -245,7 +245,7 @@
     <div class="program-list">
       <mat-tab-group (wheel)="scrollTabs($event)" #tabGroup *ngIf="programTypes.length > 0; else noProgramsTemplate"
         class="program-tabs">
-        <mat-tab *ngFor="let type of programTypes">
+        <mat-tab *ngFor="let type of programTypes; trackBy: trackByProgramType">
           <ng-template mat-tab-label>
             <span class="program-tab-inline" [matTooltip]="type" matTooltipPosition="below">
 
@@ -255,7 +255,7 @@
             </span>
           </ng-template>
           <div class="program-cards">
-            <ng-container *ngFor="let program of getProgramsByType(type); let last = last">
+            <ng-container *ngFor="let program of getProgramsByType(type); let last = last; trackBy: trackByProgram">
             <mat-card class="program-card" [class.live-card]="getProgramStatus(program) === 'live'"
               [class.upcoming-card]="getProgramStatus(program) === 'upcoming'"
               [class.completed-card]="getProgramStatus(program) === 'completed'">
@@ -277,7 +277,7 @@
                     }}</span>
                   <swiper-container class="program-photo-swiper" *ngIf="program.photos.length; else noPhotosTemplate"
                     slides-per-view="1" space-between="8" pagination="true" navigation="true" loop="false">
-                    <swiper-slide *ngFor="let photo of program.photos">
+                    <swiper-slide *ngFor="let photo of program.photos; trackBy: trackByPhoto">
                       <img [src]="photo" [alt]="program.title" class="program-photo" />
                     </swiper-slide>
                   </swiper-container>

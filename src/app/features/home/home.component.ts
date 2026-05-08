@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
   private locationService = inject(LocationService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-   private notify = inject(NotificationService);
+  private notify = inject(NotificationService);
 
   onCreateSamiti() {
     document.body.classList.add('dialog-open');
@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
       if (result) {
         console.log('Samiti created:', result);
         this.notify.success('"' + result.data.name + '" samiti created successfully!');
-        this.fetchGroupsEventsPrograms();
+        // this.fetchGroupsEventsPrograms();
       }
     });
   }
@@ -85,23 +85,14 @@ export class HomeComponent implements OnInit {
   samitiGroups: GroupDetailsModel[] = [];
   samitiGroupsCopy: GroupDetailsModel[] = [];
   programsData: ProgramDetailWithContextModel[] = [];
+  filteredSamitiGroupsView: GroupDetailsModel[] = [];
+  programTypesView: ProgramType[] = [];
+  private groupEventsByTabCache = new Map<string, EventDetailsModel[]>();
+  private programsByTypeCache = new Map<ProgramType, ProgramDetailWithContextModel[]>();
+  private programCountByTypeCache = new Map<ProgramType, number>();
 
   get filteredSamitiGroups(): GroupDetailsModel[] {
-    const term = this.groupSearchTerm.toLowerCase();
-    const maxDistanceMeters = this.groupSelectedDistance * 1000;
-
-    return this.samitiGroups.filter((group) => {
-      const distanceMeters = this.parseDistanceToMeters(group.distanceFromUser);
-      if (distanceMeters > maxDistanceMeters) return false;
-
-      if (!term) return true;
-      return (
-        group.title?.toLowerCase().includes(term) ||
-        group.area?.toLowerCase().includes(term) ||
-        group.locationName?.toLowerCase().includes(term) ||
-        group.groupId?.toLowerCase().includes(term)
-      );
-    });
+    return this.filteredSamitiGroupsView;
   }
 
   readonly currentYear = new Date().getFullYear();
@@ -237,9 +228,11 @@ export class HomeComponent implements OnInit {
       this.applyStatusAndSorting(this.samitiGroups);
       this.samitiGroupsCopy = [...this.samitiGroups];
       this.populateProgramsData(this.samitiGroups);
+      this.refreshViewCaches();
 
       // Geocode location names in parallel (non-blocking for UI)
       await this.populateGroupLocationNamesParallel(this.samitiGroups);
+      this.refreshViewCaches();
     } catch (error) {
       this.hasFetchedGroupsEventsPrograms = false;
       console.error('Failed to fetch groups/events/programs', error);
@@ -266,26 +259,8 @@ export class HomeComponent implements OnInit {
   }
 
   getGroupEventsByTab(group: GroupDetailsModel, tab: number): EventDetailsModel[] {
-    const events = group.events ?? [];
-    const statusOrder: Record<'completed' | 'live' | 'upcoming', number> = {
-      live: 0,
-      upcoming: 1,
-      completed: 2,
-    };
-
-    return events
-      .filter((event) => this.eventFallsInYear(event, tab))
-      .sort((a, b) => {
-        const statusA = statusOrder[this.getEventStatus(a)];
-        const statusB = statusOrder[this.getEventStatus(b)];
-        if (statusA !== statusB) {
-          return statusA - statusB;
-        }
-
-        const startA = this.getEventDateBoundary(a.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
-        const startB = this.getEventDateBoundary(b.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
-        return startA - startB;
-      });
+    const key = this.getGroupTabCacheKey(group.id, tab);
+    return this.groupEventsByTabCache.get(key) ?? [];
   }
 
   private eventFallsInYear(event: EventDetailsModel, year: number): boolean {
@@ -383,14 +358,68 @@ export class HomeComponent implements OnInit {
   }
 
   get programTypes(): ProgramType[] {
-    return [...new Set(this.programsData.map((program) => program.type))].sort(
-      (a, b) =>
-        (programTypeSortOrder[a] ?? Number.MAX_SAFE_INTEGER) -
-        (programTypeSortOrder[b] ?? Number.MAX_SAFE_INTEGER)
-    );
+    return this.programTypesView;
   }
 
   getProgramsByType(type: ProgramType): ProgramDetailWithContextModel[] {
+    return this.programsByTypeCache.get(type) ?? [];
+  }
+
+  getProgramCountByType(type: ProgramType): number {
+    return this.programCountByTypeCache.get(type) ?? 0;
+  }
+
+  private refreshViewCaches(): void {
+    this.refreshFilteredGroupsAndEventsCache();
+    this.refreshProgramsCache();
+  }
+
+  private refreshFilteredGroupsAndEventsCache(): void {
+    const term = this.groupSearchTerm.toLowerCase();
+    const maxDistanceMeters = this.groupSelectedDistance * 1000;
+    const statusOrder: Record<'completed' | 'live' | 'upcoming', number> = {
+      live: 0,
+      upcoming: 1,
+      completed: 2,
+    };
+
+    this.filteredSamitiGroupsView = this.samitiGroups.filter((group) => {
+      const distanceMeters = this.parseDistanceToMeters(group.distanceFromUser);
+      if (distanceMeters > maxDistanceMeters) return false;
+
+      if (!term) return true;
+      return (
+        group.title?.toLowerCase().includes(term) ||
+        group.area?.toLowerCase().includes(term) ||
+        group.locationName?.toLowerCase().includes(term) ||
+        group.groupId?.toLowerCase().includes(term)
+      );
+    });
+
+    this.groupEventsByTabCache.clear();
+    for (const group of this.filteredSamitiGroupsView) {
+      const events = group.events ?? [];
+      for (const tab of this.groupEventTabs) {
+        const key = this.getGroupTabCacheKey(group.id, tab);
+        const value = events
+          .filter((event) => this.eventFallsInYear(event, tab))
+          .sort((a, b) => {
+            const statusA = statusOrder[this.getEventStatus(a)];
+            const statusB = statusOrder[this.getEventStatus(b)];
+            if (statusA !== statusB) {
+              return statusA - statusB;
+            }
+
+            const startA = this.getEventDateBoundary(a.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+            const startB = this.getEventDateBoundary(b.start_date, false)?.getTime() ?? Number.POSITIVE_INFINITY;
+            return startA - startB;
+          });
+        this.groupEventsByTabCache.set(key, value);
+      }
+    }
+  }
+
+  private refreshProgramsCache(): void {
     const statusOrder: Record<'live' | 'upcoming' | 'completed', number> = {
       live: 0,
       upcoming: 1,
@@ -399,39 +428,52 @@ export class HomeComponent implements OnInit {
 
     const term = this.programSearchTerm.toLowerCase().trim();
     const maxDistanceMeters = this.programSelectedDistance * 1000;
+    this.programsByTypeCache.clear();
+    this.programCountByTypeCache.clear();
 
-    return this.programsData
-      .filter((program) => {
-        if (program.type !== type) return false;
-        const distanceMeters = this.parseDistanceToMeters(program.distanceFromUser);
-        if (distanceMeters > maxDistanceMeters) return false;
-        if (!term) return true;
-        return (
-          program.title?.toLowerCase().includes(term) ||
-          program.groupTitle?.toLowerCase().includes(term) ||
-          program.eventTitle?.toLowerCase().includes(term) ||
-          program.locationName?.toLowerCase().includes(term)
-        );
-      })
-      .sort((a, b) => {
-        const statusA = statusOrder[this.getProgramStatus(a)];
-        const statusB = statusOrder[this.getProgramStatus(b)];
-        if (statusA !== statusB) {
-          return statusA - statusB;
-        }
+    this.programTypesView = [...new Set(this.programsData.map((program) => program.type))].sort(
+      (a, b) =>
+        (programTypeSortOrder[a] ?? Number.MAX_SAFE_INTEGER) -
+        (programTypeSortOrder[b] ?? Number.MAX_SAFE_INTEGER)
+    );
 
-        const distanceA = this.parseDistanceToMeters(a.distanceFromUser);
-        const distanceB = this.parseDistanceToMeters(b.distanceFromUser);
-        if (distanceA !== distanceB) {
-          return distanceA - distanceB;
-        }
+    for (const type of this.programTypesView) {
+      const programs = this.programsData
+        .filter((program) => {
+          if (program.type !== type) return false;
+          const distanceMeters = this.parseDistanceToMeters(program.distanceFromUser);
+          if (distanceMeters > maxDistanceMeters) return false;
+          if (!term) return true;
+          return (
+            program.title?.toLowerCase().includes(term) ||
+            program.groupTitle?.toLowerCase().includes(term) ||
+            program.eventTitle?.toLowerCase().includes(term) ||
+            program.locationName?.toLowerCase().includes(term)
+          );
+        })
+        .sort((a, b) => {
+          const statusA = statusOrder[this.getProgramStatus(a)];
+          const statusB = statusOrder[this.getProgramStatus(b)];
+          if (statusA !== statusB) {
+            return statusA - statusB;
+          }
 
-        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
-      });
+          const distanceA = this.parseDistanceToMeters(a.distanceFromUser);
+          const distanceB = this.parseDistanceToMeters(b.distanceFromUser);
+          if (distanceA !== distanceB) {
+            return distanceA - distanceB;
+          }
+
+          return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+        });
+
+      this.programsByTypeCache.set(type, programs);
+      this.programCountByTypeCache.set(type, programs.length);
+    }
   }
 
-  getProgramCountByType(type: ProgramType): number {
-    return this.getProgramsByType(type).length;
+  private getGroupTabCacheKey(groupId: number, tab: number): string {
+    return `${groupId}:${tab}`;
   }
 
   getProgramStatus(program: ProgramDetailWithContextModel): 'live' | 'upcoming' | 'completed' {
@@ -737,27 +779,61 @@ export class HomeComponent implements OnInit {
   onSearchGroups(event: Event) {
     const input = event.target as HTMLInputElement;
     this.groupSearchTerm = input.value.toLowerCase().trim();
+    this.refreshFilteredGroupsAndEventsCache();
   }
 
   onSearchProgram(event: Event) {
     const target = event.target as HTMLInputElement;
     this.programSearchTerm = target.value;
+    this.refreshProgramsCache();
   }
 
   onGroupDistanceChange(distance: number) {
     this.groupSelectedDistance = distance;
+    this.refreshFilteredGroupsAndEventsCache();
   }
 
   onProgramDistanceChange(distance: number) {
     this.programSelectedDistance = distance;
+    this.refreshProgramsCache();
   }
 
   clearGroupSearch() {
     this.groupSearchTerm = '';
+    this.refreshFilteredGroupsAndEventsCache();
   }
 
   clearProgramSearch() {
-    this.programSearchTerm = ''
+    this.programSearchTerm = '';
+    this.refreshProgramsCache();
+  }
+
+  trackByDistanceOption(_: number, km: number): number {
+    return km;
+  }
+
+  trackByGroup(_: number, group: GroupDetailsModel): number {
+    return group.id;
+  }
+
+  trackByTab(_: number, tab: number): number {
+    return tab;
+  }
+
+  trackByEvent(_: number, event: EventDetailsModel): number {
+    return event.id;
+  }
+
+  trackByPhoto(_: number, photo: string): string {
+    return photo;
+  }
+
+  trackByProgramType(_: number, type: ProgramType): ProgramType {
+    return type;
+  }
+
+  trackByProgram(_: number, program: ProgramDetailWithContextModel): number {
+    return program.id;
   }
 
   openProgramDetails(event: EventDetailsModel) {
